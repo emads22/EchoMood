@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Playlist with Next and Previous</title>
+</head>
+<body>
+    <h2>Playlist</h2>
+    
+    <!-- Audio Player -->
+    <!-- <audio id="audioPlayer" controls>
+        <source id="audioSource" src="https://archive.org/embed/LoseYourselfClean" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio> -->
+    <div id="audioPlayer">
+    <iframe 
+        src="https://archive.org/embed/LoseYourselfClean"
+        width="500"
+        height="200"
+        frameborder="0"
+        allowfullscreen
+        autoplay
+    ></iframe>
+    </div>
+    
+    <!-- Buttons for Next and Previous -->
+    <button id="prevButton">Previous</button>
+    <button id="nextButton">Next</button>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        // const audioSource = document.getElementById('audioSource');
+        const audioSource = document.querySelector('iframe');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+
+        const playlist = [
+        "https://archive.org/embed/LoseYourselfClean",
+        "https://archive.org/embed/TheDBSidesEpisode6",
+        "https://archive.org/embed/BalancedBreakfast2015-06-19"
+            // Add more track URLs as needed
+        ];
+
+        let currentTrackIndex = 0;
+
+        function playTrack(trackIndex) {
+            // audioSource.src = playlist[trackIndex];
+            audioSource.setAttribute('src', playlist[trackIndex]);
+            // Trigger autoplay by calling play() on the iframe's contentWindow        
+            audioSource.contentWindow.postMessage('play', '*');
+            // audioPlayer.load();
+            // audioPlayer.play();
+        }
+
+        prevButton.addEventListener('click', () => {
+            currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+            playTrack(currentTrackIndex);
+        });
+
+        nextButton.addEventListener('click', () => {
+            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+            playTrack(currentTrackIndex);
+        });
+
+        // Play the first track by default
+        playTrack(currentTrackIndex);
+    </script>
+</body>
+</html>
