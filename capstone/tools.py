@@ -15,16 +15,16 @@ def fetch_tracks_info():
 
     try:
         service_account_info = all_about(things, matter)
-        # create credentials using the service account info 
-        credentials = service_account.Credentials.from_service_account_info(
+        # create creds using the service account info 
+        creds = service_account.Credentials.from_service_account_info(
             service_account_info,
             scopes=scopes
         )
         # build the Google Drive API service object
-        drive_service = build('drive', 'v3', credentials=credentials)
+        drive_service = build('drive', 'v3', credentials=creds)
 
         try:
-            # list all files in the specified folder
+            # list all files in the specified folder (as per docs)
             response = drive_service.files().list(q=f"'{folder_id}' in parents").execute()
             tracks = response.get('files', [])    
             return tracks     
