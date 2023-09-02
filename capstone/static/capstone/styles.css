@@ -1,0 +1,30 @@
+/* Style the audio controls */
+audio {
+    /* width: 100%; */
+    margin-bottom: 10px;          
+  }
+
+  /* Customize the appearance of the play button */
+  audio::-webkit-media-controls-play-button {
+    background-color: orange;
+    color: #fff;
+  }
+
+  audio {
+      background-color: #000;
+  }
+
+  /* Customize the appearance of the seek bar */
+  audio::-webkit-media-controls-current-time-display,
+  audio::-webkit-media-controls-time-remaining-display,
+  audio::-webkit-media-controls-timeline {
+    background-color: #f1f1f1;
+    color: #333;
+  }
+
+  /* Customize the appearance of the volume controls */
+  audio::-webkit-media-controls-volume-slider,
+  audio::-webkit-media-controls-mute-button {
+    background-color: #f1f1f1;
+    color: #333;
+  }

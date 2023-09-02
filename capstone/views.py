@@ -9,10 +9,14 @@ from django.core.paginator import Paginator
 import json
 
 from .models import User
+from .tools import fetch_tracks_info
 
 
-def index(request):    
-    return render(request, "capstone/index.html")
+def index(request): 
+    all_tracks = fetch_tracks_info()
+    return render(request, "capstone/index.html", {
+        'tracks': all_tracks
+    })
                   
 
 def login_view(request):

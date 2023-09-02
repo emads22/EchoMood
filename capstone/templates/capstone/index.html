@@ -6,50 +6,24 @@
 
     <h1>HELLO CAPSTONE</h1> <br>
 
-    <!-- <iframe src="https://archive.org/embed/jj2008-06-14.mk4&playlist=1&autoplay=1" width="500" height="300" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe> -->
-
-
-    <!-- <iframe src="https://archive.org/embed/BalancedBreakfast2015-06-19" width="500" height="300" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
-    
-    <h2>My Playlist</h2>
-    
-    
-    <h3>Item 1: Title of Item 1</h3>
-    <iframe
-        src="https://archive.org/embed/BalancedBreakfast2015-06-19"
-        width="500"
-        height="200"
-        frameborder="0"
-        webkitallowfullscreen="true"
-        mozallowfullscreen="true"
-        allowfullscreen
-    ></iframe>
-    
-    
-    <h3>Item 2: Title of Item 2</h3>
-    <iframe
-        src="https://archive.org/embed/LoseYourselfClean"
-        width="500"
-        height="200"
-        frameborder="0"
-        webkitallowfullscreen="true"
-        mozallowfullscreen="true"
-        allowfullscreen
-    ></iframe>
-    
-    <hr>
-    <hr>
-    <hr> -->
+    <div>
+        <ul>
+            {% for track in tracks %}
+                <li>
+                    {{track.name}}<br>
+                    <!-- <audio id="playerx" controls>                        
+                        <source src="https://drive.google.com/uc?id={{track.id}}" type="audio/mpeg">
+                        Your browser does not support the audio element. 
+                    </audio><br> -->
+                </li>
+            {% empty %}
+                <li>No tracks found.</li>
+            {% endfor %}
+        </ul>
+    </div>
 
     <h2>My Playlist</h2>
 
-    <!-- <iframe
-    src="https://drive.google.com/file/d/1dS9V_4mPfOnm0SMzdLqHjIDaLNOBKSO0/preview"
-    width="300"
-    height="150"
-    frameborder="0"
-    allowfullscreen
-    ></iframe> -->
     <div>
         <!-- Embedded Player for Item 1 -->
         <audio id="player1" controls>
@@ -79,58 +53,12 @@
         <button id="pauseAll">Pause All</button>
         <button id="playNext">Play Next</button>
         <button id="playPrevious">Play Previous</button>
+        <button id="stopPlayer">Stop</button>
     </div>
-
-    <script>
-
-        const sources = [
-            "1dS9V_4mPfOnm0SMzdLqHjIDaLNOBKSO0",
-            "12wLVzkKJfiwXiUQIWaJKWTh5CTrvohE1",
-            "1qL7pOuOE_ZLHSeVgpSRzDhaopFuL1F6v"
-        ]
-
-        const base = "https://drive.google.com/uc?id="
-        const player = document.getElementById("player1");
-
-        let currentSourceIndex = 0;
-
-        function playNext() {
-            currentSourceIndex = (currentSourceIndex + 1) % sources.length;
-            // player.pause();
-            player.src = `${base}${sources[currentSourceIndex]}`;
-            player.play();
-        }
-
-        function playPrevious() {
-            // player.pause();
-            if (currentSourceIndex===0) {
-                currentSourceIndex = sources.length - 1;
-            } else {
-                currentSourceIndex = (currentSourceIndex - 1) % sources.length;
-            }
-            player.play();
-        }
-
-        document.getElementById("playAll").addEventListener("click", () => {
-            player.play();
-        });
-
-        document.getElementById("pauseAll").addEventListener("click", () => {
-            player.pause();
-        });
-
-        document.getElementById("playNext").addEventListener("click", () => {
-            playNext();
-        });
-
-        document.getElementById("playPrevious").addEventListener("click", () => {
-            playPrevious();
-        });
-
-        player.addEventListener("ended", playNext);
-    </script>
-
-
+    <div>
+        <label for="checkLoop">Loop</label> 
+        <input type="checkbox" id="checkLoop">
+    </div>
 
 
 {% endblock %} 
