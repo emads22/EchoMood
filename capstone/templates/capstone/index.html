@@ -8,9 +8,10 @@
 
     <div>
         <ul>
-            {% for track in tracks %}
+            {% for id, info in tracks.items %}
                 <li>
-                    {{track.name}}<br>
+                    {{info.title}} - {{info.artist}} - {{info.genre}}
+                    <br>
                     <!-- <audio id="playerx" controls>                        
                         <source src="https://drive.google.com/uc?id={{track.id}}" type="audio/mpeg">
                         Your browser does not support the audio element. 

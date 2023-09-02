@@ -13,9 +13,17 @@ from .tools import fetch_tracks_info
 
 
 def index(request): 
+    tracks = {}
     all_tracks = fetch_tracks_info()
+    for track in all_tracks:
+        title = track['name'][:-4].split(" - ")
+        tracks[track['id']] = {
+            'title': title[1],
+            'artist': title[0],
+            'genre': title[2]
+            }
     return render(request, "capstone/index.html", {
-        'tracks': all_tracks
+        'tracks': tracks
     })
                   
 
