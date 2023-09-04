@@ -14,7 +14,7 @@ class Mood(models.Model):
 
 class Genre(models.Model):
     label = models.CharField(max_length=50)
-    mood = models.ForeignKey(Mood, on_delete=models.CASCADE, blank=True, null=True, related_name="mood_genres")
+    mood = models.ForeignKey(Mood, on_delete=models.CASCADE, related_name="mood_genres")
 
     def __str__(self):
         return f'{self.label}'
@@ -24,10 +24,10 @@ class Track(models.Model):
     gdrive_id = models.CharField(max_length=200)
     artist = models.CharField(max_length=100)
     added_on = models.DateTimeField(auto_now_add=True)    # automatically populated with current date
-    genre = models.ForeignKey(Genre, on_delete=models.CASCADE, blank=True, null=True, related_name="genre_tracks")
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE, related_name="genre_tracks")
 
     def __str__(self):
-        return f'{self.title} - {self.artist} -- ({self.gdrive_id})'
+        return f'{self.title} - {self.artist} -- ({self.gdrive_id}) | {self.genre.label} | {self.genre.mood.name}'
 
 
 

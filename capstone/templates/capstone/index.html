@@ -7,6 +7,10 @@
     <h1>HELLO CAPSTONE</h1> <br>
 
     <div>
+        <script>
+            // access the 'tracks' dict passed to template via views func in JavaScript using Django template tags (pass to js it after parsing it)
+            var tracksFromDjango = {{ tracks|safe }};
+        </script>
         <ul>
             {% for id, info in tracks.items %}
                 <li>

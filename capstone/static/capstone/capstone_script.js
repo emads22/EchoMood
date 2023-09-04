@@ -13,46 +13,48 @@ const base = "https://drive.google.com/uc?id="
 
 let currentSourceIndex = 0;
 
-document.addEventListener("DOMContentLoaded", function() {
-    console.log("MOODZECHO");
+console.log(tracksFromDjango);
 
-    const player = document.getElementById("player1");
-    const loop = document.getElementById("checkLoop");
+// document.addEventListener("DOMContentLoaded", function() {
+//     console.log("MOODZECHO");
 
-    const playAllButton = document.getElementById("playAll");
-    const pauseAllButton = document.getElementById("pauseAll");
-    const stopPlayerButton = document.getElementById("stopPlayer");
-    const playNextButton = document.getElementById("playNext");
-    const playPreviousButton = document.getElementById("playPrevious");
+//     const player = document.getElementById("player1");
+//     const loop = document.getElementById("checkLoop");
 
-    playAllButton.addEventListener("click", () => {
-        player.play();
-    });
+//     const playAllButton = document.getElementById("playAll");
+//     const pauseAllButton = document.getElementById("pauseAll");
+//     const stopPlayerButton = document.getElementById("stopPlayer");
+//     const playNextButton = document.getElementById("playNext");
+//     const playPreviousButton = document.getElementById("playPrevious");
 
-    pauseAllButton.addEventListener("click", () => {
-        player.pause();
-    });
+//     playAllButton.addEventListener("click", () => {
+//         player.play();
+//     });
 
-    stopPlayerButton.addEventListener("click", () => {
-        stopPlayer(player);
-    })
+//     pauseAllButton.addEventListener("click", () => {
+//         player.pause();
+//     });
 
-    playNextButton.addEventListener("click", () => {
-        playNext(player, loop);
-    });
+//     stopPlayerButton.addEventListener("click", () => {
+//         stopPlayer(player);
+//     })
 
-    playPreviousButton.addEventListener("click", () => {
-        playPrevious(player);
-    });
+//     playNextButton.addEventListener("click", () => {
+//         playNext(player, loop);
+//     });
 
-    player.addEventListener("ended", playNext);
+//     playPreviousButton.addEventListener("click", () => {
+//         playPrevious(player);
+//     });
 
-    const test = document.getElementById("testButton");
-    test.addEventListener("click", () => {
-        fetch("")
-    })
+//     player.addEventListener("ended", playNext);
 
-})
+//     const test = document.getElementById("testButton");
+//     test.addEventListener("click", () => {
+//         fetch("")
+//     })
+
+// })
 
     
 function stopPlayer(player) {

@@ -11,10 +11,12 @@
     <!-- the following link element provides a small transparent image as the favicon, preventing the browser from making additional requests for the favicon.ico file and getting favicon error due to its absence. -->
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link href="{% static 'capstone/styles.css' %}" rel="stylesheet">
-    <script src="{% static 'capstone/capstone_script.js' %}"></script>
+    <!-- <script src="{% static 'capstone/capstone_script.js' %}"></script> -->
     <!-- icons -->
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'>
     {% block body %}
-    {% endblock %}    
+    {% endblock %}   
+    <!-- moved this script to here in order to identify the var passed to js from django template in 'index' page  -->
+    <script src="{% static 'capstone/capstone_script.js' %}"></script>
 </body>
 </html>
