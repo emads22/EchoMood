@@ -7,14 +7,18 @@
     <h1>HELLO CAPSTONE</h1> <br>
 
     <div>
+        {% if message %}
+            <p>{{message}}</p>
+        {% endif %}
         <script>
             // access the 'tracks' dict passed to template via views func in JavaScript using Django template tags (pass to js it after parsing it)
-            var tracksFromDjango = {{ tracks|safe }};
+            var all_tracks = {{ tracks|safe }};
         </script>
+        TRACKS
         <ul>
-            {% for id, info in tracks.items %}
+            {% for track in tracks %}
                 <li>
-                    {{info.title}} - {{info.artist}} - {{info.genre}}
+                    {{track.title}} - {{track.artist}} - {{track.genre}}
                     <br>
                     <!-- <audio id="playerx" controls>                        
                         <source src="https://drive.google.com/uc?id={{track.id}}" type="audio/mpeg">
@@ -25,9 +29,44 @@
                 <li>No tracks found.</li>
             {% endfor %}
         </ul>
+        GENRES
+        <ul>
+            {% for genre in genres %}
+                <li>
+                    {{genre.name}}
+                </li>
+            {% empty %}
+                <li>No genres found.</li>
+            {% endfor %}
+        </ul>
+        MOODS
+        <ul>
+            {% for mood in moods %}
+                <li>
+                    {{mood.name}}
+                </li>
+            {% empty %}
+                <li>No moods found.</li>
+            {% endfor %}
+        </ul>
     </div>
 
     <h2>My Playlist</h2>
+
+    <div>
+        <br>
+        <form action="{% url 'this_genre' %}" method="post">
+            {% csrf_token %}
+            <label for="requested_genre" class="form-label">Enter your preferred genre</label>
+            <select id="requested_genre" class="form-select" aria-label="Default select example" name="genre">
+                <option selected>Genre</option>
+                {% for genre in genres %}
+                    <option value="{{genre.name}}">{{genre.name}}</option>
+                {% endfor %}
+              </select>
+            <input type="submit" class="btn btn-primary" value="Submit">
+        </form><br>
+    </div>
 
     <div>
         <!-- Embedded Player for Item 1 -->

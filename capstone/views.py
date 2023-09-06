@@ -8,22 +8,17 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 import json
 
-from .models import User
-from .tools import fetch_tracks_info
+from .models import User, Mood, Genre, Track
+from .tools import fetch_tracks_info, populate_tracks_db
 
 
 def index(request): 
-    tracks = {}
-    all_tracks = fetch_tracks_info()
-    for track in all_tracks:
-        title = track['name'][:-4].split(" - ")
-        tracks[track['id']] = {
-            'title': title[1],
-            'artist': title[0],
-            'genre': title[2]
-            }
+    drive_tracks = fetch_tracks_info()
+    populate_tracks_db(drive_tracks)
     return render(request, "capstone/index.html", {
-        'tracks': tracks
+        'tracks': Track.objects.all(),
+        'genres': Genre.objects.all(),
+        'moods': Mood.objects.all()
     })
                   
 
@@ -40,11 +35,11 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "network/login.html", {
+            return render(request, "capstone/login.html", {
                 "message": "Invalid username and/or password."
             })
     else:
-        return render(request, "network/login.html")
+        return render(request, "capstone/login.html")
     
 
 def logout_view(request):
@@ -61,7 +56,7 @@ def register(request):
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            return render(request, "network/register.html", {
+            return render(request, "capstone/register.html", {
                 "message": "Passwords must match."
             })
 
@@ -70,10 +65,28 @@ def register(request):
             user = User.objects.create_user(username, email, password)
             user.save()
         except IntegrityError:
-            return render(request, "network/register.html", {
+            return render(request, "capstone/register.html", {
                 "message": "Username already taken."
             })
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
-        return render(request, "network/register.html")
+        return render(request, "capstone/register.html")
+    
+
+def this_genre_tracks(request):
+    if request.method != "POST":
+        pass
+    else:
+        selected_genre = request.POST.get("genre")
+        if Genre.objects.filter(name=selected_genre).exists():
+            this_genre = Genre.objects.get(name=selected_genre)
+            genre_exists = True
+        else:
+            genre_exists = False
+        
+        return render(request, "capstone/index.html", {
+            'tracks': this_genre.genre_tracks.all() if genre_exists else [],
+            'genres': Genre.objects.all()
+        })
+    

@@ -1,60 +1,49 @@
 
-const sources = [
-    "1dS9V_4mPfOnm0SMzdLqHjIDaLNOBKSO0",
-    "1aDd5FTDAoKqXHwqrb0XpyA1F-qUTPJta",
-    "1YisZ5e8B5K_ocIBiGk7Wz-iTUuLpMnUk",
-    "1KipsIxQu9tvwcbmytGFcvdKPr7gOa-0h",
-    "1nto-03CIGSk5zqB8pElY_rgBr2GMuiB1",
-    "1g4xbf6E93WM71-guvglLI-j7oaDlCeBP",
-    "1xGZpoQD-Sl6fukZXUtRWUc8HBmpcdJ8w",
-]
+const sources = Object.keys(all_tracks);
 
 const base = "https://drive.google.com/uc?id="
 
 let currentSourceIndex = 0;
 
-console.log(tracksFromDjango);
+console.log(sources.length);
 
-// document.addEventListener("DOMContentLoaded", function() {
-//     console.log("MOODZECHO");
 
-//     const player = document.getElementById("player1");
-//     const loop = document.getElementById("checkLoop");
+document.addEventListener("DOMContentLoaded", function() {
+    // console.log("ECHOMOOD");
 
-//     const playAllButton = document.getElementById("playAll");
-//     const pauseAllButton = document.getElementById("pauseAll");
-//     const stopPlayerButton = document.getElementById("stopPlayer");
-//     const playNextButton = document.getElementById("playNext");
-//     const playPreviousButton = document.getElementById("playPrevious");
+    const player = document.getElementById("player1");
+    const loop = document.getElementById("checkLoop");
 
-//     playAllButton.addEventListener("click", () => {
-//         player.play();
-//     });
+    const playAllButton = document.getElementById("playAll");
+    const pauseAllButton = document.getElementById("pauseAll");
+    const stopPlayerButton = document.getElementById("stopPlayer");
+    const playNextButton = document.getElementById("playNext");
+    const playPreviousButton = document.getElementById("playPrevious");
 
-//     pauseAllButton.addEventListener("click", () => {
-//         player.pause();
-//     });
+    playAllButton.addEventListener("click", () => {
+        player.play();
+    });
 
-//     stopPlayerButton.addEventListener("click", () => {
-//         stopPlayer(player);
-//     })
+    pauseAllButton.addEventListener("click", () => {
+        player.pause();
+    });
 
-//     playNextButton.addEventListener("click", () => {
-//         playNext(player, loop);
-//     });
+    stopPlayerButton.addEventListener("click", () => {
+        stopPlayer(player);
+    })
 
-//     playPreviousButton.addEventListener("click", () => {
-//         playPrevious(player);
-//     });
+    playNextButton.addEventListener("click", () => {
+        playNext(player, loop);
+    });
 
-//     player.addEventListener("ended", playNext);
+    playPreviousButton.addEventListener("click", () => {
+        playPrevious(player);
+    });
 
-//     const test = document.getElementById("testButton");
-//     test.addEventListener("click", () => {
-//         fetch("")
-//     })
+    player.addEventListener("ended", playNext);
 
-// })
+
+})
 
     
 function stopPlayer(player) {
@@ -81,3 +70,14 @@ function playPrevious(player) {
 }
 
     
+
+
+// const sources = [
+//     "1dS9V_4mPfOnm0SMzdLqHjIDaLNOBKSO0",
+//     "1aDd5FTDAoKqXHwqrb0XpyA1F-qUTPJta",
+//     "1YisZ5e8B5K_ocIBiGk7Wz-iTUuLpMnUk",
+//     "1KipsIxQu9tvwcbmytGFcvdKPr7gOa-0h",
+//     "1nto-03CIGSk5zqB8pElY_rgBr2GMuiB1",
+//     "1g4xbf6E93WM71-guvglLI-j7oaDlCeBP",
+//     "1xGZpoQD-Sl6fukZXUtRWUc8HBmpcdJ8w",
+// ]
