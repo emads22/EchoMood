@@ -16,9 +16,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 artist: element.fields.artist,
                 genre: element.fields.genre
             });
-
-            musicPlayer(sources);
         })
+        musicPlayer(sources);
     }
 })
 
@@ -72,18 +71,18 @@ function stopPlayer(player) {
 
 function playNext(player, title, loop, sources) {
     // even if index is the end of the playlist, using modulo '%' will return index to the start (0)
-    // currentSourceIndex = (currentSourceIndex + 1) % sources.length;
-    currentSourceIndex ++;
+    currentSourceIndex = (currentSourceIndex + 1) % sources.length;
+    // currentSourceIndex ++;
     player.src = `${src_base}${sources[currentSourceIndex].id}`;
     
     // in case index returned to start (0) and loop isnt checked then end of playlist is reached and player must stop without looping
     if (!loop.checked && currentSourceIndex >= sources.length) {
         console.log("end of playlist");
-        // load to reset the element's state
-        player.load(); // --fix                       starting index 0 no autopnext
+        // load to reset the element's state 
+        player.load(); 
     // otherwise keep playing the music playlist from the starting track cz loop is checked
     } else {
-        title.innerHtml = `${sources[currentSourceIndex].title}`
+        title.textContent = `${sources[currentSourceIndex].title}`;
         player.play(); 
     }
 }
@@ -91,8 +90,8 @@ function playNext(player, title, loop, sources) {
 function playPrevious(player, title, sources) {
     // if index gets to 0 (start of playlist) it will remain at 0 without going negative
     currentSourceIndex = (currentSourceIndex === 0) ? 0 : (currentSourceIndex - 1) % sources.length;
-    player.src = `${base}${sources[currentSourceIndex].id}`;
-    title.innerHtml = `${sources[currentSourceIndex].title}`
+    player.src = `${src_base}${sources[currentSourceIndex].id}`;
+    title.textContent = `${sources[currentSourceIndex].title}`;
     player.play();
 }
 
