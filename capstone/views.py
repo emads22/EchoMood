@@ -8,25 +8,38 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 import json
 from django.core import serializers
+from django import forms
 
 from .models import User, Mood, Genre, Track
-from .tools import fetch_tracks_info, sync_drive_db
+from .tools import fetch_tracks_info, sync_drive_db, create_context
 
 
+# <==================================================< Forms >==================================================>
+class MoodForm(forms.Form):    
+    mood = forms.ChoiceField(
+        label='Enter your mood ',
+        # choices must be list of tuples (value, display_label), and added first choice as empty value. (genres are instances of Model table)
+        choices=[('', 'Select a mood')] + [(mood.name, mood.name) for mood in Mood.objects.all()],
+        initial='',     # here empty value is selected at first
+        widget=forms.Select(attrs={'class': 'form-select form-select-lg'})
+        )
+    
+    
 def index(request): 
     drive_tracks = fetch_tracks_info()
     # sync the tracks from the drive with the tracks from db
     sync_drive_db(drive_tracks)
     # fetch all tracks in db
     these_tracks = Track.objects.all();
-    # serialize the list of tracks objects to JSON format before being used in JavaScript code
-    tracks_json = serializers.serialize('json', these_tracks)
-    return render(request, "capstone/index.html", {
-        'tracks': these_tracks,
-        'tracks_json': tracks_json,
-        'genres': Genre.objects.all(),
-        'moods': Mood.objects.all()
-    })
+    # create the default context
+    context = create_context(
+        mood_form=MoodForm(),
+        tracks=these_tracks,
+        # serialize the list of tracks objects to JSON format before being used in JavaScript code
+        tracks_json=serializers.serialize('json', these_tracks),
+    )
+
+    return render(request, "capstone/index.html", context=context)
                   
 
 def login_view(request):
@@ -81,19 +94,39 @@ def register(request):
         return render(request, "capstone/register.html")
     
 
-def this_genre_tracks(request):
+def this_mood_tracks(request):
+    # create the default context
+    context = create_context(
+        mood_form=MoodForm()
+    )
+
     if request.method != "POST":
-        pass
+        context['message'] = "Only POST method"
+        # handle other HTTP methods (like GET) as needed
+        return render(request, "capstone/error.html", context)
+    
     else:
-        selected_genre = request.POST.get("genre")
-        if Genre.objects.filter(name=selected_genre).exists():
-            this_genre = Genre.objects.get(name=selected_genre)
-            genre_exists = True
-        else:
-            genre_exists = False
+        mood_form = MoodForm(request.POST)
+        # validate form (mood) 
+        if mood_form.is_valid(): 
+            context['selected_mood'] = request.POST.get("mood")
+            this_mood = Mood.objects.get(name=context['selected_mood'])
+            # get all the genres associated with this mood
+            this_mood_genres = this_mood.genres.all()
+            # get a list of genres names to pass in context
+            context['this_mood_genres'] = [genre.name for genre in this_mood_genres]
+            # using the 'genre__in' lookup retrieve all tracks where the genre is in the 'this_mood_genres' queryset, 
+            # which represents all genres associated with the selected mood
+            context['tracks'] = Track.objects.filter(genre__in=this_mood_genres).all()
+            # serialize list of tracks objects to JSON format before using it in JavaScript code 
+            context['tracks_json'] = serializers.serialize('json', context['tracks'])
+            # redirect to same page 'index' bt with the collection of tracks based on this mood selected
+            return render(request, "capstone/index.html", context=context)
         
-        return render(request, "capstone/index.html", {
-            'tracks': this_genre.genre_tracks.all() if genre_exists else [],
-            'genres': Genre.objects.all()
-        })
+        # otherwise not validated
+        else:
+            # do nothing cz its a form of one field so automatically will stay in same page
+            pass
+        
+    
     

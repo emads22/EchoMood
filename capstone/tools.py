@@ -87,3 +87,20 @@ def sync_drive_db(drive_tracks):
     # catch tracks that don't meet this criteria (tracks that arent existent in drive anymore)
     db_tracks = Track.objects.exclude(title__in=drive_tracks_titles)
     db_tracks.delete()
+
+
+def create_context(**kwargs):
+    """ 
+    creates context template to avoid repeating the passing args in views everytime. use get() to set a default value 'None' if key not available
+    """
+    
+    context = {
+        "mood_form": kwargs.get("mood_form", None),
+        "tracks": kwargs.get("tracks", None),
+        "tracks_json": kwargs.get("tracks_json", None),
+        "message": kwargs.get("message", None),
+        "selected_mood": kwargs.get("selected_mood", None),
+        "this_mood_genres": kwargs.get("this_mood_genres", None),
+        }
+
+    return context

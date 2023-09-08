@@ -1,20 +1,35 @@
 
-const sources = all_tracks;
-
-const base = "https://drive.google.com/uc?id="
-
+const src_base = "https://drive.google.com/uc?id="
 var currentSourceIndex = 0;
-
-// console.log(sources.length);
-console.log(sources);
+var sources = [];
 
 
 document.addEventListener("DOMContentLoaded", function() {
     // console.log("ECHOMOOD");
+    
+    if (typeof all_tracks !== "undefined") {
+        all_tracks.forEach(element => {
+            // create a list of dict (objects) for each track in 'all_tracks' object
+            sources.push({
+                id: element.fields.gdrive_id,
+                title: element.fields.title,
+                artist: element.fields.artist,
+                genre: element.fields.genre
+            });
 
-    const player = document.getElementById("player1");
+            musicPlayer(sources);
+        })
+    }
+})
+
+
+
+function musicPlayer(sources) {
+    
+    const player = document.getElementById("player");
+    const title = document.getElementById("trackTitle");
     const loop = document.getElementById("checkLoop");
-
+    
     const playAllButton = document.getElementById("playAll");
     const pauseAllButton = document.getElementById("pauseAll");
     const stopPlayerButton = document.getElementById("stopPlayer");
@@ -34,41 +49,50 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 
     playNextButton.addEventListener("click", () => {
-        playNext(player, loop);
+        playNext(player, title, loop, sources);
     });
 
     playPreviousButton.addEventListener("click", () => {
-        playPrevious(player);
+        playPrevious(player, title, sources);
     });
 
-    player.addEventListener("ended", playNext);
-
-    // console.log("HELLO");
-    // console.log(playAllButton, pauseAllButton, stopPlayerButton,  playNextButton, playPreviousButton);
-
-})
+    player.addEventListener("ended", () => {
+        playNext(player, title, loop, sources);
+    });
+}
 
     
 function stopPlayer(player) {
-    player.currentTime = 0; // Reset playback position
-    player.load(); // Load to reset the element's state
+    // reset playback position
+    player.currentTime = 0; 
+    // load to reset the element's state which is the start of song (current time is 0)
+    player.load(); 
 }
     
 
-function playNext(player, loop) {
-    currentSourceIndex = (currentSourceIndex + 1) % sources.length;
-    player.src = `${base}${sources[currentSourceIndex]}`;
-    if (!loop.checked && currentSourceIndex === 0) {
+function playNext(player, title, loop, sources) {
+    // even if index is the end of the playlist, using modulo '%' will return index to the start (0)
+    // currentSourceIndex = (currentSourceIndex + 1) % sources.length;
+    currentSourceIndex ++;
+    player.src = `${src_base}${sources[currentSourceIndex].id}`;
+    
+    // in case index returned to start (0) and loop isnt checked then end of playlist is reached and player must stop without looping
+    if (!loop.checked && currentSourceIndex >= sources.length) {
         console.log("end of playlist");
-        player.load(); // Load to reset the element's state
+        // load to reset the element's state
+        player.load(); // --fix                       starting index 0 no autopnext
+    // otherwise keep playing the music playlist from the starting track cz loop is checked
     } else {
+        title.innerHtml = `${sources[currentSourceIndex].title}`
         player.play(); 
     }
 }
 
-function playPrevious(player) {
+function playPrevious(player, title, sources) {
+    // if index gets to 0 (start of playlist) it will remain at 0 without going negative
     currentSourceIndex = (currentSourceIndex === 0) ? 0 : (currentSourceIndex - 1) % sources.length;
-    player.src = `${base}${sources[currentSourceIndex]}`;
+    player.src = `${base}${sources[currentSourceIndex].id}`;
+    title.innerHtml = `${sources[currentSourceIndex].title}`
     player.play();
 }
 
