@@ -1,6 +1,8 @@
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 
 from .apps import all_about, things, matter
 from .models import Genre, Track
@@ -53,19 +55,35 @@ def fetch_tracks_info(page_token=None):
         return f'An error occurred: {error}'
     
 
-def populate_tracks_db(all_tracks):
-    """ populate the db of this server with tracks info """
+# use 'transaction.atomic()' to ensure that either all changes are committed to the db or none of them if an error occurs during synchronization
+@transaction.atomic
+def sync_drive_db(drive_tracks):
+    """ populate the db of this server with info of new tracks added in drive, also remove any track info from db if the track not existent anymore in drive """
 
-    for track in all_tracks:
+    drive_tracks_titles = []
+    for track in drive_tracks:
         title = track['name'][:-4].split(" - ")
-        # only if a track with this id doesnt exist in db then insert it 
-        if not Track.objects.filter(gdrive_id=track['id']).exists():
-            new_track = Track(
-                title=title[1],
-                gdrive_id=track['id'],
-                artist=title[0], 
-                # get the genre object of this track from the title
-                genre=Genre.objects.get(name=title[2])
-            )
-            new_track.save()
-        
+        # collect track names in a list
+        drive_tracks_titles.append(title[1])
+        # fetch the genre and test if error of non existence rises
+        try:
+            # get the genre object of this track from the title
+            this_genre = Genre.objects.get(name=title[2])
+        # handle the case when the genre doesn't exist in db
+        except ObjectDoesNotExist:
+            this_genre = "N/A"
+
+        # use get_or_create to either get an existing track or create a new one ('obj' is he retrieved or created object, 'created' is a
+        # boolean to indicate whether the object was created (True) or retrieved from the database)
+        track, created = Track.objects.get_or_create(
+            gdrive_id=track['id'],
+            defaults={
+                'title': title[1],
+                'artist': title[0],                
+                'genre': this_genre
+            }
+        )
+    
+    # catch tracks that don't meet this criteria (tracks that arent existent in drive anymore)
+    db_tracks = Track.objects.exclude(title__in=drive_tracks_titles)
+    db_tracks.delete()

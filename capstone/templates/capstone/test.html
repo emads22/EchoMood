@@ -6,9 +6,31 @@
     <title>Document</title>
 </head>
 <body>
-    {{total}}
-    {% for e in genres %}
-        {{e}}<br>
-    {% endfor %}
+    <h1>Playlist</h1>
+    <script>
+        var all_tracks = {{ tracks|safe }};
+    </script>
+    <div>
+        <!-- Embedded Player for Item 1 -->
+        <audio id="player1" controls>
+            {% comment %} <source src="https://drive.google.com/uc?id=1dS9V_4mPfOnm0SMzdLqHjIDaLNOBKSO0" type="audio/mpeg"> {% endcomment %}
+            Your browser does not support the audio element.
+            <!-- src="https://drive.google.com/file/d/1dS9V_4mPfOnm0SMzdLqHjIDaLNOBKSO0/view?usp=drive_link" -->
+        </audio><br>
+    </div>
+
+    <br><br>
+
+    <div>
+        <button id="playAll">Play All</button>
+        <button id="pauseAll">Pause All</button>
+        <button id="playNext">Play Next</button>
+        <button id="playPrevious">Play Previous</button>
+        <button id="stopPlayer">Stop</button>
+    </div>
+    <div>
+        <label for="checkLoop">Loop</label> 
+        <input type="checkbox" id="checkLoop">
+    </div>
 </body>
 </html>

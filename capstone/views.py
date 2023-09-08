@@ -7,16 +7,23 @@ from django.urls import reverse
 from django.contrib import messages
 from django.core.paginator import Paginator
 import json
+from django.core import serializers
 
 from .models import User, Mood, Genre, Track
-from .tools import fetch_tracks_info, populate_tracks_db
+from .tools import fetch_tracks_info, sync_drive_db
 
 
 def index(request): 
     drive_tracks = fetch_tracks_info()
-    populate_tracks_db(drive_tracks)
+    # sync the tracks from the drive with the tracks from db
+    sync_drive_db(drive_tracks)
+    # fetch all tracks in db
+    these_tracks = Track.objects.all();
+    # serialize the list of tracks objects to JSON format before being used in JavaScript code
+    tracks_json = serializers.serialize('json', these_tracks)
     return render(request, "capstone/index.html", {
-        'tracks': Track.objects.all(),
+        'tracks': these_tracks,
+        'tracks_json': tracks_json,
         'genres': Genre.objects.all(),
         'moods': Mood.objects.all()
     })

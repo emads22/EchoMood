@@ -6,13 +6,13 @@
 
     <h1>HELLO CAPSTONE</h1> <br>
 
-    <div>
-        {% if message %}
-            <p>{{message}}</p>
-        {% endif %}
+    <div>        
         <script>
-            // access the 'tracks' dict passed to template via views func in JavaScript using Django template tags (pass to js it after parsing it)
-            var all_tracks = {{ tracks|safe }};
+            // parse the JSON-formatted string into a JavaScript object to make it accessible as the 'all_tracks' variable in your JavaScript code
+            // Including '|escapejs' is a security precaution to  ensure that the JSON data is properly escaped to prevent syntax errors in our 
+            // JavaScript code. This filter escapes special characters so the resulting JavaScript string is valid
+            // ensure that special characters are properly escaped, preventing potential JavaScript errors
+            var all_tracks =  JSON.parse('{{ tracks_json|escapejs }}');
         </script>
         TRACKS
         <ul>
@@ -21,7 +21,7 @@
                     {{track.title}} - {{track.artist}} - {{track.genre}}
                     <br>
                     <!-- <audio id="playerx" controls>                        
-                        <source src="https://drive.google.com/uc?id={{track.id}}" type="audio/mpeg">
+                        <source src="https://drive.google.com/uc?id=track.id" type="audio/mpeg">
                         Your browser does not support the audio element. 
                     </audio><br> -->
                 </li>
@@ -75,19 +75,6 @@
             Your browser does not support the audio element.
             <!-- src="https://drive.google.com/file/d/1dS9V_4mPfOnm0SMzdLqHjIDaLNOBKSO0/view?usp=drive_link" -->
         </audio><br>
-
-
-        
-        <!-- <audio id="player2" controls>
-            <source src="https://drive.google.com/uc?id=12wLVzkKJfiwXiUQIWaJKWTh5CTrvohE1" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio><br>
-
-        
-        <audio id="player3" controls>
-            <source src="https://drive.google.com/uc?id=1qL7pOuOE_ZLHSeVgpSRzDhaopFuL1F6v" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio><br> -->
     </div>
 
     <br><br>

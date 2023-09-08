@@ -1,11 +1,12 @@
 
-const sources = Object.keys(all_tracks);
+const sources = all_tracks;
 
 const base = "https://drive.google.com/uc?id="
 
-let currentSourceIndex = 0;
+var currentSourceIndex = 0;
 
-console.log(sources.length);
+// console.log(sources.length);
+console.log(sources);
 
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -42,6 +43,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     player.addEventListener("ended", playNext);
 
+    // console.log("HELLO");
+    // console.log(playAllButton, pauseAllButton, stopPlayerButton,  playNextButton, playPreviousButton);
 
 })
 

@@ -15,6 +15,7 @@ class Genre(models.Model):
 
 class Mood(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    # each genre can have several moods and each mood can have several genres
     genres = models.ManyToManyField('Genre', related_name='moods')
 
     def __str__(self):
