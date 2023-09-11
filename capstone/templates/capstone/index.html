@@ -12,17 +12,17 @@
         var all_tracks =  JSON.parse('{{ tracks_json | escapejs }}');
     </script>
         
-    <h2>My Playlist</h2>
-
-    <ul>
+    <h2>
         {% if selected_mood %}
-            {{selected_mood}}: [{% for genre in this_mood_genres %}{{genre}}, {% endfor %}]
-        {%endif%} 
+            {{selected_mood}} 
+        {%endif%} Playlist:
+    </h2>
 
+    <ol>
         {% for track in tracks %}
             <li>{{track.title}} - {{track.genre}}</li>
         {% endfor %}
-    </ul>
+    </ol>
 
     <div>
         <br>

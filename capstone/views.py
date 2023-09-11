@@ -11,7 +11,8 @@ from django.core import serializers
 from django import forms
 
 from .models import User, Mood, Genre, Track
-from .tools import fetch_tracks_info, sync_drive_db, create_context
+from .tools import fetch_tracks_info, sync_drive_db, create_context, create_playlist, shuffle_list
+
 
 
 # <==================================================< Forms >==================================================>
@@ -25,6 +26,8 @@ class MoodForm(forms.Form):
         )
     
     
+
+# <==================================================<Views Functions>==================================================>
 def index(request): 
     drive_tracks = fetch_tracks_info()
     # sync the tracks from the drive with the tracks from db
@@ -38,7 +41,6 @@ def index(request):
         # serialize the list of tracks objects to JSON format before being used in JavaScript code
         tracks_json=serializers.serialize('json', these_tracks),
     )
-
     return render(request, "capstone/index.html", context=context)
                   
 
@@ -92,9 +94,9 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "capstone/register.html")
-    
 
-def this_mood_tracks(request):
+
+def mood_tracks(request):
     # create the default context
     context = create_context(
         mood_form=MoodForm()
@@ -111,15 +113,9 @@ def this_mood_tracks(request):
         if mood_form.is_valid(): 
             context['selected_mood'] = request.POST.get("mood")
             this_mood = Mood.objects.get(name=context['selected_mood'])
-            # get all the genres associated with this mood
-            this_mood_genres = this_mood.genres.all()
-            # get a list of genres names to pass in context
-            context['this_mood_genres'] = [genre.name for genre in this_mood_genres]
-            # using the 'genre__in' lookup retrieve all tracks where the genre is in the 'this_mood_genres' queryset, 
-            # which represents all genres associated with the selected mood
-            context['tracks'] = Track.objects.filter(genre__in=this_mood_genres).all()
+            context['tracks'] = create_playlist(this_mood)
             # serialize list of tracks objects to JSON format before using it in JavaScript code 
-            context['tracks_json'] = serializers.serialize('json', context['tracks'])
+            context['tracks_json'] = serializers.serialize('json', context['tracks'])            
             # redirect to same page 'index' bt with the collection of tracks based on this mood selected
             return render(request, "capstone/index.html", context=context)
         
@@ -127,6 +123,7 @@ def this_mood_tracks(request):
         else:
             # do nothing cz its a form of one field so automatically will stay in same page
             pass
-        
-    
+  
+
+ 
     

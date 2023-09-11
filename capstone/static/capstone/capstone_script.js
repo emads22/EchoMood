@@ -76,7 +76,7 @@ function playNext(player, title, loop, sources) {
     player.src = `${src_base}${sources[currentSourceIndex].id}`;
     
     // in case index returned to start (0) and loop isnt checked then end of playlist is reached and player must stop without looping
-    if (!loop.checked && currentSourceIndex >= sources.length) {
+    if (!loop.checked && currentSourceIndex === 0) {
         console.log("end of playlist");
         // load to reset the element's state 
         player.load(); 

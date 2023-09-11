@@ -3,14 +3,21 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
+import random
 
 from .apps import all_about, things, matter
 from .models import Genre, Track
 
 
-def fetch_tracks_info(page_token=None):
-    """ using the Drive v3 API, get a service account to access the Google Drive API and retrieve file names and IDs from a specific folder """
 
+PLAYLIST_MAX_TRACKS = 16
+
+
+
+def fetch_tracks_info(page_token=None):
+    """ 
+    using the Drive v3 API, get a service account to access the Google Drive API and retrieve file names and IDs from a specific folder 
+    """
     # scopes are defined in the project in google cloud console
     scopes = ['https://www.googleapis.com/auth/drive.readonly']
     # drive ID of the folder we want to read tracks from
@@ -45,7 +52,6 @@ def fetch_tracks_info(page_token=None):
                 remaining_tracks = fetch_tracks_info(page_token=next_page_token)
                 # combine the contents of 'tracks' and 'remaining_tracks' lists into a single list
                 tracks.extend(remaining_tracks) 
-
             return tracks     
 
         except HttpError as http_error:
@@ -55,11 +61,13 @@ def fetch_tracks_info(page_token=None):
         return f'An error occurred: {error}'
     
 
+
 # use 'transaction.atomic()' to ensure that either all changes are committed to the db or none of them if an error occurs during synchronization
 @transaction.atomic
 def sync_drive_db(drive_tracks):
-    """ populate the db of this server with info of new tracks added in drive, also remove any track info from db if the track not existent anymore in drive """
-
+    """ 
+    populate the db of this server with info of new tracks added in drive, also remove any track info from db if the track not existent anymore in drive 
+    """
     drive_tracks_titles = []
     for track in drive_tracks:
         title = track['name'][:-4].split(" - ")
@@ -89,11 +97,11 @@ def sync_drive_db(drive_tracks):
     db_tracks.delete()
 
 
+
 def create_context(**kwargs):
     """ 
     creates context template to avoid repeating the passing args in views everytime. use get() to set a default value 'None' if key not available
     """
-    
     context = {
         "mood_form": kwargs.get("mood_form", None),
         "tracks": kwargs.get("tracks", None),
@@ -102,5 +110,34 @@ def create_context(**kwargs):
         "selected_mood": kwargs.get("selected_mood", None),
         "this_mood_genres": kwargs.get("this_mood_genres", None),
         }
-
     return context
+
+
+
+def create_playlist(mood):
+    """ 
+    generate a playlist of max_tracks number of tracks randomly selected from the list of tracks relative to this mood passed as arg then shuffled
+    """
+    # get all the genres associated with this mood
+    this_mood_genres = mood.genres.all()
+    # using the 'genre__in' lookup retrieve all tracks where the genre is in the 'this_mood_genres' queryset, 
+    # which represents all genres associated with the selected mood. And convert it to a list in order to shuffle it
+    tracks_of_this_mood = list(Track.objects.filter(genre__in=this_mood_genres).all())
+    # generate a random sample (a subset) or a list of unique elements randomly selected from the 'tracks_of_this_mood' list
+    playlist = random.sample(tracks_of_this_mood, PLAYLIST_MAX_TRACKS)
+    print(type(playlist), len(playlist))
+    # shuffle this list a "random number between 6 and 9" times
+    playlist = shuffle_list(playlist, random.randint(6,9))    
+    return playlist
+
+
+
+def shuffle_list(this_list, num_shuffles):
+    """
+    recursively shuffle 'this_list' for n number of times then return it 
+    """   
+    if num_shuffles <= 0:
+        return this_list    
+    else:
+        random.shuffle(this_list)
+        return shuffle_list(this_list, num_shuffles-1)
