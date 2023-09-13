@@ -18,11 +18,17 @@
         {%endif%} Playlist:
     </h2>
 
-    <ol>
+    <!-- <ol>
         {% for track in tracks %}
             <li>{{track.title}} - {{track.genre}}</li>
         {% endfor %}
-    </ol>
+    </ol> -->
+
+    <div class="list-group">
+        {% for track in tracks %}
+            <button id="{{track.gdrive_id}}" class="list-group-item list-group-item-action list-group-item-secondary track">{{track.title}} - {{track.genre}}</button>
+        {% endfor %}
+    </div>
 
     <div>
         <br>

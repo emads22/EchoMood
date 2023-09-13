@@ -6,7 +6,8 @@ var sources = [];
 
 document.addEventListener("DOMContentLoaded", function() {
     // console.log("ECHOMOOD");
-    
+
+    // when 'all_tracks' var is available and defined
     if (typeof all_tracks !== "undefined") {
         all_tracks.forEach(element => {
             // create a list of dict (objects) for each track in 'all_tracks' object
@@ -37,11 +38,11 @@ function musicPlayer(sources) {
 
     playAllButton.addEventListener("click", () => {
         player.play();
-    });
+    })
 
     pauseAllButton.addEventListener("click", () => {
         player.pause();
-    });
+    })
 
     stopPlayerButton.addEventListener("click", () => {
         stopPlayer(player);
@@ -49,15 +50,45 @@ function musicPlayer(sources) {
 
     playNextButton.addEventListener("click", () => {
         playNext(player, title, loop, sources);
-    });
+    })
 
     playPreviousButton.addEventListener("click", () => {
         playPrevious(player, title, sources);
-    });
+    })
 
     player.addEventListener("ended", () => {
         playNext(player, title, loop, sources);
-    });
+    }) 
+
+
+    // select all <button> elements with class "track"
+    const trackButtons = document.querySelectorAll("button.track");
+
+    trackButtons.forEach(function(button) {
+        
+        button.addEventListener("dblclick", function() {
+            // console.log(this.textContent, this.id);
+            
+            // store the clicked button ID in a variable
+            const clickedButtonId = this.id;
+            // the 'Array.findIndex()' method is called on 'sources', it takes a function as an argument, and this function is executed for each 
+            // element in the array. it returns the index of the first element that satisfies the condition of having an id property equal to 
+            // 'this.id'. if no such element is found, it returns -1
+            currentSourceIndex = sources.findIndex(function(track) {
+                return track.id === clickedButtonId;
+            })
+            
+            if (currentSourceIndex !== -1) {
+                // update the player source and title for the current playing track
+                player.src = `${src_base}${sources[currentSourceIndex].id}`;
+                title.textContent = `${sources[currentSourceIndex].title}`;
+                // play the audio
+                player.play(); 
+            } else {
+                console.log("Track source not found in sources array.");
+            }
+        }) 
+      })
 }
 
     
@@ -69,7 +100,7 @@ function stopPlayer(player) {
 }
     
 
-function playNext(player, title, loop, sources) {
+function playNext(player, title, loop, sources) {    
     // even if index is the end of the playlist, using modulo '%' will return index to the start (0)
     currentSourceIndex = (currentSourceIndex + 1) % sources.length;
     // currentSourceIndex ++;
@@ -87,7 +118,8 @@ function playNext(player, title, loop, sources) {
     }
 }
 
-function playPrevious(player, title, sources) {
+
+function playPrevious(player, title, sources) {    
     // if index gets to 0 (start of playlist) it will remain at 0 without going negative
     currentSourceIndex = (currentSourceIndex === 0) ? 0 : (currentSourceIndex - 1) % sources.length;
     player.src = `${src_base}${sources[currentSourceIndex].id}`;
