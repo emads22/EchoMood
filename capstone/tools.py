@@ -80,22 +80,21 @@ def sync_drive_db(drive_tracks):
         # fetch the genre and test if error of non existence rises
         try:
             # get the genre object of this track from the title
-            this_genre = Genre.objects.get(name=title[2])
-        # handle the case when the genre doesn't exist in db
+            this_genre = Genre.objects.get(name=title[2])            
+        # handle the case when the genre doesn't exist in db by assign a default value ("Misc" genre)
         except ObjectDoesNotExist:
-            this_genre = None
-        # only continue to add track if no error with genre
-        else:
-            # use get_or_create to either get an existing track or create a new one ('obj' is he retrieved or created object, 'created' is a
-            # boolean to indicate whether the object was created (True) or retrieved from the database)
-            track, created = Track.objects.get_or_create(
-                gdrive_id=track['id'],
-                defaults={
-                    'title': title[1],
-                    'artist': title[0],                
-                    'genre': this_genre
-                }
-            )
+            this_genre = Genre.objects.get(name="Miscellaneous")
+        
+        # use get_or_create to either get an existing track or create a new one ('obj' is he retrieved or created object, 'created' is a
+        # boolean to indicate whether the object was created (True) or retrieved from the database)
+        track, created = Track.objects.get_or_create(
+            gdrive_id=track['id'],
+            defaults={
+                'title': title[1],
+                'artist': title[0],                
+                'genre': this_genre
+            }
+        )
     
     # catch tracks that don't meet this criteria (tracks that arent existent in drive anymore)
     db_tracks = Track.objects.exclude(title__in=drive_tracks_titles)
