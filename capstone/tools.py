@@ -10,6 +10,10 @@ from .models import Genre, Track
 
 
 
+# regex to catch a string containing only alphanumeric characters and the specified special characters, with a length between 6 and 8 characters, 
+# with 4 Positive lookaheads respectively for at least 2 uppercase letters, at least 2 digits, and at least 2 special characters 
+# from the set [_!@#$%&]
+PASSWORD_PATTERN = r"^(?=.*[A-Z].*[A-Z])(?=.*[0-9].*[0-9])(?=.*[_!@#$%&].*[_!@#$%&])[\w!@#$%&]{6,8}$"
 PLAYLIST_MAX_TRACKS = 16
 
 
@@ -79,18 +83,19 @@ def sync_drive_db(drive_tracks):
             this_genre = Genre.objects.get(name=title[2])
         # handle the case when the genre doesn't exist in db
         except ObjectDoesNotExist:
-            this_genre = "N/A"
-
-        # use get_or_create to either get an existing track or create a new one ('obj' is he retrieved or created object, 'created' is a
-        # boolean to indicate whether the object was created (True) or retrieved from the database)
-        track, created = Track.objects.get_or_create(
-            gdrive_id=track['id'],
-            defaults={
-                'title': title[1],
-                'artist': title[0],                
-                'genre': this_genre
-            }
-        )
+            this_genre = None
+        # only continue to add track if no error with genre
+        else:
+            # use get_or_create to either get an existing track or create a new one ('obj' is he retrieved or created object, 'created' is a
+            # boolean to indicate whether the object was created (True) or retrieved from the database)
+            track, created = Track.objects.get_or_create(
+                gdrive_id=track['id'],
+                defaults={
+                    'title': title[1],
+                    'artist': title[0],                
+                    'genre': this_genre
+                }
+            )
     
     # catch tracks that don't meet this criteria (tracks that arent existent in drive anymore)
     db_tracks = Track.objects.exclude(title__in=drive_tracks_titles)
@@ -103,6 +108,8 @@ def create_context(**kwargs):
     creates context template to avoid repeating the passing args in views everytime. use get() to set a default value 'None' if key not available
     """
     context = {
+        "register_form": kwargs.get("register_form", None),
+        "login_form": kwargs.get("login_form", None),
         "mood_form": kwargs.get("mood_form", None),
         "tracks": kwargs.get("tracks", None),
         "tracks_json": kwargs.get("tracks_json", None),

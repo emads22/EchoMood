@@ -12,23 +12,28 @@
         var all_tracks =  JSON.parse('{{ tracks_json | escapejs }}');
     </script>
         
-    <h2>
-        {% if selected_mood %}
-            {{selected_mood}} 
-        {%endif%} Playlist:
-    </h2>
+    {% if message %}
+        <div class="alert alert-secondary p-4 fs-5" role="alert">
+            {{ message }}
+        </div>
+        <!-- The meta tag with http-equiv="refresh" attribute reloads the page after 1 second here -->
+        <meta http-equiv="refresh" content="1;url={% url 'index' %}">
+    {% endif %}
 
-    <!-- <ol>
-        {% for track in tracks %}
-            <li>{{track.title}} - {{track.genre}}</li>
-        {% endfor %}
-    </ol> -->
-
-    <div class="list-group">
-        {% for track in tracks %}
-            <button id="{{track.gdrive_id}}" class="list-group-item list-group-item-action list-group-item-secondary track">{{track.title}} - {{track.genre}}</button>
-        {% endfor %}
-    </div>
+    {% if tracks %}
+        <h2>{{selected_mood}} Playlist:</h2><br>
+        <div class="list-group">
+            {% for track in tracks %}
+                <!-- <li> -->
+                    <button id="{{track.gdrive_id}}" class="list-group-item list-group-item-secondary text-start track">
+                        {{track.title}} - {{track.genre}}
+                    </button>
+                <!-- </li> -->
+            {% endfor %}
+        </div>
+    {% else %}
+        <h1>Welcome to EchoMood </h1>
+    {% endif %}
 
     <div>
         <br>

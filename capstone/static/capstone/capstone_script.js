@@ -60,35 +60,21 @@ function musicPlayer(sources) {
         playNext(player, title, loop, sources);
     }) 
 
+    // add an event listener for the "play" event
+    player.addEventListener("play", () => {
+        // this function will be called when the audio starts or resumes playing
+        highlightTrack(player, sources);
+    })
 
     // select all <button> elements with class "track"
     const trackButtons = document.querySelectorAll("button.track");
 
-    trackButtons.forEach(function(button) {
-        
+    trackButtons.forEach(function(button) {         
         button.addEventListener("dblclick", function() {
-            // console.log(this.textContent, this.id);
-            
-            // store the clicked button ID in a variable
-            const clickedButtonId = this.id;
-            // the 'Array.findIndex()' method is called on 'sources', it takes a function as an argument, and this function is executed for each 
-            // element in the array. it returns the index of the first element that satisfies the condition of having an id property equal to 
-            // 'this.id'. if no such element is found, it returns -1
-            currentSourceIndex = sources.findIndex(function(track) {
-                return track.id === clickedButtonId;
-            })
-            
-            if (currentSourceIndex !== -1) {
-                // update the player source and title for the current playing track
-                player.src = `${src_base}${sources[currentSourceIndex].id}`;
-                title.textContent = `${sources[currentSourceIndex].title}`;
-                // play the audio
-                player.play(); 
-            } else {
-                console.log("Track source not found in sources array.");
-            }
-        }) 
-      })
+            // if '() =>' is used instead of 'function()', current event target 'this' wont be accessible
+            playClickedTrack(this, title, sources);
+        })
+    })
 }
 
     
@@ -127,7 +113,53 @@ function playPrevious(player, title, sources) {
     player.play();
 }
 
+
+function playClickedTrack(element, title, sources) {
+    // store the clicked button ID in a variable
+    const clickedButtonId = element.id;
+    // the 'Array.findIndex()' method is called on 'sources', it takes a function as an argument, and this function is executed for each 
+    // element in the array. it returns the index of the first element that satisfies the condition of having an id property equal to 
+    // 'this.id'. if no such element is found, it returns -1
+    currentSourceIndex = sources.findIndex(function(track) {
+        return track.id === clickedButtonId;
+    })
     
+    if (currentSourceIndex !== -1) {
+        // update the player source and title for the current playing track
+        player.src = `${src_base}${sources[currentSourceIndex].id}`;
+        title.textContent = `${sources[currentSourceIndex].title}`;
+        // play the audio track
+        player.play(); 
+    } else {
+        console.log("Track source not found in sources array.");
+    }
+}
+
+
+function highlightTrack(player, sources) {
+    // console.log(sources[currentSourceIndex].title);
+    thisTrack = document.getElementById(sources[currentSourceIndex].id);
+    playlistTracks = document.querySelectorAll(".track");
+    playlistTracks.forEach((track) => {
+        if (track.id === sources[currentSourceIndex].id) {
+            // console.log("Found it: ", sources[currentSourceIndex].title);
+            // add the highlighted class to this track
+            track.classList.add("highlighted");
+        } else {
+            // console.log("Not found it: ");
+            // check if 'highlighted' class exists in this track's classList in order to remove it
+            if (track.classList.contains('highlighted')) {
+                // remove a class from this track
+                track.classList.remove("highlighted");
+            }
+        }
+    })
+    
+    
+
+    
+
+}
 
 
 // const sources = [
