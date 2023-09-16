@@ -13,26 +13,14 @@
     </script>
         
     {% if message %}
-        <div class="alert alert-secondary p-4 fs-5" role="alert">
+        <div class="alert alert-warning p-4 fs-5" role="alert">
             {{ message }}
         </div>
         <!-- The meta tag with http-equiv="refresh" attribute reloads the page after 1 second here -->
         <meta http-equiv="refresh" content="1;url={% url 'index' %}">
     {% endif %}
 
-    <!-- <div class="row align-items-center">
-        <div class="col-md-6">
-            <h2 class="py-4 ps-5 ms-5 latest-title"><strong>{{heading}}</strong></h2>
-        </div>
-        <div class="col-md-6">
-            <div class="col-auto text-end py-4 pe-5 me-5">
-                <h3><strong class="title">E:neT</strong></h3>
-                <h5 class="">Exploring Ideas, Sharing Stories, Building Connections</h5>
-            </div>
-        </div>
-    </div>  -->
-
-    <div class="col-auto d-flex justify-content-center align-items-center">
+    <div class="col-auto d-flex justify-content-center align-items-center p-4">
         <img src="{% static 'capstone/assets/logo/EchoMood.png' %}" alt="EchoMood Logo">
     </div>
 
@@ -48,7 +36,15 @@
             {% endfor %}
         </div>
     {% else %}
-        <h1>No tracks </h1>
+        <!-- <h1>No tracks </h1> -->
+        <div class="col-auto d-flex justify-content-center align-items-center p-4">
+            <!-- Embedded Player -->
+            <h5 id="landingTrackTitle">"Surf" by Gunna Type Beat</h5>
+            <audio id="landingTrack" controls>
+                <source src="{% static 'capstone/assets/landing track/Gunna Type Beat - Surf - Melodic Guitar Rap Instrumental 2023.mp3' %}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
     {% endif %}
 
 

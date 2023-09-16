@@ -6,6 +6,7 @@ var sources = [];
 
 document.addEventListener("DOMContentLoaded", function() {
     // console.log("ECHOMOOD");
+    handleLandingTrack();
 
     // when 'all_tracks' var is available and defined
     if (typeof all_tracks !== "undefined") {
@@ -21,6 +22,24 @@ document.addEventListener("DOMContentLoaded", function() {
         musicPlayer(sources);
     }
 })
+
+
+
+function handleLandingTrack() {
+    const landingTrack = document.getElementById("landingTrack");
+    // set the initial volume when the audio element loads (0.2 represents 20% volume)
+    landingTrack.volume = 0.2;  
+    // on the first interaction from user (any mouse click) start playing landing track
+    document.addEventListener("click", () => {
+        landingTrack.play();
+    })
+    // restart the audio when it ends
+    landingTrack.addEventListener("ended", () => {
+        // reset the audio to the beginning
+        landingTrack.currentTime = 0; 
+        landingTrack.play();
+    })
+}
 
 
 

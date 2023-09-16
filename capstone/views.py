@@ -67,6 +67,7 @@ class MoodForm(forms.Form):
     
 
 # <==================================================<Views Functions>==================================================>
+@login_required
 def index(request): 
     drive_tracks = fetch_tracks_info()
     # sync the tracks from the drive with the tracks from db
@@ -113,6 +114,7 @@ def login_view(request):
     return render(request, "capstone/login.html", context=context)
     
 
+@login_required
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
@@ -167,6 +169,7 @@ def register(request):
     return render(request, "capstone/register.html", context=context)
 
 
+@login_required
 def mood_tracks(request):
     # create the default context
     context = create_context(

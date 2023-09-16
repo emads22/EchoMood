@@ -1,9 +1,11 @@
 {% extends "capstone/layout.html" %}
 
+{% load static %}
+
 {% block body %}
     
     {% if message %}
-        <div class="alert alert-secondary p-4 fs-5" role="alert">
+        <div class="alert alert-warning p-4 fs-5" role="alert">
             {{ message }}
         </div>
         <!-- The meta tag with http-equiv="refresh" attribute reloads the page after 2 seconds here -->
@@ -14,8 +16,10 @@
     <div class="row container-fluid">
 
         <div class="col-auto m-5 p-5">
-            <h1 class="">Discover, Engage, and Share.</h1>
-            <h1 class="">Welcome to<strong class="title ms-4">E:neT</strong></h1>        
+            <h1 class="mb-3">Discover, Stream, and Synchronize.</h1>
+            <div class="d-flex justify-content-center">
+                <img src="{% static 'capstone/assets/logo/EchoMood.png' %}" alt="EchoMood Logo" class="small-logo">
+            </div>
         </div>
 
         <div class="col-auto m-5 p-5 container">
@@ -31,8 +35,8 @@
                     </div>
                     
                     <div class="col-auto">
-                        <button type="submit" class="form-control btn btn-lg mt-2 mb-4 fs-4 btn-primary">
-                            Login
+                        <button type="submit" class="form-control btn btn-lg mt-2 mb-4 fs-4 btn-green">
+                            Log In
                         </button>
                     </div>
                 </form>

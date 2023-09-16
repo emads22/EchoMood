@@ -3,6 +3,57 @@ body {
     color:#7ED957;
 }
 
+/* a {
+    text-decoration: none;
+} */
+
+a.register-link, a.login-link {
+    color: #7ED957;
+}
+
+.bg-navbar {
+    background-color: #7ED957;
+}
+
+.dropdown-menu {
+    background-color: #7ED957;
+}
+
+a.dropdown-item:hover {
+    background-color:  #6CB946;
+}
+
+.home-icon {
+    margin-top: -15px;
+    margin-bottom: -10px;
+}
+
+.small-logo {
+    width: 60%;
+    height: auto;
+}
+
+.btn-green{
+    background-color: #7ED957; 
+    color: #081B00;
+}
+
+.btn:hover {
+    background-color: #6CB946; /*#19c37d;*/ /* #1CB953; */
+    color: #FFF;
+}
+
+.alert-warning {
+    border-radius: 0;
+    background-color: #A4E981;   /*#ff872e;*/
+    /* border-color: #081B00;
+    border-width: 8px; */
+    border: none;
+    color: #081B00;
+}
+
+
+
 
 /* Style the audio controls */
 audio {
@@ -12,12 +63,12 @@ audio {
 
 /* Customize the appearance of the play button */
 audio::-webkit-media-controls-play-button {
-  background-color: orange;
-  color: #fff;
+  background-color: #F16017;
+  color: #FFF;
 }
 
 audio {
-    background-color: #000;
+    background-color: #081B00;
 }
 
 /* Customize the appearance of the seek bar */

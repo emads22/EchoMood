@@ -129,4 +129,4 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # This setting specifies the URL where users should be redirected when they are not authenticated and try to access a protected view.
-# LOGIN_URL = 'login'
+LOGIN_URL = 'login'
