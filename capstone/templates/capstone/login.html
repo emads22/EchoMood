@@ -23,12 +23,6 @@
                 <form action="{% url 'login' %}" method="post">
                     {% csrf_token %}
 
-                    <!-- <div class="col-auto mb-4">
-                        <input autofocus class="form-control form-control-lg" type="text" name="username" placeholder="Username">
-                    </div>
-                    <div class="col-auto mb-4">
-                        <input class="form-control form-control-lg" type="password" name="password" placeholder="Password">
-                    </div> -->
                     <div class="col-auto mb-4">
                         {{ login_form.username }}
                     </div>

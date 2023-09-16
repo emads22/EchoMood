@@ -20,6 +20,22 @@
         <meta http-equiv="refresh" content="1;url={% url 'index' %}">
     {% endif %}
 
+    <!-- <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2 class="py-4 ps-5 ms-5 latest-title"><strong>{{heading}}</strong></h2>
+        </div>
+        <div class="col-md-6">
+            <div class="col-auto text-end py-4 pe-5 me-5">
+                <h3><strong class="title">E:neT</strong></h3>
+                <h5 class="">Exploring Ideas, Sharing Stories, Building Connections</h5>
+            </div>
+        </div>
+    </div>  -->
+
+    <div class="col-auto d-flex justify-content-center align-items-center">
+        <img src="{% static 'capstone/assets/logo/EchoMood.png' %}" alt="EchoMood Logo">
+    </div>
+
     {% if tracks %}
         <h2>{{selected_mood}} Playlist:</h2><br>
         <div class="list-group">
@@ -32,8 +48,9 @@
             {% endfor %}
         </div>
     {% else %}
-        <h1>Welcome to EchoMood </h1>
+        <h1>No tracks </h1>
     {% endif %}
+
 
     <div>
         <br>
