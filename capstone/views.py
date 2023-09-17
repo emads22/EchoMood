@@ -57,7 +57,7 @@ class RegisterForm(forms.Form):
 
 class MoodForm(forms.Form):    
     mood = forms.ChoiceField(
-        # label='Enter your mood ',
+        # label='Select your mood ',
         # choices must be list of tuples (value, display_label), and added first choice as empty value. (genres are instances of Model table)
         choices=[('', 'Select your mood')] + [(mood.name, mood.name) for mood in Mood.objects.all()],
         initial='',     # here empty value is selected at first
@@ -66,17 +66,16 @@ class MoodForm(forms.Form):
         required=True
         )
     
-    # add a hidden input field to signal playing
-    # playable = forms.CharField(
-    #     widget=forms.HiddenInput(), 
-    #     initial=True)
-    
     
 
 # <==================================================<Views Functions>==================================================>
 @login_required
 def index(request): 
     drive_tracks = fetch_tracks_info()      #--fix  raise errors
+    print()
+    print(drive_tracks, len(drive_tracks))
+    these = Track.objects.all()
+    print(these.count())
     # sync the tracks from the drive with the tracks from db
     sync_drive_db(drive_tracks)
     # fetch all tracks info from db

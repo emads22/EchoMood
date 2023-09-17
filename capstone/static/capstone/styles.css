@@ -13,6 +13,10 @@ a.register-link, a.login-link {
     color: #7ED957;
 }
 
+a.dropdown-item:hover {
+    background-color:  #6CB946;
+}
+
 .bg-navbar, .dropdown-menu {
     background-color: #7ED957;
 }
@@ -20,10 +24,6 @@ a.register-link, a.login-link {
 /* .dropdown-menu {
     background-color: #7ED957;
 } */
-
-a.dropdown-item:hover {
-    background-color:  #6CB946;
-}
 
 .home-icon {
     margin-top: -15px;
@@ -54,7 +54,6 @@ a.dropdown-item:hover {
     color: #081B00;
 }
 
-
 .container-fluid {
     /* width: 80%; */
     /* max-width: 1200px; */
@@ -64,7 +63,8 @@ a.dropdown-item:hover {
 
 .sticky-div {
     /* display: none; */
-    background-color: red;
+    background-color: #7ED957;
+    color: #081B00;
     padding: 10px;
     position: sticky;
     bottom: 0; /* Adjust the value to set the distance from the top */

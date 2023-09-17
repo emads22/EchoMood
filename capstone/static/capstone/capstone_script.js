@@ -4,6 +4,7 @@ var currentSourceIndex = 0;
 var sources = [];
 
 
+
 document.addEventListener("DOMContentLoaded", function() {
 
     handleMoodSelectDiv();
@@ -36,6 +37,7 @@ function handlePlayerDiv() {
 }
 
 
+
 function handleMoodSelectDiv() {
     const moodDiv = document.getElementById("mood-div");
     // access the 'data-mood-select' attribute (JavaScript converts the hyphenated attribute names to camelCase when accessing them through the 
@@ -50,12 +52,10 @@ function handleMoodSelectDiv() {
 
 
 
-function musicPlayer(sources) {
-    
+function musicPlayer(sources) {    
     const player = document.getElementById("musicPlayer");
     const title = document.getElementById("trackTitle");
-    const loop = document.getElementById("checkLoop");
-    
+    const loop = document.getElementById("checkLoop");    
     const playAllButton = document.getElementById("playAll");
     const pauseAllButton = document.getElementById("pauseAll");
     const stopPlayerButton = document.getElementById("stopPlayer");
@@ -110,14 +110,13 @@ function musicPlayer(sources) {
             default:
                 errorMessage = 'An unknown error occurred.';
         }
-
-        // Handle the error, e.g., display a message to the user or take appropriate action
+        // Handle the error and display a message on the console
         console.error(`Audio error: ${errorMessage}`);
         // another handling of error which is signaling user that theres an error of loading media
         title.textContent = "Error Loading Media. Try Again Later.";
     });
     
-    // add an event listener for the "play" event
+    // add an event listener for the "play" event in order to highlight the track that is being played
     player.addEventListener("play", () => {
         // this function will be called when the audio starts or resumes playing
         highlightTrack(player, sources);
@@ -140,13 +139,6 @@ function musicPlayer(sources) {
 }
 
     
-function stopPlayer(player) {
-    // reset playback position
-    // player.currentTime = 0; 
-    // load to reset the element's state which is the start of song (current time is 0)
-    player.load(); 
-}
-    
 
 function playNext(player, title, loop, sources) {    
     // even if index is the end of the playlist, using modulo '%' will return index to the start (0)
@@ -166,6 +158,7 @@ function playNext(player, title, loop, sources) {
 }
 
 
+
 function playPrevious(player, title, sources) {    
     // if index gets to 0 (start of playlist) it will remain at 0 without going negative
     currentSourceIndex = (currentSourceIndex === 0) ? 0 : (currentSourceIndex - 1) % sources.length;
@@ -175,6 +168,16 @@ function playPrevious(player, title, sources) {
     title.textContent = `${sources[currentSourceIndex].title}`;    
     player.play();
 }
+
+
+
+function stopPlayer(player) {
+    // reset playback position
+    // player.currentTime = 0; 
+    // load to reset the element's state which is the start of song (current time is 0)
+    player.load(); 
+}
+
 
 
 function playClickedTrack(player, element, title, sources) {
@@ -201,6 +204,7 @@ function playClickedTrack(player, element, title, sources) {
 }
 
 
+
 function highlightTrack(player, sources) {
     // console.log(sources[currentSourceIndex].title);
     thisTrack = document.getElementById(sources[currentSourceIndex].id);
@@ -218,13 +222,9 @@ function highlightTrack(player, sources) {
                 track.classList.remove("highlighted");
             }
         }
-    })
-    
-    
-
-    
-
+    }) 
 }
+
 
 
 // const sources = [
