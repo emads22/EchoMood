@@ -57,22 +57,29 @@ class RegisterForm(forms.Form):
 
 class MoodForm(forms.Form):    
     mood = forms.ChoiceField(
-        label='Enter your mood ',
+        # label='Enter your mood ',
         # choices must be list of tuples (value, display_label), and added first choice as empty value. (genres are instances of Model table)
-        choices=[('', 'Select a mood')] + [(mood.name, mood.name) for mood in Mood.objects.all()],
+        choices=[('', 'Select your mood')] + [(mood.name, mood.name) for mood in Mood.objects.all()],
         initial='',     # here empty value is selected at first
-        widget=forms.Select(attrs={'class': 'form-select form-select-lg'})
+        widget=forms.Select(attrs={'class': 'form-select form-select-lg',
+                                   'autofocus': 'autofocus'}),
+        required=True
         )
+    
+    # add a hidden input field to signal playing
+    # playable = forms.CharField(
+    #     widget=forms.HiddenInput(), 
+    #     initial=True)
     
     
 
 # <==================================================<Views Functions>==================================================>
 @login_required
 def index(request): 
-    drive_tracks = fetch_tracks_info()
+    drive_tracks = fetch_tracks_info()      #--fix  raise errors
     # sync the tracks from the drive with the tracks from db
     sync_drive_db(drive_tracks)
-    # fetch all tracks in db
+    # fetch all tracks info from db
     these_tracks = Track.objects.all();
     # create the default context
     context = create_context(
@@ -189,7 +196,10 @@ def mood_tracks(request):
             this_mood = Mood.objects.get(name=context['selected_mood'])
             context['tracks'] = create_playlist(this_mood)
             # serialize list of tracks objects to JSON format before using it in JavaScript code 
-            context['tracks_json'] = serializers.serialize('json', context['tracks'])            
+            context['tracks_json'] = serializers.serialize('json', context['tracks'])  
+            # add 'playable' variable to signal playing music
+            context['playable'] = True       
+            context['mood_select'] = False       
             # redirect to same page 'index' bt with the collection of tracks based on this mood selected
             return render(request, "capstone/index.html", context=context)
         

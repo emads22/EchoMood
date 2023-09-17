@@ -5,9 +5,21 @@ var sources = [];
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    // console.log("ECHOMOOD");
-    handleLandingTrack();
 
+    handleMoodSelectDiv();
+    handlePlayerDiv();
+    
+})
+
+
+
+function handlePlayerDiv() {
+    const playerDiv = document.getElementById("player-div");
+    // access the 'data-playable' attribute
+    const playableValue = playerDiv.dataset.playable;
+    if (playableValue === "True") {
+        playerDiv.style.display = "block";
+    } 
     // when 'all_tracks' var is available and defined
     if (typeof all_tracks !== "undefined") {
         all_tracks.forEach(element => {
@@ -21,31 +33,26 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         musicPlayer(sources);
     }
-})
+}
 
 
-
-function handleLandingTrack() {
-    const landingTrack = document.getElementById("landingTrack");
-    // set the initial volume when the audio element loads (0.2 represents 20% volume)
-    landingTrack.volume = 0.2;  
-    // on the first interaction from user (any mouse click) start playing landing track
-    document.addEventListener("click", () => {
-        landingTrack.play();
-    })
-    // restart the audio when it ends
-    landingTrack.addEventListener("ended", () => {
-        // reset the audio to the beginning
-        landingTrack.currentTime = 0; 
-        landingTrack.play();
-    })
+function handleMoodSelectDiv() {
+    const moodDiv = document.getElementById("mood-div");
+    // access the 'data-mood-select' attribute (JavaScript converts the hyphenated attribute names to camelCase when accessing them through the 
+    // dataset object so 'mood-select' is now 'moodSelect' )
+    const moodSelection = moodDiv.dataset.moodSelect;
+    if (moodSelection === "True") {
+        moodDiv.style.display = "block";
+    } else {
+        moodDiv.style.display = "none";
+    }
 }
 
 
 
 function musicPlayer(sources) {
     
-    const player = document.getElementById("player");
+    const player = document.getElementById("musicPlayer");
     const title = document.getElementById("trackTitle");
     const loop = document.getElementById("checkLoop");
     
@@ -54,6 +61,13 @@ function musicPlayer(sources) {
     const stopPlayerButton = document.getElementById("stopPlayer");
     const playNextButton = document.getElementById("playNext");
     const playPreviousButton = document.getElementById("playPrevious");
+
+    // set the initial volume when the audio element loads (0.2 represents 20% volume)
+    player.volume = 0.2; 
+    // set the src for the music layer (1st track)
+    player.src = `${src_base}${sources[currentSourceIndex].id}`;
+    // load src of player
+    player.load();
 
     playAllButton.addEventListener("click", () => {
         player.play();
@@ -75,15 +89,44 @@ function musicPlayer(sources) {
         playPrevious(player, title, sources);
     })
 
-    player.addEventListener("ended", () => {
-        playNext(player, title, loop, sources);
-    }) 
+    // Add an event listener to handle errors
+    player.addEventListener('error', () => {
+        const errorCode = player.error.code;
+        let errorMessage = '';
 
+        switch (errorCode) {
+            case MediaError.MEDIA_ERR_ABORTED:
+                errorMessage = 'The fetching process for the media resource was aborted.';
+                break;
+            case MediaError.MEDIA_ERR_NETWORK:
+                errorMessage = 'A network error occurred while fetching the media resource.';
+                break;
+            case MediaError.MEDIA_ERR_DECODE:
+                errorMessage = 'The media resource couldn\'t be decoded.';
+                break;
+            case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+                errorMessage = 'The media resource format is not supported.';
+                break;
+            default:
+                errorMessage = 'An unknown error occurred.';
+        }
+
+        // Handle the error, e.g., display a message to the user or take appropriate action
+        console.error(`Audio error: ${errorMessage}`);
+        // another handling of error which is signaling user that theres an error of loading media
+        title.textContent = "Error Loading Media. Try Again Later.";
+    });
+    
     // add an event listener for the "play" event
     player.addEventListener("play", () => {
         // this function will be called when the audio starts or resumes playing
         highlightTrack(player, sources);
+        title.textContent = `${sources[currentSourceIndex].title}`;
     })
+
+    player.addEventListener("ended", () => {
+        playNext(player, title, loop, sources);
+    }) 
 
     // select all <button> elements with class "track"
     const trackButtons = document.querySelectorAll("button.track");
@@ -91,7 +134,7 @@ function musicPlayer(sources) {
     trackButtons.forEach(function(button) {         
         button.addEventListener("dblclick", function() {
             // if '() =>' is used instead of 'function()', current event target 'this' wont be accessible
-            playClickedTrack(this, title, sources);
+            playClickedTrack(player, this, title, sources);
         })
     })
 }
@@ -99,7 +142,7 @@ function musicPlayer(sources) {
     
 function stopPlayer(player) {
     // reset playback position
-    player.currentTime = 0; 
+    // player.currentTime = 0; 
     // load to reset the element's state which is the start of song (current time is 0)
     player.load(); 
 }
@@ -108,14 +151,13 @@ function stopPlayer(player) {
 function playNext(player, title, loop, sources) {    
     // even if index is the end of the playlist, using modulo '%' will return index to the start (0)
     currentSourceIndex = (currentSourceIndex + 1) % sources.length;
-    // currentSourceIndex ++;
     player.src = `${src_base}${sources[currentSourceIndex].id}`;
+    // load new src of player 
+    player.load();
     
     // in case index returned to start (0) and loop isnt checked then end of playlist is reached and player must stop without looping
     if (!loop.checked && currentSourceIndex === 0) {
         console.log("end of playlist");
-        // load to reset the element's state 
-        player.load(); 
     // otherwise keep playing the music playlist from the starting track cz loop is checked
     } else {
         title.textContent = `${sources[currentSourceIndex].title}`;
@@ -128,12 +170,14 @@ function playPrevious(player, title, sources) {
     // if index gets to 0 (start of playlist) it will remain at 0 without going negative
     currentSourceIndex = (currentSourceIndex === 0) ? 0 : (currentSourceIndex - 1) % sources.length;
     player.src = `${src_base}${sources[currentSourceIndex].id}`;
-    title.textContent = `${sources[currentSourceIndex].title}`;
+    // load new src of player 
+    player.load();
+    title.textContent = `${sources[currentSourceIndex].title}`;    
     player.play();
 }
 
 
-function playClickedTrack(element, title, sources) {
+function playClickedTrack(player, element, title, sources) {
     // store the clicked button ID in a variable
     const clickedButtonId = element.id;
     // the 'Array.findIndex()' method is called on 'sources', it takes a function as an argument, and this function is executed for each 
@@ -147,10 +191,12 @@ function playClickedTrack(element, title, sources) {
         // update the player source and title for the current playing track
         player.src = `${src_base}${sources[currentSourceIndex].id}`;
         title.textContent = `${sources[currentSourceIndex].title}`;
-        // play the audio track
+        // load and play the audio track
+        player.load();
         player.play(); 
     } else {
         console.log("Track source not found in sources array.");
+        title.textContent = "Error Loading Media. Try Again Later.";
     }
 }
 
@@ -190,3 +236,23 @@ function highlightTrack(player, sources) {
 //     "1g4xbf6E93WM71-guvglLI-j7oaDlCeBP",
 //     "1xGZpoQD-Sl6fukZXUtRWUc8HBmpcdJ8w",
 // ]
+
+
+
+
+
+// function handleLandingTrack() {
+//     const landingTrack = document.getElementById("musicPlayer");
+//     // set the initial volume when the audio element loads (0.2 represents 20% volume)
+//     landingTrack.volume = 0.2;  
+//     // on the first interaction from user (any mouse click) start playing landing track
+//     // document.addEventListener("click", () => {
+//     //     landingTrack.play();
+//     // })
+//     // restart the audio when it ends
+//     landingTrack.addEventListener("ended", () => {
+//         // reset the audio to the beginning
+//         landingTrack.currentTime = 0; 
+//         landingTrack.play();
+//     })
+// }

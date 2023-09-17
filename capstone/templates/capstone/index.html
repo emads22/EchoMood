@@ -20,7 +20,7 @@
         <meta http-equiv="refresh" content="1;url={% url 'index' %}">
     {% endif %}
 
-    <div class="col-auto d-flex justify-content-center align-items-center p-4">
+    <div class="col-auto d-flex justify-content-center align-items-center p-3">
         <img src="{% static 'capstone/assets/logo/EchoMood.png' %}" alt="EchoMood Logo">
     </div>
 
@@ -28,58 +28,80 @@
         <h2>{{selected_mood}} Playlist:</h2><br>
         <div class="list-group">
             {% for track in tracks %}
-                <!-- <li> -->
+                <!-- <div> -->
                     <button id="{{track.gdrive_id}}" class="list-group-item list-group-item-secondary text-start track">
                         {{track.title}} - {{track.genre}}
                     </button>
-                <!-- </li> -->
+                <!-- </div> -->
             {% endfor %}
         </div>
     {% else %}
         <!-- <h1>No tracks </h1> -->
-        <div class="col-auto d-flex justify-content-center align-items-center p-4">
-            <!-- Embedded Player -->
-            <h5 id="landingTrackTitle">"Surf" by Gunna Type Beat</h5>
-            <audio id="landingTrack" controls>
-                <source src="{% static 'capstone/assets/landing track/Gunna Type Beat - Surf - Melodic Guitar Rap Instrumental 2023.mp3' %}" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        </div>
+        
     {% endif %}
 
-
-    <div>
+    <div id="mood-div" style="display: none;" data-mood-select="{{ mood_select }}">
         <br>
-        <form action="{% url 'this_mood' %}" method="post">
-            {% csrf_token %}
-            {{ mood_form.as_p }}
-            <input type="submit" class="btn btn-primary" value="Submit">
-        </form><br>
+        <div class="d-flex justify-content-center">
+            <form action="{% url 'this_mood' %}" method="post">
+                {% csrf_token %}
+                <div class="col-auto">
+                    {{ mood_form.mood }}
+                </div>
+                <div class="col-auto">
+                    <input type="submit" class="form-control btn btn-lg btn-green" value="Submit">
+                </div>
+            </form><br>
+        </div>
     </div>
 
-    <div>
-        <!-- Embedded Player -->
+    <!-- by default this sticky div of player is hidden -->
+    <div id="player-div" class="sticky-div" style="display: none;" data-playable="{{ playable }}">
+        <div class="d-flex justify-content-center align-items-center p-4" >
+            <!-- Embedded Player -->
+            <!-- <span id="error-messsage"></span> -->
+            <h5 id="trackTitle"></h5>
+            <audio id="musicPlayer" controls>
+                <!-- access the first element of the queryset 'tracks' (like tracks[0] but this is Django) -->
+                <source src="" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio><br>
+
+            <div>
+                <button id="playAll">Play All</button>
+                <button id="pauseAll">Pause All</button>
+                <button id="playNext">Play Next</button>
+                <button id="playPrevious">Play Previous</button>
+                <button id="stopPlayer">Stop</button>
+            </div>
+            <div>
+                <label for="checkLoop">Loop</label> 
+                <input type="checkbox" id="checkLoop">
+            </div>
+        </div>
+    </div>
+
+{% endblock %} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <!-- <div>
         <h5 id="trackTitle">{{tracks.0.title}}</h5>
         <audio id="player" controls>
-            <!-- access the first element of the queryset 'tracks' (like tracks[0] but this is Django) -->
             <source src="https://drive.google.com/uc?id={{tracks.0.gdrive_id}}" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio><br>
     </div>
 
-    <br><br>
-
-    <div>
-        <button id="playAll">Play All</button>
-        <button id="pauseAll">Pause All</button>
-        <button id="playNext">Play Next</button>
-        <button id="playPrevious">Play Previous</button>
-        <button id="stopPlayer">Stop</button>
-    </div>
-    <div>
-        <label for="checkLoop">Loop</label> 
-        <input type="checkbox" id="checkLoop">
-    </div>
-
-
-{% endblock %} 
+    <br><br> -->

@@ -1,4 +1,6 @@
 body {
+    margin: 0;
+    padding: 0;
     background-color: #081B00;
     color:#7ED957;
 }
@@ -11,13 +13,13 @@ a.register-link, a.login-link {
     color: #7ED957;
 }
 
-.bg-navbar {
+.bg-navbar, .dropdown-menu {
     background-color: #7ED957;
 }
 
-.dropdown-menu {
+/* .dropdown-menu {
     background-color: #7ED957;
-}
+} */
 
 a.dropdown-item:hover {
     background-color:  #6CB946;
@@ -51,6 +53,46 @@ a.dropdown-item:hover {
     border: none;
     color: #081B00;
 }
+
+
+.container-fluid {
+    /* width: 80%; */
+    /* max-width: 1200px; */
+    margin: 0 auto;
+    /* padding: 20px; */
+}
+
+.sticky-div {
+    /* display: none; */
+    background-color: red;
+    padding: 10px;
+    position: sticky;
+    bottom: 0; /* Adjust the value to set the distance from the top */
+    /* You can also use "right", "bottom", or "left" instead of "top" */
+    z-index: 1; /* Ensure it's above other elements */
+}
+
+.content {
+    margin-top: 20px; /* Create space below the sticky div */
+}
+
+.track-line {
+    width: 300px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

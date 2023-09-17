@@ -115,6 +115,8 @@ def create_context(**kwargs):
         "message": kwargs.get("message", None),
         "selected_mood": kwargs.get("selected_mood", None),
         "this_mood_genres": kwargs.get("this_mood_genres", None),
+        "playable": kwargs.get("playable", False),  # here default value of 'playable' is False not None
+        "mood_select": kwargs.get("mood_select", True),  # here default value of 'playable' is False not None
         }
     return context
 
@@ -131,7 +133,6 @@ def create_playlist(mood):
     tracks_of_this_mood = list(Track.objects.filter(genre__in=this_mood_genres).all())
     # generate a random sample (a subset) or a list of unique elements randomly selected from the 'tracks_of_this_mood' list
     playlist = random.sample(tracks_of_this_mood, PLAYLIST_MAX_TRACKS)
-    print(type(playlist), len(playlist))
     # shuffle this list a "random number between 6 and 9" times
     playlist = shuffle_list(playlist, random.randint(6,9))    
     return playlist
