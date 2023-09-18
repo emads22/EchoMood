@@ -25,6 +25,11 @@ a.dropdown-item:hover {
     background-color: #7ED957;
 } */
 
+.container-fluid {
+    margin: 0;
+    padding: 0;
+}
+
 .home-icon {
     margin-top: -15px;
     margin-bottom: -10px;
@@ -80,6 +85,9 @@ a.dropdown-item:hover {
     width: 300px;
 }
 
+.mood-form {
+    width: 130%;
+}
 
 
 

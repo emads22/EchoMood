@@ -19,9 +19,38 @@
         <!-- The meta tag with http-equiv="refresh" attribute reloads the page after 1 second here -->
         <meta http-equiv="refresh" content="1;url={% url 'index' %}">
     {% endif %}
+    
+    <div class="row container-fluid d-flex justify-content-center">
+        <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+            <img src="{% static 'capstone/assets/logo/EchoMood.png' %}" alt="EchoMood Logo">
+        </div>
+    </div>
 
-    <div class="col-auto d-flex justify-content-center align-items-center p-3">
-        <img src="{% static 'capstone/assets/logo/EchoMood.png' %}" alt="EchoMood Logo">
+
+    <div class="row container-fluid d-flex justify-content-center align-items-center mt-2 pt-2">
+        <div class="col-md-6 col-sm-12 mb-5 mx-auto">
+            
+            <h1 class="my-3"><span class="fs-1">🎧</span>&nbsp;Stream Your Mood Music!&nbsp;<span class="fs-1">🎵</span></h1>
+    
+            <h2 class="my-3">                
+                <span class="fs-1">⚡</span>&nbsp;&nbsp;Set your mood,<br>
+                <span class="fs-1">🤖</span>&nbsp;&nbsp;<strong>EchoMood</strong>&nbsp;&nbsp;tailors your playlist.              
+            </h2>
+        </div>
+
+        <div class="col-md-4 mx-auto d-flex justify-content-center" id="mood-div" style="display: none;" data-mood-select="{{ mood_select }}">
+            <form action="{% url 'this_mood' %}" method="post">
+                {% csrf_token %}
+
+                <div class="col-auto mb-4 mx-auto">
+                    {{ mood_form.mood }}
+                </div>
+                
+                <div class="col-auto mx-auto">
+                    <input type="submit" class="form-control btn btn-lg btn-green mt-2 py-3 fs-3 mood-form" value="Harmonize">
+                </div>
+            </form>
+        </div>
     </div>
 
     {% if tracks %}
@@ -36,24 +65,8 @@
             {% endfor %}
         </div>
     {% else %}
-        <!-- <h1>No tracks </h1> -->
-        
+        <!-- <h1>No tracks </h1> -->        
     {% endif %}
-
-    <div id="mood-div" style="display: none;" data-mood-select="{{ mood_select }}">
-        <br>
-        <div class="d-flex justify-content-center">
-            <form action="{% url 'this_mood' %}" method="post">
-                {% csrf_token %}
-                <div class="col-auto">
-                    {{ mood_form.mood }}
-                </div>
-                <div class="col-auto">
-                    <input type="submit" class="form-control btn btn-lg btn-green" value="Submit">
-                </div>
-            </form><br>
-        </div>
-    </div>
 
     <!-- by default this sticky div of player is hidden -->
     <div id="player-div" class="sticky-div" style="display: none;" data-playable="{{ playable }}">

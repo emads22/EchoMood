@@ -59,10 +59,12 @@ def fetch_tracks_info(page_token=None):
             return tracks     
 
         except HttpError as http_error:
-            return f'An HTTP error occurred: {http_error}'
+            # handle error by propagating it to caller function
+            raise ValueError(f'An HTTP error occurred: {http_error}')
 
     except Exception as error:
-        return f'An error occurred: {error}'
+        # handle error by propagating it to caller function
+        raise ValueError(f'An error occurred: {error}')
     
 
 

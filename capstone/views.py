@@ -61,7 +61,7 @@ class MoodForm(forms.Form):
         # choices must be list of tuples (value, display_label), and added first choice as empty value. (genres are instances of Model table)
         choices=[('', 'Select your mood')] + [(mood.name, mood.name) for mood in Mood.objects.all()],
         initial='',     # here empty value is selected at first
-        widget=forms.Select(attrs={'class': 'form-select form-select-lg',
+        widget=forms.Select(attrs={'class': 'form-select form-select-lg fs-4 py-3 mood-form',
                                    'autofocus': 'autofocus'}),
         required=True
         )
@@ -71,22 +71,26 @@ class MoodForm(forms.Form):
 # <==================================================<Views Functions>==================================================>
 @login_required
 def index(request): 
-    drive_tracks = fetch_tracks_info()      #--fix  raise errors
-    print()
-    print(drive_tracks, len(drive_tracks))
-    these = Track.objects.all()
-    print(these.count())
-    # sync the tracks from the drive with the tracks from db
-    sync_drive_db(drive_tracks)
-    # fetch all tracks info from db
-    these_tracks = Track.objects.all();
     # create the default context
-    context = create_context(
-        mood_form=MoodForm(),
-        # tracks=these_tracks,
-        # serialize the list of tracks objects to JSON format before being used in JavaScript code
-        tracks_json=serializers.serialize('json', these_tracks),
-    )
+    context = create_context(mood_form=MoodForm())
+
+    try:
+        # attempt to fetch info of the tracks in the google drive
+        drive_tracks = fetch_tracks_info() 
+    # handle exception (raised value error) from 'fetch_tracks_info()'
+    except ValueError as error:
+        # in case fetching failed for any reason (network, server,...) then skip syncing and continue with tracks available in the db for the moment
+        these_tracks = Track.objects.all() 
+        # context['messsage'] = f'An error occurred: {error}'
+        # return render(request, "capstone/error.html", context=context)         
+    else:
+        # if successfully loaded (fetched) then sync the tracks from the drive with the tracks from db
+        sync_drive_db(drive_tracks)
+        # fetch all tracks info from db
+        these_tracks = Track.objects.all()    
+
+    # serialize the list of tracks objects to JSON format before being used in JavaScript code
+    context['tracks_json'] = serializers.serialize('json', these_tracks)
     return render(request, "capstone/index.html", context=context)
                   
 

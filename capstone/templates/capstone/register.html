@@ -14,17 +14,13 @@
         <meta http-equiv="refresh" content="6;url={% url 'register' %}">
     {% endif %}
 
-
-    <div class="row container-fluid">
-        
-        <div class="col-auto m-5 p-5">
-            <h1 class="mb-3">Discover, Stream, and Synchronize.</h1>
-            <div class="d-flex justify-content-center">
-                <img src="{% static 'capstone/assets/logo/EchoMood.png' %}" alt="EchoMood Logo" class="small-logo">
-            </div>
+    <div class="row container-fluid d-flex justify-content-center align-items-center mt-4 pt-4">
+        <div class="col-md-6 p-3">
+            <h1 class="m-3">Discover, Stream, and Synchronize.</h1>
+            <img src="{% static 'capstone/assets/logo/EchoMood.png' %}" alt="EchoMood Logo" class="ms-5 ps-5 small-logo">
         </div>
 
-        <div class="col-auto m-5 p-5 container">
+        <div class="col-md-4 p-3">
             <div class="d-flex justify-content-center">
                 <form action="{% url 'register' %}" method="post">
                     {% csrf_token %}
@@ -43,18 +39,15 @@
                     </div>
                     
                     <div class="col-auto">
-                        <button type="submit" class="form-control btn btn-lg mt-2 mb-4 fs-4 btn-green">
-                            Register
-                        </button>
+                        <input type="submit" class="form-control btn btn-lg btn-green mt-2 mb-4 fs-4" value="Register">
                     </div>
                 </form>
             </div>
             <br>
-            <p class="text-center mt-2 mb-4 fs-4">
+            <p class="text-center mt-2 fs-4">
                 Already have an account? <a href="{% url 'login' %}" class="mx-2 login-link"><strong>Log In here.</strong></a>
             </p>
-        </div>
-
+        </div>        
     </div>
 
 {% endblock %}
