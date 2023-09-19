@@ -130,7 +130,7 @@ function musicPlayer(sources) {
         // handle the error and display a message on the console
         console.error(`Audio error: ${errorMessage}`);
         // another handling of error which is signaling user that theres an error of loading media
-        title.textContent = "Error Loading Media.";
+        title.textContent = "Error Loading Media";
     });
     
     // add an event listener for the "play" event in order to highlight the track that is being played
@@ -216,7 +216,7 @@ function playClickedTrack(player, element, title, sources) {
         player.play(); 
     } else {
         console.log("Track source not found in sources array.");
-        title.textContent = "Error Loading Media. Try Again Later.";
+        title.textContent = "Error Loading Media";
     }
 }
 
