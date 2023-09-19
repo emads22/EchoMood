@@ -5,9 +5,16 @@ body {
     color:#7ED957;
 }
 
-/* a {
-    text-decoration: none;
-} */
+audio {
+    background-color: #081B00; 
+}
+
+/* style the appearance of the <audio> play button */
+audio::-webkit-media-controls-play-button {
+    /* background-color: #F16017; */
+    /* hide the default play button */
+    display: none;
+  }
 
 a.register-link, a.login-link {
     color: #7ED957;
@@ -26,9 +33,6 @@ a.dropdown-item:hover, button.track:hover {
 button.highlighted {
     background-color:  #F16017;
 }
-/* .dropdown-menu {
-    background-color: #7ED957;
-} */
 
 .container-fluid {
     margin: 0;
@@ -51,24 +55,19 @@ button.highlighted {
 }
 
 .btn:hover {
-    background-color: #6CB946; /*#19c37d;*/ /* #1CB953; */
+    background-color: #6CB946;
     color: #FFF;
 }
 
 .alert-warning {
     border-radius: 0;
-    background-color: #A4E981;   /*#ff872e;*/
-    /* border-color: #081B00;
-    border-width: 8px; */
+    background-color: #A4E981;
     border: none;
     color: #081B00;
 }
 
 .container-fluid {
-    /* width: 80%; */
-    /* max-width: 1200px; */
     margin: 0 auto;
-    /* padding: 20px; */
 }
 
 #player-div {
@@ -104,53 +103,37 @@ button.highlighted {
 
 .sound {
     width: fit-content;
-    margin-top: -40px;
+    margin-top: -37px;
+}
+
+#musicPlayer {
+    border: 5px solid #F16017;
+    border-radius: 50px;
+}
+
+#musicPlayer:hover {
+    border-color: #7ED957;
+}
+
+#media-btns {
+    border: 5px solid #7ED957;
+    border-radius: 50px;
+}
+
+#trackTitle:hover, #loop:hover {
+    color: #7ED957;
+}
+
+.form-check-input:checked {
+    background-color: #F16017;
+    border-color: #F16017;
+}
+
+.form-check-input:hover {
+    background-color: #7ED957;
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Style the audio controls */
-audio {
-    /* width: 100%; */
-    margin-bottom: 10px;          
-  }
-
-/* Customize the appearance of the play button */
-audio::-webkit-media-controls-play-button {
-  background-color: #F16017;
-  color: #FFF;
-}
-
-audio {
-    background-color: #081B00;
-}
-
-/* Customize the appearance of the seek bar */
-audio::-webkit-media-controls-current-time-display,
-audio::-webkit-media-controls-time-remaining-display,
-audio::-webkit-media-controls-timeline {
-  background-color: #f1f1f1;
-  color: #333;
-}
-
-/* Customize the appearance of the volume controls */
-audio::-webkit-media-controls-volume-slider,
-audio::-webkit-media-controls-mute-button {
-  background-color: #f1f1f1;
-  color: #333;
-}
 
 
 

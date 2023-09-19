@@ -64,8 +64,17 @@
         {% if tracks %}
             <div class="list-group col-md-6 col-sm-12 mx-auto">
                 {% for track in tracks %}
-                    <button id="{{track.gdrive_id}}" class="list-group-item text-center btn btn-lg track">
-                        {{track.title}} - {{track.genre}}
+                    <button id="{{track.gdrive_id}}" class="list-group-item btn btn-lg track pt-3">                        
+                        <figure class="text-center">
+                            <blockquote class="blockquote">
+                                <p>
+                                    <strong>{{track.title}}</strong>&nbsp;&nbsp;-&nbsp;&nbsp;{{track.artist}}
+                                    <span class="blockquote-footer ms-5">
+                                        <cite title="Source Title"><strong>{{track.genre}}</strong></cite>
+                                    </span>
+                                </p>
+                            </blockquote>
+                        </figure>
                     </button>
                 {% endfor %}
             </div>
@@ -76,28 +85,55 @@
 
     <!-- by default this sticky div of player is hidden -->
     <div id="player-div" style="display: none;" data-playable="{{ playable }}">
-        <div class="d-flex justify-content-center align-items-center p-5" >
-            <!-- Embedded Player -->
-            <!-- <span id="error-messsage"></span> -->
-            <h5 id="trackTitle"></h5>
-            <audio id="musicPlayer" controls>
-                <!-- access the first element of the queryset 'tracks' (like tracks[0] but this is Django) -->
-                <source src="" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio><br>
+        <div class="container">
+            <div class="row d-flex justify-content-between align-items-center p-2">
+                <!-- first sub-div Embedded Player -->
+                <div class="col-md-3 col-sm-12 my-3 mx-auto">
+                    <div class="d-flex justify-content-start">
+                        <h3 id="trackTitle" class="d-flex justify-content-start py-3">Track Title</h3>
+                    </div>                    
+                </div>                
+        
+                <!-- second sub-div (Media Buttons) -->
+                <div id="media-btns" class="col-md-4 col-sm-12 my-3 mx-auto">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button id="playAll" class="btn player-btn">
+                            <img class="m-1 p-1" src="{% static 'capstone/assets/icons/play.png' %}" alt="play icon">
+                        </button>                  
+                        <button id="pauseAll" class="btn player-btn">
+                            <img class="m-1 p-1" src="{% static 'capstone/assets/icons/pause.png' %}" alt="pause icon">
+                        </button>
+                        <button id="stopPlayer" class="btn player-btn">
+                            <img class="m-1 p-1" src="{% static 'capstone/assets/icons/stop.png' %}" alt="stop icon">
+                        </button>                        
+                        <button id="playPrevious" class="btn player-btn">
+                            <img class="m-1 p-1" src="{% static 'capstone/assets/icons/previous.png' %}" alt="previous icon">
+                        </button>
+                        <button id="playNext" class="btn player-btn">
+                            <img class="m-1 p-1" src="{% static 'capstone/assets/icons/next.png' %}" alt="next icon">
+                        </button>
+                    </div>
+                </div>
 
-            <div>
-                <button id="playAll">Play All</button>
-                <button id="pauseAll">Pause All</button>
-                <button id="playNext">Play Next</button>
-                <button id="playPrevious">Play Previous</button>
-                <button id="stopPlayer">Stop</button>
-            </div>
-            <div>
-                <label for="checkLoop">Loop</label> 
-                <input type="checkbox" id="checkLoop">
+                <!-- third sub-div (Audio Player) -->   
+                <div class="col-md-5 col-sm-12 d-flex justify-content-end my-3 mx-auto">
+                    <div class="d-flex align-items-center">
+                        <audio id="musicPlayer" controls class="">
+                            <source src="" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <div class="d-flex align-items-center form-check ms-4">
+                            <input class="form-check-input ms-2 mt-2" type="checkbox" id="checkLoop">
+                            <label class="form-check-label ms-3 mt-1 fs-4" for="checkLoop" id="loop"><strong>Loop</strong></label>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
         </div>
+    </div>
+
+
     </div>
 
 {% endblock %} 

@@ -113,24 +113,24 @@ function musicPlayer(sources) {
 
         switch (errorCode) {
             case MediaError.MEDIA_ERR_ABORTED:
-                errorMessage = 'The fetching process for the media resource was aborted.';
+                errorMessage = `The fetching process for the media resource was aborted.`;
                 break;
             case MediaError.MEDIA_ERR_NETWORK:
-                errorMessage = 'A network error occurred while fetching the media resource.';
+                errorMessage = `A network error occurred while fetching the media resource.`;
                 break;
             case MediaError.MEDIA_ERR_DECODE:
-                errorMessage = 'The media resource couldn\'t be decoded.';
+                errorMessage = `The media resource couldn't be decoded.`;
                 break;
             case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-                errorMessage = 'The media resource format is not supported.';
+                errorMessage = `The media resource format is not supported.`;
                 break;
             default:
-                errorMessage = 'An unknown error occurred.';
+                errorMessage = `An unknown error occurred.`;
         }
         // handle the error and display a message on the console
         console.error(`Audio error: ${errorMessage}`);
         // another handling of error which is signaling user that theres an error of loading media
-        title.textContent = "Error Loading Media. Try Again Later.";
+        title.textContent = "Error Loading Media.";
     });
     
     // add an event listener for the "play" event in order to highlight the track that is being played
