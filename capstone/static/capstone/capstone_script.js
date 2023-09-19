@@ -8,9 +8,38 @@ var sources = [];
 document.addEventListener("DOMContentLoaded", function() {
 
     handleMoodSelectDiv();
+    handleTracksDiv();
     handlePlayerDiv();
     
 })
+
+
+
+function handleMoodSelectDiv() {
+    const moodDiv = document.getElementById("mood-div");
+    // access the 'data-mood-select' attribute (JavaScript converts the hyphenated attribute names to camelCase when accessing them through the 
+    // dataset object so 'mood-select' is now 'moodSelect' )
+    const moodSelection = moodDiv.dataset.moodSelect;
+    if (moodSelection === "True") {
+        moodDiv.style.display = "block";
+    } else {
+        moodDiv.style.display = "none";
+    }
+}
+
+
+
+function handleTracksDiv() {
+    const tracksDiv = document.getElementById("tracks-div");
+    // access the 'data-mood-select' attribute (JavaScript converts the hyphenated attribute names to camelCase when accessing them through the 
+    // dataset object so 'mood-select' is now 'moodSelect' )
+    const tracksPlayable = tracksDiv.dataset.playable;
+    if (tracksPlayable === "True") {
+        tracksDiv.style.display = "block";
+    } else {
+        tracksDiv.style.display = "none";
+    }
+}
 
 
 
@@ -33,20 +62,8 @@ function handlePlayerDiv() {
             });
         })
         musicPlayer(sources);
-    }
-}
-
-
-
-function handleMoodSelectDiv() {
-    const moodDiv = document.getElementById("mood-div");
-    // access the 'data-mood-select' attribute (JavaScript converts the hyphenated attribute names to camelCase when accessing them through the 
-    // dataset object so 'mood-select' is now 'moodSelect' )
-    const moodSelection = moodDiv.dataset.moodSelect;
-    if (moodSelection === "True") {
-        moodDiv.style.display = "block";
     } else {
-        moodDiv.style.display = "none";
+        console.log("No Tracks Available");
     }
 }
 
@@ -110,7 +127,7 @@ function musicPlayer(sources) {
             default:
                 errorMessage = 'An unknown error occurred.';
         }
-        // Handle the error and display a message on the console
+        // handle the error and display a message on the console
         console.error(`Audio error: ${errorMessage}`);
         // another handling of error which is signaling user that theres an error of loading media
         title.textContent = "Error Loading Media. Try Again Later.";
@@ -209,18 +226,20 @@ function highlightTrack(player, sources) {
     // console.log(sources[currentSourceIndex].title);
     thisTrack = document.getElementById(sources[currentSourceIndex].id);
     playlistTracks = document.querySelectorAll(".track");
-    playlistTracks.forEach((track) => {
-        if (track.id === sources[currentSourceIndex].id) {
+    playlistTracks.forEach((playlistTrack) => {
+        if (playlistTrack.id === sources[currentSourceIndex].id) {
             // console.log("Found it: ", sources[currentSourceIndex].title);
             // add the highlighted class to this track
-            track.classList.add("highlighted");
+            playlistTrack.classList.add("highlighted");
+            console.log(playlistTrack.id, "highlighted");
         } else {
             // console.log("Not found it: ");
             // check if 'highlighted' class exists in this track's classList in order to remove it
-            if (track.classList.contains('highlighted')) {
+            if (playlistTrack.classList.contains('highlighted')) {
                 // remove a class from this track
-                track.classList.remove("highlighted");
+                playlistTrack.classList.remove("highlighted");
             }
+            console.log(playlistTrack.id, "not highlighted");
         }
     }) 
 }

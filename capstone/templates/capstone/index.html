@@ -27,50 +27,56 @@
     </div>
 
 
-    <div class="row container-fluid d-flex justify-content-center align-items-center mt-2 pt-2">
-        <div class="col-md-6 col-sm-12 mb-5 mx-auto">
-            
-            <h1 class="my-3"><span class="fs-1">🎧</span>&nbsp;Stream Your Mood Music!&nbsp;<span class="fs-1">🎵</span></h1>
-    
-            <h2 class="my-3">                
-                <span class="fs-1">⚡</span>&nbsp;&nbsp;Set your mood,<br>
-                <span class="fs-1">🤖</span>&nbsp;&nbsp;<strong>EchoMood</strong>&nbsp;&nbsp;tailors your playlist.              
-            </h2>
-        </div>
-
-        <div class="col-md-4 mx-auto d-flex justify-content-center" id="mood-div" style="display: none;" data-mood-select="{{ mood_select }}">
-            <form action="{% url 'this_mood' %}" method="post">
-                {% csrf_token %}
-
-                <div class="col-auto mb-4 mx-auto">
-                    {{ mood_form.mood }}
-                </div>
+    <div id="mood-div" style="display: none;" data-mood-select="{{ mood_select }}"> 
+        <div class="row container-fluid d-flex justify-content-center align-items-center mt-2 pt-2">
+            <div class="col-md-6 col-sm-12 mb-5 mx-auto">
                 
-                <div class="col-auto mx-auto">
-                    <input type="submit" class="form-control btn btn-lg btn-green mt-2 py-3 fs-3 mood-form" value="Harmonize">
-                </div>
-            </form>
+                <h1 class="my-3"><span class="fs-1">🎧</span>&nbsp;Stream Your Mood Music!&nbsp;<span class="fs-1">🎵</span></h1>
+        
+                <h2 class="my-3">                
+                    <span class="fs-1">⚡</span>&nbsp;&nbsp;Set your mood,<br>
+                    <span class="fs-1">🤖</span>&nbsp;&nbsp;<strong>EchoMood</strong>&nbsp;&nbsp;tailors your playlist.              
+                </h2>
+            </div>
+
+            <div class="col-md-4 mx-auto d-flex justify-content-center">
+                <form action="{% url 'this_mood' %}" method="post">
+                    {% csrf_token %}
+
+                    <div class="col-auto mb-4 mx-auto">
+                        {{ mood_form.mood }}
+                    </div>
+                    
+                    <div class="col-auto mx-auto">
+                        <input type="submit" class="form-control btn btn-lg btn-green mt-2 py-3 fs-3 mood-form" value="Harmonize">
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
-    {% if tracks %}
-        <h2>{{selected_mood}} Playlist:</h2><br>
-        <div class="list-group">
-            {% for track in tracks %}
-                <!-- <div> -->
-                    <button id="{{track.gdrive_id}}" class="list-group-item list-group-item-secondary text-start track">
+    <div id="tracks-div" style="display: none;" data-playable="{{ playable }}" class="mb-5">
+        <div class="container-fluid d-flex justify-content-center mx-auto my-3">
+            <img class="d-flex justify-content-center mx-auto sound" src="{% static 'capstone/assets/icons/sound1.png' %}" alt="sound icon">
+            <h1 class="d-flex justify-content-center mt-2 mx-auto fs-1 playlist">{{selected_mood}}&nbsp;Playlist</h1>
+            <img class="d-flex justify-content-center mx-auto sound" src="{% static 'capstone/assets/icons/sound1.png' %}" alt="sound icon">
+        </div>
+        {% if tracks %}
+            <div class="list-group col-md-6 col-sm-12 mx-auto">
+                {% for track in tracks %}
+                    <button id="{{track.gdrive_id}}" class="list-group-item text-center btn btn-lg track">
                         {{track.title}} - {{track.genre}}
                     </button>
-                <!-- </div> -->
-            {% endfor %}
-        </div>
-    {% else %}
-        <!-- <h1>No tracks </h1> -->        
-    {% endif %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <h3>No Tracks Available.</h3>        
+        {% endif %}
+    </div>
 
     <!-- by default this sticky div of player is hidden -->
-    <div id="player-div" class="sticky-div" style="display: none;" data-playable="{{ playable }}">
-        <div class="d-flex justify-content-center align-items-center p-4" >
+    <div id="player-div" style="display: none;" data-playable="{{ playable }}">
+        <div class="d-flex justify-content-center align-items-center p-5" >
             <!-- Embedded Player -->
             <!-- <span id="error-messsage"></span> -->
             <h5 id="trackTitle"></h5>

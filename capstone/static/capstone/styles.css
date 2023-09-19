@@ -13,14 +13,19 @@ a.register-link, a.login-link {
     color: #7ED957;
 }
 
-a.dropdown-item:hover {
+a.dropdown-item:hover, button.track:hover {
     background-color:  #6CB946;
 }
+  
 
-.bg-navbar, .dropdown-menu {
+.bg-navbar, .dropdown-menu, button.track {
     background-color: #7ED957;
 }
 
+
+button.highlighted {
+    background-color:  #F16017;
+}
 /* .dropdown-menu {
     background-color: #7ED957;
 } */
@@ -66,30 +71,41 @@ a.dropdown-item:hover {
     /* padding: 20px; */
 }
 
-.sticky-div {
-    /* display: none; */
-    background-color: #7ED957;
-    color: #081B00;
-    padding: 10px;
+#player-div {
+    background-color: #081B00;
+    color: #F16017;
+    border: 5px solid #F16017;
+    border-radius: 10px;
     position: sticky;
-    bottom: 0; /* Adjust the value to set the distance from the top */
-    /* You can also use "right", "bottom", or "left" instead of "top" */
-    z-index: 1; /* Ensure it's above other elements */
+    /* set the distance from the top */
+    bottom: 0; 
+    /* ensure this element is above other elements using z-index */
+    z-index: 1; 
 }
 
 .content {
     margin-top: 20px; /* Create space below the sticky div */
 }
 
-.track-line {
-    width: 300px;
+.track {
+    border-radius: 0;
+    border-color: #6CB946;
 }
 
 .mood-form {
     width: 130%;
 }
 
+.playlist {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    color: #F16017;
+}
 
+.sound {
+    width: fit-content;
+    margin-top: -40px;
+}
 
 
 
@@ -136,10 +152,6 @@ audio::-webkit-media-controls-mute-button {
   color: #333;
 }
 
-
-.highlighted {
-  background-color: lightgreen; 
-}
 
 
 
