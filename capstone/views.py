@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, Http404
 from django.db import IntegrityError
 from django.urls import reverse
 from django.contrib import messages
@@ -9,9 +9,10 @@ from django.core.paginator import Paginator
 import json
 from django.core import serializers
 from django import forms
+# from django.forms.widgets import HiddenInput
 import re
 
-from .models import User, Mood, Genre, Track
+from .models import User, Mood, Genre, Track, Playlist
 from .tools import fetch_tracks_info, sync_drive_db, create_context, create_playlist, shuffle_list, PASSWORD_PATTERN
 
 
@@ -66,7 +67,21 @@ class MoodForm(forms.Form):
         required=True
         )
     
+
+class PlaylistForm(forms.Form):
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={'class': 'form-control form-control-lg', 
+                                      'placeholder': 'Playlist Name',
+                                      'autofocus': 'autofocus'}),
+        required=True
+        )
+    # define a playlist object hidden field with a default value None (initial)for every instance of PlaylistForm
+    # playlist = forms.CharField(
+    #     widget=forms.HiddenInput,
+    #     initial=None
+    #     )
     
+
 
 # <==================================================<Views Functions>==================================================>
 @login_required
@@ -180,16 +195,14 @@ def register(request):
 
 
 @login_required
-def mood_tracks(request):
+def this_mood_tracks(request):
     # create the default context
-    context = create_context(
-        mood_form=MoodForm()
-    )
+    context = create_context(mood_form=MoodForm())
 
     if request.method != "POST":
         context['message'] = "Only POST method"
         # handle other HTTP methods (like GET) as needed
-        return render(request, "capstone/error.html", context)
+        return render(request, "capstone/error.html", context)      # --fix            
     
     else:
         mood_form = MoodForm(request.POST)
@@ -197,12 +210,14 @@ def mood_tracks(request):
         if mood_form.is_valid(): 
             context['selected_mood'] = request.POST.get("mood")
             this_mood = Mood.objects.get(name=context['selected_mood'])
-            context['tracks'] = create_playlist(this_mood)
+            context['playlist'] = create_playlist(this_mood)
             # serialize list of tracks objects to JSON format before using it in JavaScript code 
-            context['tracks_json'] = serializers.serialize('json', context['tracks'])  
-            # add 'playable' variable to signal playing music
+            context['tracks_json'] = serializers.serialize('json', context['playlist'])  
+            # add 'playable' variable and 'mood_select' to signal showing playing music section and hiding mood selection section
             context['playable'] = True       
-            context['mood_select'] = False       
+            context['mood_select'] = False 
+            # create an instance of the playlist form and set the initial value for 'playlist' hidden field (default value)
+            context['playlist_form'] = PlaylistForm(initial={'playlist': context['playlist']})      
             # redirect to same page 'index' bt with the collection of tracks based on this mood selected
             return render(request, "capstone/index.html", context=context)
         
@@ -212,5 +227,74 @@ def mood_tracks(request):
             pass
   
 
- 
+
+@login_required
+def save_playlist(request, playlist_mood):
+    save_playlist = True
+    # create the default context
+    context = create_context(playlist_form=PlaylistForm())
     
+    if request.method != "POST":
+        context['message'] = "Only POST method"
+        # handle other HTTP methods (like GET) as needed
+        return render(request, "capstone/error.html", context)  # Replace with your custom error page --fix       
+    
+    else:
+        try:
+            # this time using 'get_object_or_404()' instead of regular 'get()'
+            this_mood = get_object_or_404(Mood, name=playlist_mood)
+            print(this_mood)
+
+        except Http404:
+            # Handle the case where the mood with the given name was not found (get_object_or_404() raises a standard HTTP 404 "Not Found" error)
+            return render(request, 'error.html')  # Replace with your custom error page --fix        
+        
+        else:
+            playlist_form = PlaylistForm(request.POST)
+            # validate playlist 
+            if playlist_form.is_valid(): 
+                # fetch the value of hidden field
+                this_playlist = request.POST.get("playlist")
+                # this_playlist_mood = Mood.objects.get(name=request.POST.get("mood"))
+                this_playlist_name = request.POST.get("name")
+                # Check if the playlist exists in the current user's playlists (order of tracks does not matter)
+                current_user = request.user
+
+                for playlist in current_user.playlists.all():
+                    # if these sets are equal, it means that same tracks exist in both this playlist and the user's playlist, regardless of their 
+                    # order so no need to save this existant playlist (A set is an unordered collection of unique elements so using a set here 
+                    # ensures that the order of the tracks does not matter when comparing them)
+                    if set(playlist.tracks.all()) == set(this_playlist):
+                        save_playlist = False                        
+                        context['message'] = "Playlist already exists."
+                        break
+                    elif playlist.name == this_playlist_name:
+                        save_playlist = False
+                        context['message'] = "Playlist with such name already exists."
+                        break  
+                
+                if not save_playlist:
+                    return render(request, "capstone/playlists.html", context=context)  # Replace with your custom error page --fix        
+                
+                # create a new playlist instance and set its name (no need to use 'save()' when using 'create()')
+                new_playlist = Playlist.objects.create(name=this_playlist_name, mood=this_mood)
+                # add the new playlist to the current user's playlists
+                current_user.playlists.add(new_playlist)
+
+                # --fix Delete Playlist
+
+                context['user_playlists'] = current_user.playlists.all()   #--fix    
+                # redirect to this user 'playlists' page
+                return render(request, "capstone/playlists.html", context=context)
+            
+            # otherwise not validated
+            else:
+                # do nothing cz its a form of one field so automatically will stay in same page
+                pass
+
+
+
+@login_required
+def playlists(request):
+
+    return render(request, "capstone/playlists.html")

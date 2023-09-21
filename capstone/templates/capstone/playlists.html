@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>playlists</h1>
+    {% if message %}
+        <em class="fs-2 text-danger">{{message}}</em>
+    {% endif %} 
+
+
+    {% for playlist in user.playlists.all %}
+    <h3>{{playlist.name}}</h3>
+    {% empty %}
+    <h3> no playlists available</h3>
+    {% endfor %}
+</body>
+</html>

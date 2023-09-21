@@ -50,10 +50,10 @@ function handlePlayerDiv() {
     if (playableValue === "True") {
         playerDiv.style.display = "block";
     } 
-    // when 'all_tracks' var is available and defined
-    if (typeof all_tracks !== "undefined") {
-        all_tracks.forEach(element => {
-            // create a list of dict (objects) for each track in 'all_tracks' object
+    // when 'playlist_tracks' var is available and defined
+    if (typeof playlist_tracks !== "undefined") {
+        playlist_tracks.forEach(element => {
+            // create a list of dict (objects) for each track in 'playlist_tracks' object
             sources.push({
                 id: element.fields.gdrive_id,
                 title: element.fields.title,
@@ -231,7 +231,7 @@ function highlightTrack(player, sources) {
             // console.log("Found it: ", sources[currentSourceIndex].title);
             // add the highlighted class to this track
             playlistTrack.classList.add("highlighted");
-            console.log(playlistTrack.id, "highlighted");
+            // console.log(playlistTrack.id, "highlighted");
         } else {
             // console.log("Not found it: ");
             // check if 'highlighted' class exists in this track's classList in order to remove it
@@ -239,7 +239,7 @@ function highlightTrack(player, sources) {
                 // remove a class from this track
                 playlistTrack.classList.remove("highlighted");
             }
-            console.log(playlistTrack.id, "not highlighted");
+            // console.log(playlistTrack.id, "not highlighted");
         }
     }) 
 }

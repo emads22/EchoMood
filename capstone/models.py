@@ -1,9 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    pass
+    playlists = models.ManyToManyField('Playlist', related_name='playlist_users')
 
 
 class Genre(models.Model):
@@ -33,5 +33,11 @@ class Track(models.Model):
         return f'{self.title} - {self.artist} -- ({self.gdrive_id}) | {self.genre.name}'
 
 
+class Playlist(models.Model):
+    name = models.CharField(max_length=200)
+    created_on = models.DateTimeField(auto_now_add=True)    # automatically populated with current date
+    tracks = models.ManyToManyField('Track', related_name='playlists')
+    mood = models.ForeignKey(Mood, on_delete=models.CASCADE, related_name="mood_playlists")
 
-
+    def __str__(self):
+        return f'{self.name}'

@@ -112,8 +112,10 @@ def create_context(**kwargs):
         "register_form": kwargs.get("register_form", None),
         "login_form": kwargs.get("login_form", None),
         "mood_form": kwargs.get("mood_form", None),
-        "tracks": kwargs.get("tracks", None),
+        "playlist_form": kwargs.get("playlist_form", None),
+        "playlist": kwargs.get("playlist", None),
         "tracks_json": kwargs.get("tracks_json", None),
+        "user_playlists": kwargs.get("user_playlists", None),
         "message": kwargs.get("message", None),
         "selected_mood": kwargs.get("selected_mood", None),
         "this_mood_genres": kwargs.get("this_mood_genres", None),
@@ -136,8 +138,11 @@ def create_playlist(mood):
     # generate a random sample (a subset) or a list of unique elements randomly selected from the 'tracks_of_this_mood' list
     playlist = random.sample(tracks_of_this_mood, PLAYLIST_MAX_TRACKS)
     # shuffle this list a "random number between 6 and 9" times
-    playlist = shuffle_list(playlist, random.randint(6,9))    
-    return playlist
+    playlist = shuffle_list(playlist, random.randint(6,9)) 
+    # after being shuffled convert it back from list to queryset like it was in 'tracks_of_this_mood' 
+    playlist_queryset = Track.objects.filter(pk__in=[track.pk for track in playlist])
+    # return playlist as queryset
+    return playlist_queryset
 
 
 

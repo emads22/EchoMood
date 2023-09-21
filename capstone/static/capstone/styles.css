@@ -54,7 +54,7 @@ button.highlighted {
     color: #081B00;
 }
 
-.btn:hover {
+.btn:hover, .form-select:hover {
     background-color: #6CB946;
     color: #FFF;
 }
@@ -133,11 +133,18 @@ button.highlighted {
     background-color: #7ED957;
 }
 
+.form-select {
+    background-color: #7ED957;
+    border-color: #7ED957;
+}
 
+.modal-header {
+    background-color: #7ED957;
+    color: #081B00;
+}
 
+.modal-body, .modal-footer {
+    background-color: #E0E0E1;
+    color: #081B00;
+}
 
-
-
-
-
-  

@@ -9,7 +9,7 @@
         // Including '|escapejs' is a security precaution to  ensure that the JSON data is properly escaped to prevent syntax errors in our 
         // JavaScript code. This filter escapes special characters so the resulting JavaScript string is valid
         // ensure that special characters are properly escaped, preventing potential JavaScript errors
-        var all_tracks =  JSON.parse('{{ tracks_json | escapejs }}');
+        var playlist_tracks =  JSON.parse('{{ tracks_json | escapejs }}');
     </script>
         
     {% if message %}
@@ -40,7 +40,7 @@
             </div>
 
             <div class="col-md-4 mx-auto d-flex justify-content-center">
-                <form action="{% url 'this_mood' %}" method="post">
+                <form action="{% url 'this_mood_tracks' %}" method="post">
                     {% csrf_token %}
 
                     <div class="col-auto mb-4 mx-auto">
@@ -48,7 +48,7 @@
                     </div>
                     
                     <div class="col-auto mx-auto">
-                        <input type="submit" class="form-control btn btn-lg btn-green mt-2 py-3 fs-3 mood-form" value="Harmonize">
+                        <input type="submit" class="form-control btn btn-lg btn-green mt-2 py-3 fs-4 mood-form" value="Harmonize">
                     </div>
                 </form>
             </div>
@@ -58,12 +58,12 @@
     <div id="tracks-div" style="display: none;" data-playable="{{ playable }}" class="mb-5">
         <div class="container-fluid d-flex justify-content-center mx-auto my-3">
             <img class="d-flex justify-content-center mx-auto sound" src="{% static 'capstone/assets/icons/sound.png' %}" alt="sound icon">
-            <h1 class="d-flex justify-content-center mt-2 mx-auto fs-1 playlist">{{selected_mood}}&nbsp;Playlist</h1>
+            <h3 class="d-flex justify-content-center mt-2 mx-2 playlist">{{selected_mood}}&nbsp;Mood Playlist</h3>
             <img class="d-flex justify-content-center mx-auto sound" src="{% static 'capstone/assets/icons/sound.png' %}" alt="sound icon">
         </div>
-        {% if tracks %}
+        {% if playlist %}
             <div class="list-group col-md-6 col-sm-12 mx-auto">
-                {% for track in tracks %}
+                {% for track in playlist %}
                     <button id="{{track.gdrive_id}}" class="list-group-item btn btn-lg track pt-3">                        
                         <figure class="text-center">
                             <blockquote class="blockquote">
@@ -76,10 +76,51 @@
                             </blockquote>
                         </figure>
                     </button>
+                {% empty %}
+                    <div class="col-md-6 col-sm-12 d-flex justify-content-center mx-auto">
+                        <h3>No Tracks Available.</h3>    
+                    </div> 
                 {% endfor %}
             </div>
+            <div>
+                {% if not user_saved_this_playlist %}
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-lg btn-green d-flex justify-content-center mx-auto p-3 mt-5 fs-4" data-bs-toggle="modal" data-bs-target="#savePlaylistModal">
+                        Save Playlist
+                    </button>
+                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="savePlaylistModal" tabindex="-1" aria-labelledby="savePlaylistModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="savePlaylistModalLabel">Save this playlist for <strong class="fs-4">{{selected_mood}}</strong> mood</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{% url 'save_playlist' selected_mood %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="modal-body">
+                                        {{ playlist_form.name }}
+                                        {{ playlist_form.playlist }}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-lg btn-green" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-lg btn-green">Save</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                <button type="button" class="btn btn-lg btn-green d-flex justify-content-center mx-auto p-3 mt-5 fs-4">
+                    Delete Playlist
+                </button>
+                {% endif %}
+            </div>
         {% else %}
-            <h3>No Tracks Available.</h3>        
+            <div class="col-md-6 col-sm-12 d-flex justify-content-center mx-auto">
+                <h3>No Tracks Available.</h3>    
+            </div>   
         {% endif %}
     </div>
 
