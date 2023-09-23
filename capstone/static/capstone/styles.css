@@ -61,7 +61,7 @@ button.highlighted {
 
 .alert-warning {
     border-radius: 0;
-    background-color: #A4E981;
+    background-color: #f3b03f; /* #A4E981; */
     border: none;
     color: #081B00;
 }

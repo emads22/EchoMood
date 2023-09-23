@@ -9,12 +9,15 @@
         // Including '|escapejs' is a security precaution to  ensure that the JSON data is properly escaped to prevent syntax errors in our 
         // JavaScript code. This filter escapes special characters so the resulting JavaScript string is valid
         // ensure that special characters are properly escaped, preventing potential JavaScript errors
-        var playlist_tracks =  JSON.parse('{{ tracks_json | escapejs }}');
+        var playlist_tracks =  JSON.parse('{{ playlist_json | escapejs }}');
     </script>
         
-    {% if message %}
-        <div class="alert alert-warning p-4 fs-5" role="alert">
-            {{ message }}
+    {% if messages %}
+        <div class="alert alert-warning p-3 fs-5" role="alert">
+            {% for message in messages %}
+                <!-- <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p> -->
+                <p class="pt-2 px-2">{{ message }}</p>
+            {% endfor %}
         </div>
         <!-- The meta tag with http-equiv="refresh" attribute reloads the page after 1 second here -->
         <meta http-equiv="refresh" content="1;url={% url 'index' %}">
@@ -40,7 +43,7 @@
             </div>
 
             <div class="col-md-4 mx-auto d-flex justify-content-center">
-                <form action="{% url 'this_mood_tracks' %}" method="post">
+                <form action="{% url 'this_mood_playlist' %}" method="post">
                     {% csrf_token %}
 
                     <div class="col-auto mb-4 mx-auto">
@@ -83,7 +86,7 @@
                 {% endfor %}
             </div>
             <div>
-                {% if not user_saved_this_playlist %}
+                {% if not is_in_user_playlists %}
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-lg btn-green d-flex justify-content-center mx-auto p-3 mt-5 fs-4" data-bs-toggle="modal" data-bs-target="#savePlaylistModal">
                         Save Playlist
@@ -101,7 +104,6 @@
                                     {% csrf_token %}
                                     <div class="modal-body">
                                         {{ playlist_form.name }}
-                                        {{ playlist_form.playlist }}
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-lg btn-green" data-bs-dismiss="modal">Cancel</button>
@@ -111,10 +113,10 @@
                             </div>
                         </div>
                     </div>
-                {% else %}
-                <button type="button" class="btn btn-lg btn-green d-flex justify-content-center mx-auto p-3 mt-5 fs-4">
-                    Delete Playlist
-                </button>
+                {% else %}  <!--fix with a form to new view function of deletion -->
+                    <button type="button" class="btn btn-lg btn-green d-flex justify-content-center mx-auto p-3 mt-5 fs-4">
+                        Delete Playlist
+                    </button>
                 {% endif %}
             </div>
         {% else %}

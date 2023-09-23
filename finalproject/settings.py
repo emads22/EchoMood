@@ -121,7 +121,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
+
+# add a leading slash to the URL to ensure that Django can serve static files correctly
+STATIC_URL = "/static/"     
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -130,3 +132,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # This setting specifies the URL where users should be redirected when they are not authenticated and try to access a protected view.
 LOGIN_URL = 'login'
+
+# # enable session support (can choose a different session engine if needed, by default its database-backed session engine)
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# # by default django sets the session cookie name as "sessionid,"  
+# SESSION_COOKIE_NAME = 'my_session'  
+
+# set session timeout to 1 hour (in seconds) (by default in django its 1209600 seconds (2 weeks))
+SESSION_COOKIE_AGE = 3600

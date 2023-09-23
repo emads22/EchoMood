@@ -19,18 +19,18 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-navbar p-4 fs-5">
         <div class="container-fluid">
-            <a id="homepage" class="navbar-brand fs-3 me-5" href="{% url 'index' %}">
+            <span id="homepage" class="navbar-brand fs-3 me-5">
                 <img class="me-2 px-2 home-icon" src="{% static 'capstone/assets/icons/vinyl.png' %}" alt="home icon"><strong>EchoMood</strong>
-            </a>
+            </span>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Home</a>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item mt-1">
+                        <a class="nav-link" aria-current="page" href="{% url 'index' %}">Home</a>
                     </li>
                     {% if not user.is_authenticated %}
                         <li class="nav-item">
@@ -41,7 +41,7 @@
                         </li>
                     {% else %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle fs-4" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <strong>{{ user.username }}</strong>
                             </a>        
                             <ul class="dropdown-menu">                            
@@ -53,8 +53,8 @@
                 </ul>
             </div>
         </div>
-    </nav>        
-        
+    </nav>      
+            
     <div class="container-fluid mb-4 pb-4">
         {% block body %}
         {% endblock %}
