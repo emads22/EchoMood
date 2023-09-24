@@ -319,7 +319,7 @@ def save_playlist(request, playlist_mood):
 def open_playlist(request, playlist_name):
     try:
         # attempt to get this playlist
-        this_playlist = get_object_or_404(Mood, name=playlist_name)
+        this_playlist = get_object_or_404(Playlist, name=playlist_name)
 
     except Http404:
         # Handle the case where the playlist with the given name was not found (get_object_or_404() raises a standard HTTP 404 "Not Found" error)
@@ -327,14 +327,13 @@ def open_playlist(request, playlist_name):
         return redirect('playlists')
     
     else:
-        # context = create_context(
-        #     playlist=this_playlist.tracks.all(),
-        #     playlist_json=serializers.serialize('json', this_playlist),
-        #     playable=True,     
-        #     mood_select=False
-        # )
-
-        return render(request, "capstone/playlists.html")  #, content=context)
+        context = create_context(
+            playlist=this_playlist,
+            # serialize the list of tracks objects to JSON format before being used in JavaScript code
+            playlist_json=serializers.serialize('json', this_playlist.tracks.all())
+        )
+        
+        return render(request, "capstone/playlists.html", context=context)
 
 
 

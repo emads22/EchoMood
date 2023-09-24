@@ -5,7 +5,7 @@
 {% block body %}
         
     <script>
-        // parse the JSON-formatted string into a JavaScript object to make it accessible as the 'all_tracks' variable in JavaScript code
+        // parse the JSON-formatted string into a JavaScript object to make it accessible as the 'playlist_tracks' var in JavaScript code
         // Including '|escapejs' is a security precaution to  ensure that the JSON data is properly escaped to prevent syntax errors in our 
         // JavaScript code. This filter escapes special characters so the resulting JavaScript string is valid
         // ensure that special characters are properly escaped, preventing potential JavaScript errors
@@ -73,7 +73,7 @@
                                 <p>
                                     <strong>{{track.title}}</strong>&nbsp;&nbsp;-&nbsp;&nbsp;{{track.artist}}
                                     <span class="blockquote-footer ms-5">
-                                        <cite title="Source Title"><strong>{{track.genre}}</strong></cite>
+                                        <cite title="{{track.genre}}"><strong>{{track.genre}}</strong></cite>
                                     </span>
                                 </p>
                             </blockquote>

@@ -6,11 +6,11 @@ var sources = [];
 
 
 document.addEventListener("DOMContentLoaded", function() {
-
+    // put this function 'handlePlayerDiv()' first to catch also the tracks from 'playlists' template
+    handlePlayerDiv();
     handleMoodSelectDiv();
     handleTracksDiv();
-    handlePlayerDiv();
-    
+        
 })
 
 
@@ -50,9 +50,21 @@ function handlePlayerDiv() {
     if (playableValue === "True") {
         playerDiv.style.display = "block";
     } 
-    // when 'playlist_tracks' var is available and defined
+    // when 'playlist_tracks' var from 'index' template is available and defined
     if (typeof playlist_tracks !== "undefined") {
         playlist_tracks.forEach(element => {
+            // create a list of dict (objects) for each track in 'playlist_tracks' object
+            sources.push({
+                id: element.fields.gdrive_id,
+                title: element.fields.title,
+                artist: element.fields.artist,
+                genre: element.fields.genre
+            });
+        })
+        musicPlayer(sources);
+    } else if (typeof this_playlist_tracks !== "undefined") {
+        // here 'this_playlist_tracks' var from 'playlists' template is available and defined
+        this_playlist_tracks.forEach(element => {
             // create a list of dict (objects) for each track in 'playlist_tracks' object
             sources.push({
                 id: element.fields.gdrive_id,
@@ -240,14 +252,24 @@ function highlightTrack(sources) {
 
 
 
-function openPlaylist() {
+function handlePlaylists() {
     console.log("OPEN PLAYLIST");
 
-    const allPlaylists = document.getElementById("playlists-div");
-    const thisPlaylist = document.getElementById("open-playlist-div");
+    const allPlaylistsDiv = document.getElementById("playlists-div");
+    const thisPlaylistDiv = document.getElementById("open-playlist-div");
+    const allPlaylistsVar = allPlaylistsDiv.dataset.allPlaylists;
 
-    allPlaylists.style.display = "none";
-    thisPlaylist.style.display = "block";
+    if (allPlaylistsVar === "True") {
+        // allPlaylistsDiv.style.display = "block";
+        // thisPlaylistDiv.style.display = "none";
+        allPlaylistsDiv.style.visibility = "visible";
+        thisPlaylistDiv.style.visibility = "hidden";
+    } else {
+        // allPlaylistsDiv.style.display = "none";
+        // thisPlaylistDiv.style.display = "block";
+        allPlaylistsDiv.style.visibility = "hidden";
+        thisPlaylistDiv.style.visibility = "visible";
+    }
 }
 
 

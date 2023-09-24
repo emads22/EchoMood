@@ -122,6 +122,7 @@ def create_context(**kwargs):
         "this_mood_genres": kwargs.get("this_mood_genres", None),
         "playable": kwargs.get("playable", False),  # here default value of 'playable' is False not None
         "mood_select": kwargs.get("mood_select", True),  # here default value of 'playable' is False not None
+        "all_playlists": kwargs.get("all_playlists", True),
         }
     return context
 

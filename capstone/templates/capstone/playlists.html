@@ -21,107 +21,125 @@
             <img src="{% static 'capstone/assets/logo/EchoMood.png' %}" alt="EchoMood Logo">
         </div>
     </div>
-
-    <div id="playlists-div" style="display: block;">
-        <div class="row container-fluid row-cols-1 row-cols-md-3 g-4 px-3">
-            {% for playlist in user.playlists.all %}
-                <div class="col mb-2">
-                    <div class="card h-100 mx-2 fs-5">                    
-                        <div class="card-body p-0 m-0">
-                            <div class="card-title d-flex justify-content-center py-3">
-                                <h3 class="fs-2">{{ playlist.name }}</h3>
-                            </div>
-                            <div class="d-flex justify-content-start p-3">
-                                <ol class="card-text form-control">
-                                    {% for track in playlist.tracks.all %}
-                                        <li class="card-track fs-5">&nbsp;{{track.title}}</li>  
-                                    {% endfor %}
-                                </ol>
-                            </div>
-                            <div class="d-flex justify-content-center pt-2 mb-3">
-                                <button onclick="openPlaylist()" class="btn btn-lg btn-card fs-4">Open</button>
-                            </div>
-                        </div>
-                        <div class="card-footer py-3">
-                            <small class="d-flex justify-content-center">Created on {{ playlist.created_on }}</small>
-                        </div>
-                    </div>
-                </div>            
-            {% empty %}
-                <h4 class="card-title">You have no saved playlists.</h4>
-            {% endfor %}
-        </div>
-    </div>
-
-    <div id="open-playlist-div" style="display: none;">
-        HELLO WORLD
-        <div class="list-group col-md-6 col-sm-12 mx-auto mb-4">
-            {% for track in playlist %}
-                <button id="{{track.gdrive_id}}" class="list-group-item btn btn-lg track pt-3">                        
-                    <figure class="text-center">
-                        <blockquote class="blockquote">
-                            <p>
-                                <strong>{{track.title}}</strong>&nbsp;&nbsp;-&nbsp;&nbsp;{{track.artist}}
-                                <span class="blockquote-footer ms-5">
-                                    <cite title="Source Title"><strong>{{track.genre}}</strong></cite>
-                                </span>
-                            </p>
-                        </blockquote>
-                    </figure>
-                </button>
-            {% empty %}
-                <div class="col-md-6 col-sm-12 d-flex justify-content-center mx-auto">
-                    <h3>No Tracks Available.</h3>    
-                </div> 
-            {% endfor %}
-        </div>
-
-        <div class="container">
-            <div class="row d-flex justify-content-between align-items-center p-2">
-                <!-- first sub-div Embedded Player -->
-                <div class="col-md-3 col-sm-12 my-3 mx-auto">
-                    <div class="d-flex justify-content-start">
-                        <h3 id="trackTitle" class="d-flex justify-content-start py-3">Track Title</h3>
-                    </div>                    
-                </div>                
         
-                <!-- second sub-div (Media Buttons) -->
-                <div id="media-btns" class="col-md-4 col-sm-12 my-3 mx-auto">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <button id="playAll" class="btn player-btn">
-                            <img class="m-1 p-1" src="{% static 'capstone/assets/icons/play.png' %}" alt="play icon">
-                        </button>                  
-                        <button id="pauseAll" class="btn player-btn">
-                            <img class="m-1 p-1" src="{% static 'capstone/assets/icons/pause.png' %}" alt="pause icon">
-                        </button>
-                        <button id="stopPlayer" class="btn player-btn">
-                            <img class="m-1 p-1" src="{% static 'capstone/assets/icons/stop.png' %}" alt="stop icon">
-                        </button>                        
-                        <button id="playPrevious" class="btn player-btn">
-                            <img class="m-1 p-1" src="{% static 'capstone/assets/icons/previous.png' %}" alt="previous icon">
-                        </button>
-                        <button id="playNext" class="btn player-btn">
-                            <img class="m-1 p-1" src="{% static 'capstone/assets/icons/next.png' %}" alt="next icon">
-                        </button>
-                    </div>
-                </div>
+    {% if playlist %}
+        <script>
+            // parse the JSON-formatted string into a JavaScript object to make it accessible as the 'this_playlist_tracks' var in JavaScript code
+            // Including '|escapejs' is a security precaution to  ensure that the JSON data is properly escaped to prevent syntax errors in our 
+            // JavaScript code. This filter escapes special characters so the resulting JavaScript string is valid
+            // ensure that special characters are properly escaped, preventing potential JavaScript errors
+            var this_playlist_tracks =  JSON.parse('{{ playlist_json | escapejs }}');
+        </script>
 
-                <!-- third sub-div (Audio Player) -->   
-                <div class="col-md-5 col-sm-12 d-flex justify-content-end my-3 mx-auto">
-                    <div class="d-flex align-items-center">
-                        <audio id="musicPlayer" controls class="">
-                            <source src="" type="audio/mpeg">
-                            Your browser does not support the audio element.
-                        </audio>
-                        <div class="d-flex align-items-center form-check ms-4">
-                            <input class="form-check-input ms-2 mt-2" type="checkbox" id="checkLoop">
-                            <label class="form-check-label ms-3 mt-1 fs-4" for="checkLoop" id="loop"><strong>Loop</strong></label>
+        <div id="tracks-div" class="mb-5">
+            <div class="container-fluid d-flex justify-content-center mx-auto my-3">
+                <img class="d-flex justify-content-center mx-auto sound" src="{% static 'capstone/assets/icons/sound.png' %}" alt="sound icon">
+                <h2 class="d-flex justify-content-center mt-2 mx-2 playlist">{{ playlist.name }}</h2>
+                <img class="d-flex justify-content-center mx-auto sound" src="{% static 'capstone/assets/icons/sound.png' %}" alt="sound icon">
+            </div>
+            <div class="list-group col-md-6 col-sm-12 mx-auto mb-5">
+                {% for track in playlist.tracks.all %}
+                    <button id="{{track.gdrive_id}}" class="list-group-item btn btn-lg track pt-3">                        
+                        <figure class="text-center">
+                            <blockquote class="blockquote">
+                                <p>
+                                    <strong>{{track.title}}</strong>&nbsp;&nbsp;-&nbsp;&nbsp;{{track.artist}}
+                                    <span class="blockquote-footer ms-5">
+                                        <cite title="{{track.genre}}"><strong>{{track.genre}}</strong></cite>
+                                    </span>
+                                </p>
+                            </blockquote>
+                        </figure>
+                    </button>
+                {% empty %}
+                    <div class="col-md-6 col-sm-12 d-flex justify-content-center mx-auto">
+                        <h3>No Tracks Available.</h3>    
+                    </div> 
+                {% endfor %}
+            </div>
+
+            <div id="player-div">
+                <div class="container mt-4">
+                    <div class="row d-flex justify-content-between align-items-center p-2">
+                        <!-- first sub-div Embedded Player -->
+                        <div class="col-md-3 col-sm-12 my-3 mx-auto">
+                            <div class="d-flex justify-content-start">
+                                <h3 id="trackTitle" class="d-flex justify-content-start py-3">Track Title</h3>
+                            </div>                    
+                        </div>                
+                
+                        <!-- second sub-div (Media Buttons) -->
+                        <div id="media-btns" class="col-md-4 col-sm-12 my-3 mx-auto">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <button id="playAll" class="btn player-btn">
+                                    <img class="m-1 p-1" src="{% static 'capstone/assets/icons/play.png' %}" alt="play icon">
+                                </button>                  
+                                <button id="pauseAll" class="btn player-btn">
+                                    <img class="m-1 p-1" src="{% static 'capstone/assets/icons/pause.png' %}" alt="pause icon">
+                                </button>
+                                <button id="stopPlayer" class="btn player-btn">
+                                    <img class="m-1 p-1" src="{% static 'capstone/assets/icons/stop.png' %}" alt="stop icon">
+                                </button>                        
+                                <button id="playPrevious" class="btn player-btn">
+                                    <img class="m-1 p-1" src="{% static 'capstone/assets/icons/previous.png' %}" alt="previous icon">
+                                </button>
+                                <button id="playNext" class="btn player-btn">
+                                    <img class="m-1 p-1" src="{% static 'capstone/assets/icons/next.png' %}" alt="next icon">
+                                </button>
+                            </div>
                         </div>
+
+                        <!-- third sub-div (Audio Player) -->   
+                        <div class="col-md-5 col-sm-12 d-flex justify-content-end my-3 mx-auto">
+                            <div class="d-flex align-items-center">
+                                <audio id="musicPlayer" controls class="">
+                                    <source src="" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                                <div class="d-flex align-items-center form-check ms-4">
+                                    <input class="form-check-input ms-2 mt-2" type="checkbox" id="checkLoop">
+                                    <label class="form-check-label ms-3 mt-1 fs-4" for="checkLoop" id="loop"><strong>Loop</strong></label>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
-                
             </div>
         </div>
-    </div>
+    {% else %}
+        <div id="playlists-div" class="mb-5">
+            <div class="row container-fluid row-cols-1 row-cols-md-3 g-4 px-3">
+                {% for playlist in user.playlists.all %}
+                    <div class="col mb-2">
+                        <div class="card h-100 mx-2 fs-5">                    
+                            <div class="card-body p-0 m-0">
+                                <div class="card-title d-flex justify-content-center py-3">
+                                    <h3 class="fs-2">{{ playlist.name }}</h3>
+                                </div>
+                                <div class="d-flex justify-content-start p-3">
+                                    <ol class="card-text form-control">
+                                        {% for track in playlist.tracks.all %}
+                                            <li class="card-track fs-5">&nbsp;{{track.title}}</li>  
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                                <div class="d-flex justify-content-center pt-2 mb-3">
+                                    <a href="{% url 'open_playlist' playlist.name %}" class="btn btn-lg btn-card fs-4">Open</a>
+                                </div>
+                            </div>
+                            <div class="card-footer py-3">
+                                <small class="d-flex justify-content-center">Created on {{ playlist.created_on }}</small>
+                            </div>
+                        </div>
+                    </div>            
+                {% empty %}
+                    <div class="col mb-2 d-flex justify-content-center">
+                        <h2 class="no-playlists">You have no saved playlists.</h2>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
     
 {% endblock %}
