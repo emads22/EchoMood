@@ -29,7 +29,7 @@
 
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav mb-2 mb-lg-0">
-                    <li class="nav-item mt-1">
+                    <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="{% url 'index' %}">Home</a>
                     </li>
                     {% if not user.is_authenticated %}
@@ -40,12 +40,14 @@
                             <a class="nav-link" href="{% url 'register' %}">Register</a>
                         </li>
                     {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{% url 'playlists' %}">Playlists</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle fs-4" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <strong>{{ user.username }}</strong>
                             </a>        
-                            <ul class="dropdown-menu">                            
-                                <li><a class="dropdown-item" href="{% url 'playlists' %}">My Playlists</a></li>
+                            <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Log Out</a></li>
                             </ul>               
                         </li> 

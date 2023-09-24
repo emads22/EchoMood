@@ -4,14 +4,6 @@
 
 {% block body %}
         
-    <script>
-        // parse the JSON-formatted string into a JavaScript object to make it accessible as the 'all_tracks' variable in JavaScript code
-        // Including '|escapejs' is a security precaution to  ensure that the JSON data is properly escaped to prevent syntax errors in our 
-        // JavaScript code. This filter escapes special characters so the resulting JavaScript string is valid
-        // ensure that special characters are properly escaped, preventing potential JavaScript errors
-        var playlist_tracks =  JSON.parse('{{ playlist_json | escapejs }}');
-    </script>
-        
     {% if messages %}
         <div class="alert alert-warning p-3 fs-5" role="alert">
             {% for message in messages %}
@@ -29,36 +21,7 @@
         </div>
     </div>
 
-
-    <div id="mood-div" style="display: none;" data-mood-select="{{ mood_select }}"> 
-        <div class="row container-fluid d-flex justify-content-center align-items-center mt-2 pt-2">
-            <div class="col-md-6 col-sm-12 mb-5 mx-auto">
-                
-                <h1 class="my-3"><span class="fs-1">🎧</span>&nbsp;Stream Your Mood Music!&nbsp;<span class="fs-1">🎵</span></h1>
-        
-                <h2 class="my-3">                
-                    <span class="fs-1">⚡</span>&nbsp;&nbsp;Set your mood,<br>
-                    <span class="fs-1">🤖</span>&nbsp;&nbsp;<strong>EchoMood</strong>&nbsp;&nbsp;tailors your playlist.              
-                </h2>
-            </div>
-
-            <div class="col-md-4 mx-auto d-flex justify-content-center">
-                <form action="{% url 'this_mood_playlist' %}" method="post">
-                    {% csrf_token %}
-
-                    <div class="col-auto mb-4 mx-auto">
-                        {{ mood_form.mood }}
-                    </div>
-                    
-                    <div class="col-auto mx-auto">
-                        <input type="submit" class="form-control btn btn-lg btn-green mt-2 py-3 fs-4 mood-form" value="Harmonize">
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="tracks-div" style="display: none;" data-playable="{{ playable }}" class="mb-5">
+    <div id="tracks-div" class="mb-5">
         <div class="container-fluid d-flex justify-content-center mx-auto my-3">
             <img class="d-flex justify-content-center mx-auto sound" src="{% static 'capstone/assets/icons/sound.png' %}" alt="sound icon">
             <h3 class="d-flex justify-content-center mt-2 mx-2 playlist">{{selected_mood}}&nbsp;Mood Playlist</h3>
@@ -127,7 +90,7 @@
     </div>
 
     <!-- by default this sticky div of player is hidden -->
-    <div id="player-div" style="display: none;" data-playable="{{ playable }}">
+    <div id="player-div">
         <div class="container">
             <div class="row d-flex justify-content-between align-items-center p-2">
                 <!-- first sub-div Embedded Player -->
@@ -177,26 +140,3 @@
     </div>
 
 {% endblock %} 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- <!-- <div>
-        <h5 id="trackTitle">{{tracks.0.title}}</h5>
-        <audio id="player" controls>
-            <source src="https://drive.google.com/uc?id={{tracks.0.gdrive_id}}" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio><br>
-    </div>
-
-    <br><br> -->

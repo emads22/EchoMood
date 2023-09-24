@@ -136,7 +136,7 @@ function musicPlayer(sources) {
     // add an event listener for the "play" event in order to highlight the track that is being played
     player.addEventListener("play", () => {
         // this function will be called when the audio starts or resumes playing
-        highlightTrack(player, sources);
+        highlightTrack(sources);
         title.textContent = `${sources[currentSourceIndex].title}`;
     })
 
@@ -222,26 +222,32 @@ function playClickedTrack(player, element, title, sources) {
 
 
 
-function highlightTrack(player, sources) {
-    // console.log(sources[currentSourceIndex].title);
-    thisTrack = document.getElementById(sources[currentSourceIndex].id);
-    playlistTracks = document.querySelectorAll(".track");
+function highlightTrack(sources) {
+    const playlistTracks = document.querySelectorAll(".track");
     playlistTracks.forEach((playlistTrack) => {
         if (playlistTrack.id === sources[currentSourceIndex].id) {
-            // console.log("Found it: ", sources[currentSourceIndex].title);
             // add the highlighted class to this track
             playlistTrack.classList.add("highlighted");
-            // console.log(playlistTrack.id, "highlighted");
         } else {
-            // console.log("Not found it: ");
             // check if 'highlighted' class exists in this track's classList in order to remove it
             if (playlistTrack.classList.contains('highlighted')) {
                 // remove a class from this track
                 playlistTrack.classList.remove("highlighted");
             }
-            // console.log(playlistTrack.id, "not highlighted");
         }
     }) 
+}
+
+
+
+function openPlaylist() {
+    console.log("OPEN PLAYLIST");
+
+    const allPlaylists = document.getElementById("playlists-div");
+    const thisPlaylist = document.getElementById("open-playlist-div");
+
+    allPlaylists.style.display = "none";
+    thisPlaylist.style.display = "block";
 }
 
 
