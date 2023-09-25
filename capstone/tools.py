@@ -115,14 +115,9 @@ def create_context(**kwargs):
         "playlist_form": kwargs.get("playlist_form", None),
         "playlist": kwargs.get("playlist", None),
         "playlist_json": kwargs.get("playlist_json", None),
-        # "user_playlists": kwargs.get("user_playlists", False),
         "is_in_user_playlists": kwargs.get("is_in_user_playlists", False),
-        "message": kwargs.get("message", None),
         "selected_mood": kwargs.get("selected_mood", None),
-        "this_mood_genres": kwargs.get("this_mood_genres", None),
         "playable": kwargs.get("playable", False),  # here default value of 'playable' is False not None
-        "mood_select": kwargs.get("mood_select", True),  # here default value of 'playable' is False not None
-        "all_playlists": kwargs.get("all_playlists", True),
         }
     return context
 

@@ -83,27 +83,32 @@ class PlaylistForm(forms.Form):
 
 # <==================================================<Views Functions>==================================================>
 @login_required
-def index(request): 
+def index(request):       
+    # in case the key acting as session marker has not been created or has expired then attempt to sync db with google drive mp3 tracks
+    if "db_sync_marker" not in request.session or request.session["db_sync_marker"] is None:
+        try:
+            # attempt to fetch info of the tracks in the google drive
+            drive_tracks = fetch_tracks_info() 
+        # handle exception (raised value error) from 'fetch_tracks_info()'
+        except ValueError as error:
+            # in case fetching failed for any reason (network, server,...) then skip syncing and continue with tracks currently available in the db
+            messages.error(request, f"Failed to fetch tracks info from server: {error}.")  
+        else:
+            # if successfully loaded (fetched) then sync the tracks from the drive with the tracks from db
+            sync_drive_db(drive_tracks) 
+            # save the marker key in session to mark that db is synced (to avoid syncing db everytime we get to homepage which affects loading time)
+            request.session["db_sync_marker"] = "{E>"
+
+    # fetch all tracks currently existing in database whether the db was synced or not (an error raised above or simply session hasnt expired)
+    these_tracks = Track.objects.all(),
+
     # create the default context
-    context = create_context(mood_form=MoodForm())
+    context = create_context(
+        mood_form=MoodForm(),
+        # serialize the list of tracks objects to JSON format before being used in JavaScript code
+        playlist_json=serializers.serialize('json', these_tracks)
+    )
 
-    try:
-        # attempt to fetch info of the tracks in the google drive
-        drive_tracks = fetch_tracks_info() 
-    # handle exception (raised value error) from 'fetch_tracks_info()'
-    except ValueError as error:
-        # in case fetching failed for any reason (network, server,...) then skip syncing and continue with tracks available in the db for the moment
-        these_tracks = Track.objects.all() 
-        # context['messsage'] = f'An error occurred: {error}'
-        # return render(request, "capstone/error.html", context=context)         
-    else:
-        # if successfully loaded (fetched) then sync the tracks from the drive with the tracks from db
-        sync_drive_db(drive_tracks)
-        # fetch all tracks info from db
-        these_tracks = Track.objects.all()    
-
-    # serialize the list of tracks objects to JSON format before being used in JavaScript code
-    context['playlist_json'] = serializers.serialize('json', these_tracks)
     return render(request, "capstone/index.html", context=context)
                   
 
@@ -223,9 +228,8 @@ def this_mood_playlist(request):
                     context['is_in_user_playlists'] = True 
             # save the deserialized playlist in the session after defining session data in 'settings.py'
             request.session['playlist'] = context['playlist_json']
-            # add 'playable' variable and 'mood_select' to signal showing playing music section and hiding mood selection section
-            context['playable'] = True       
-            context['mood_select'] = False    
+            # add 'playable' variable to signal showing playing music section and hiding mood selection section
+            context['playable'] = True        
             # redirect to same page 'index' bt with the collection of tracks based on this mood selected
             return render(request, "capstone/index.html", context=context)
         
