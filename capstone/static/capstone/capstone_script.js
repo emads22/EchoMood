@@ -6,50 +6,12 @@ var sources = [];
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    // put this function 'handlePlayerDiv()' first to catch also the tracks from 'playlists' template
-    handlePlayerDiv();
-    handleMoodSelectDiv();
-    handleTracksDiv();
-        
+    handleDivs();    
 })
 
 
 
-function handleMoodSelectDiv() {
-    const moodDiv = document.getElementById("mood-div");
-    // access the 'data-mood-select' attribute (JavaScript converts the hyphenated attribute names to camelCase when accessing them through the 
-    // dataset object so 'mood-select' is now 'moodSelect' )
-    const moodSelection = moodDiv.dataset.moodSelect;
-    if (moodSelection === "True") {
-        moodDiv.style.display = "block";
-    } else {
-        moodDiv.style.display = "none";
-    }
-}
-
-
-
-function handleTracksDiv() {
-    const tracksDiv = document.getElementById("tracks-div");
-    // access the 'data-mood-select' attribute (JavaScript converts the hyphenated attribute names to camelCase when accessing them through the 
-    // dataset object so 'mood-select' is now 'moodSelect' )
-    const tracksPlayable = tracksDiv.dataset.playable;
-    if (tracksPlayable === "True") {
-        tracksDiv.style.display = "block";
-    } else {
-        tracksDiv.style.display = "none";
-    }
-}
-
-
-
-function handlePlayerDiv() {
-    const playerDiv = document.getElementById("player-div");
-    // access the 'data-playable' attribute
-    const playableValue = playerDiv.dataset.playable;
-    if (playableValue === "True") {
-        playerDiv.style.display = "block";
-    } 
+function handleDivs() {
     // when 'playlist_tracks' var from 'index' template is available and defined
     if (typeof playlist_tracks !== "undefined") {
         playlist_tracks.forEach(element => {
@@ -61,6 +23,7 @@ function handlePlayerDiv() {
                 genre: element.fields.genre
             });
         })
+        handleTracksDiv();
         musicPlayer(sources);
     } else if (typeof this_playlist_tracks !== "undefined") {
         // here 'this_playlist_tracks' var from 'playlists' template is available and defined
@@ -73,9 +36,42 @@ function handlePlayerDiv() {
                 genre: element.fields.genre
             });
         })
+        handlePlaylistsDiv();
         musicPlayer(sources);
     } else {
         console.log("No Tracks Available");
+    }
+}
+
+
+
+function handleTracksDiv() {
+    const tracksDiv = document.getElementById("tracks-div");
+    const moodDiv = document.getElementById("mood-div");
+    // access the 'data-playable' attribute 
+    const tracksPlayable = tracksDiv.dataset.playable;
+    if (tracksPlayable === "True") {
+        tracksDiv.style.display = "block";
+        moodDiv.style.display = "none";
+    } else {
+        tracksDiv.style.display = "none";
+        moodDiv.style.display = "block";
+    }
+}
+
+
+
+function handlePlaylistsDiv() {
+    const tracksDiv = document.getElementById("tracks-div");
+    const playlistsDiv = document.getElementById("playlists-div");
+    // access the 'data-playable' attribute 
+    const tracksPlayable = tracksDiv.dataset.playable;
+    if (tracksPlayable === "True") {
+        tracksDiv.style.display = "block";
+        playlistsDiv.style.display = "none";
+    } else {
+        tracksDiv.style.display = "none";
+        playlistsDiv.style.display = "block";
     }
 }
 
@@ -252,25 +248,39 @@ function highlightTrack(sources) {
 
 
 
-function handlePlaylists() {
-    console.log("OPEN PLAYLIST");
+// function handleMoodSelectDiv() {
+//     const moodDiv = document.getElementById("mood-div");
+//     // access the 'data-mood-select' attribute (JavaScript converts the hyphenated attribute names to camelCase when accessing them through the 
+//     // dataset object so 'mood-select' is now 'moodSelect' )
+//     const moodSelection = moodDiv.dataset.moodSelect;
+//     if (moodSelection === "True") {
+//         moodDiv.style.display = "block";
+//     } else {
+//         moodDiv.style.display = "none";
+//     }
+// }
 
-    const allPlaylistsDiv = document.getElementById("playlists-div");
-    const thisPlaylistDiv = document.getElementById("open-playlist-div");
-    const allPlaylistsVar = allPlaylistsDiv.dataset.allPlaylists;
 
-    if (allPlaylistsVar === "True") {
-        // allPlaylistsDiv.style.display = "block";
-        // thisPlaylistDiv.style.display = "none";
-        allPlaylistsDiv.style.visibility = "visible";
-        thisPlaylistDiv.style.visibility = "hidden";
-    } else {
-        // allPlaylistsDiv.style.display = "none";
-        // thisPlaylistDiv.style.display = "block";
-        allPlaylistsDiv.style.visibility = "hidden";
-        thisPlaylistDiv.style.visibility = "visible";
-    }
-}
+
+// function handlePlaylists() {
+//     console.log("OPEN PLAYLIST");
+
+//     const allPlaylistsDiv = document.getElementById("playlists-div");
+//     const thisPlaylistDiv = document.getElementById("open-playlist-div");
+//     const allPlaylistsVar = allPlaylistsDiv.dataset.allPlaylists;
+
+//     if (allPlaylistsVar === "True") {
+//         // allPlaylistsDiv.style.display = "block";
+//         // thisPlaylistDiv.style.display = "none";
+//         allPlaylistsDiv.style.visibility = "visible";
+//         thisPlaylistDiv.style.visibility = "hidden";
+//     } else {
+//         // allPlaylistsDiv.style.display = "none";
+//         // thisPlaylistDiv.style.display = "block";
+//         allPlaylistsDiv.style.visibility = "hidden";
+//         thisPlaylistDiv.style.visibility = "visible";
+//     }
+// }
 
 
 

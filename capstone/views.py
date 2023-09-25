@@ -290,6 +290,8 @@ def save_playlist(request, playlist_mood):
                     # check if playlist can be saved and if not then send a message 
                     if not save_playlist:
                         messages.error(request, message)
+                        return HttpResponseRedirect(reverse('save_playlist'))
+                    # otherwise proceed to save playlist
                     else:
                         # create a new playlist instance and set its name (no need to use 'save()' when using 'create()')
                         new_playlist = Playlist.objects.create(name=this_playlist_name, mood=this_mood)
@@ -304,9 +306,10 @@ def save_playlist(request, playlist_mood):
                         new_playlist.save()
                         # add the new playlist to the current user's playlists
                         current_user.playlists.add(new_playlist)  
-
-                    # redirect to this user 'playlists' page whether playlist is saved or not
-                    return redirect('playlists')
+                        # send a message of success
+                        messages.success(request, "Playlist saved successfully.")
+                        # redirect to this user 'playlists' page whether playlist is saved or not
+                        return redirect('playlists')
             
             # otherwise not validated
             else:
@@ -330,7 +333,9 @@ def open_playlist(request, playlist_name):
         context = create_context(
             playlist=this_playlist,
             # serialize the list of tracks objects to JSON format before being used in JavaScript code
-            playlist_json=serializers.serialize('json', this_playlist.tracks.all())
+            playlist_json=serializers.serialize('json', this_playlist.tracks.all()),
+            # add 'playable' variable and 'mood_select' to signal showing playing music section and hiding mood selection section
+            playable = True
         )
         
         return render(request, "capstone/playlists.html", context=context)

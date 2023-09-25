@@ -3,6 +3,14 @@
 {% load static %}
 
 {% block body %}
+    {{playlist_json}}
+    <script>
+        // parse the JSON-formatted string into a JavaScript object to make it accessible as the 'this_playlist_tracks' var in JavaScript code
+        // Including '|escapejs' is a security precaution to  ensure that the JSON data is properly escaped to prevent syntax errors in our 
+        // JavaScript code. This filter escapes special characters so the resulting JavaScript string is valid
+        // ensure that special characters are properly escaped, preventing potential JavaScript errors
+        var this_playlist_tracks =  JSON.parse('{{ playlist_json | escapejs }}');
+    </script>
 
     {% if messages %}
         <div class="alert alert-warning p-3 fs-5" role="alert">
@@ -13,7 +21,6 @@
         <!-- The meta tag with http-equiv="refresh" attribute reloads the page after 1 second here -->
         <meta http-equiv="refresh" content="1;url={% url 'playlists' %}">
     {% endif %}
-
         
     <div class="row container-fluid d-flex justify-content-center">
         <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
@@ -21,47 +28,8 @@
         </div>
     </div>
 
-    <div id="playlists-div" class="mb-5">
-        <div class="row container-fluid row-cols-1 row-cols-md-3 g-4 px-3">
-            {% for playlist in user.playlists.all %}
-                <div class="col mb-2">
-                    <div class="card h-100 mx-2 fs-5">                    
-                        <div class="card-body p-0 m-0">
-                            <div class="card-title d-flex justify-content-center py-2">
-                                <h3 class="fs-2">{{ playlist.name }}</h3>
-                            </div>
-                            <div class="d-flex justify-content-start p-3">
-                                <ol class="card-text form-control">
-                                    {% for track in playlist.tracks.all %}
-                                        <li class="card-track fs-6">&nbsp;{{track.title}}</li>  
-                                    {% endfor %}
-                                </ol>
-                            </div>
-                            <div class="d-flex justify-content-center pt-2 mb-3">
-                                <a href="{% url 'open_playlist' playlist.name %}" class="btn btn-lg btn-card fs-4">Open</a>
-                            </div>
-                        </div>
-                        <div class="card-footer py-2">
-                            <small class="d-flex justify-content-center">Created on {{ playlist.created_on }}</small>
-                        </div>
-                    </div>
-                </div>            
-            {% empty %}
-                <div class="col mb-2 d-flex justify-content-center">
-                    <h2 class="no-playlists">You have no saved playlists.</h2>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-
-    {% if playlist %}
-        <script>
-            // parse the JSON-formatted string into a JavaScript object to make it accessible as the 'this_playlist_tracks' var in JavaScript code
-            // Including '|escapejs' is a security precaution to  ensure that the JSON data is properly escaped to prevent syntax errors in our 
-            // JavaScript code. This filter escapes special characters so the resulting JavaScript string is valid
-            // ensure that special characters are properly escaped, preventing potential JavaScript errors
-            var this_playlist_tracks =  JSON.parse('{{ playlist_json | escapejs }}');
-        </script>
+    <!--  if playlist  -->
+        
 
         <div id="tracks-div" style="display: none;" data-playable="{{ playable }}" class="mb-5">
             <div class="container-fluid d-flex justify-content-center mx-auto my-3">
@@ -139,6 +107,39 @@
                 </div>
             </div>
         </div>
-    {% endif %}
-
+    <!--  else  -->
+        <div id="playlists-div" style="display: none;" class="mb-5">
+            <div class="row container-fluid row-cols-1 row-cols-md-3 g-4 px-3">
+                {% for playlist in user.playlists.all %}
+                    <div class="col mb-2">
+                        <div class="card h-100 mx-2 fs-5">                    
+                            <div class="card-body p-0 m-0">
+                                <div class="card-title d-flex justify-content-center py-2">
+                                    <h3 class="fs-2">{{ playlist.name }}</h3>
+                                </div>
+                                <div class="d-flex justify-content-start p-3">
+                                    <ol class="card-text form-control">
+                                        {% for track in playlist.tracks.all %}
+                                            <li class="card-track fs-6">&nbsp;{{track.title}}</li>  
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                                <div class="d-flex justify-content-center pt-2 mb-3">
+                                    <a href="{% url 'open_playlist' playlist.name %}" class="btn btn-lg btn-card fs-4">Open</a>
+                                </div>
+                            </div>
+                            <div class="card-footer py-2">
+                                <small class="d-flex justify-content-center">Created on {{ playlist.created_on }}</small>
+                            </div>
+                        </div>
+                    </div>            
+                {% empty %}
+                    <div class="col mb-2 d-flex justify-content-center">
+                        <h2 class="no-playlists">You have no saved playlists.</h2>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    <!--  endif  -->
+    
 {% endblock %}
