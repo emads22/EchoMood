@@ -11,9 +11,10 @@ from django.core import serializers
 from django import forms
 # from django.forms.widgets import HiddenInput
 import re
+import time
 
 from .models import User, Mood, Genre, Track, Playlist
-from .tools import fetch_tracks_info, sync_drive_db, create_context, create_playlist, shuffle_list, PASSWORD_PATTERN
+from .tools import fetch_tracks_info, sync_drive_db, create_context, create_playlist, rename_playlist_numbered, PASSWORD_PATTERN
 
 
 
@@ -73,7 +74,8 @@ class PlaylistForm(forms.Form):
     name = forms.CharField(
         widget=forms.TextInput(attrs={'class': 'form-control form-control-lg', 
                                       'placeholder': 'Playlist Name',
-                                      'autofocus': 'autofocus'}),
+                                      'autofocus': 'autofocus',
+                                      }),
         required=True
         )
     
@@ -235,9 +237,15 @@ def this_mood_playlist(request):
 
 
 @login_required
-def save_playlist(request, playlist_mood):
-    save_playlist = True
-    
+def playlists(request):
+    # create the default context to be also used in 'playlists' template for the rename playlist form
+    context = create_context(playlist_form=PlaylistForm())
+    return render(request, "capstone/playlists.html", context=context)
+
+
+
+@login_required
+def save_playlist(request, playlist_mood):    
     if request.method != "POST":
         # handle other HTTP methods (like GET) as needed
         messages.error(request, "Only POST method.")
@@ -247,12 +255,10 @@ def save_playlist(request, playlist_mood):
         try:
             # this time using 'get_object_or_404()' instead of regular 'get()'
             this_mood = get_object_or_404(Mood, name=playlist_mood)
-
         except Http404:
             # Handle the case where the mood with the given name was not found (get_object_or_404() raises a standard HTTP 404 "Not Found" error)
             messages.error(request, "Invalid Mood. Playlist cannot be saved.")
-            return redirect('index')
-        
+            return redirect('index')        
         else:
             playlist_form = PlaylistForm(request.POST)
             # validate playlist 
@@ -278,38 +284,33 @@ def save_playlist(request, playlist_mood):
                         # if these sets are equal, it means that same tracks exist in both this playlist and the user's playlist, regardless of their 
                         # order so no need to save this existant playlist (A set is an unordered collection of unique elements so using a set here 
                         # ensures that the order of the tracks does not matter when comparing them)
-                        if set(playlist.tracks.all()) == set(this_playlist):
-                            save_playlist = False                        
-                            message = "Playlist already exists."
-                            break
+                        if set(playlist.tracks.all()) == set(this_playlist):                       
+                            messages.error(request, "Another playlist with these tracks already exists.")
+                            # redirect to this user 'playlists' page after failing to save playlist cz another playlist wth same tracks exists
+                            return redirect('playlists')
+                        
                         elif playlist.name == this_playlist_name:
-                            save_playlist = False
-                            message = "Playlist with such name already exists."
-                            break  
-
-                    # check if playlist can be saved and if not then send a message 
-                    if not save_playlist:
-                        messages.error(request, message)
-                        return HttpResponseRedirect(reverse('save_playlist'))
-                    # otherwise proceed to save playlist
-                    else:
-                        # create a new playlist instance and set its name (no need to use 'save()' when using 'create()')
-                        new_playlist = Playlist.objects.create(name=this_playlist_name, mood=this_mood)
-                        # add the tracks to the new playlist
-                        for track in this_playlist:
-                            # First, save the object and then add the relationships. 
-                            # (to avoid 'instance is on database "default", value is on database "None"' error) (ref: 
-                            # "https://stackoverflow.com/questions/7837033/valueerror-cannot-add-instance-is-on-database-default-value-is-on-databas")
-                            track.save()
-                            new_playlist.tracks.add(track)
-                        # save the new playlist to the database
-                        new_playlist.save()
-                        # add the new playlist to the current user's playlists
-                        current_user.playlists.add(new_playlist)  
-                        # send a message of success
-                        messages.success(request, "Playlist saved successfully.")
-                        # redirect to this user 'playlists' page whether playlist is saved or not
-                        return redirect('playlists')
+                            # adjust the playlist name by adding number for differentiation
+                            this_playlist_name = rename_playlist_numbered(this_playlist_name)
+                            break
+                    
+                    # create a new playlist instance and set its name (no need to use 'save()' when using 'create()')
+                    new_playlist = Playlist.objects.create(name=this_playlist_name, mood=this_mood)
+                    # add the tracks to the new playlist
+                    for track in this_playlist:
+                        # First, save the object and then add the relationships. 
+                        # (to avoid 'instance is on database "default", value is on database "None"' error) (ref: 
+                        # "https://stackoverflow.com/questions/7837033/valueerror-cannot-add-instance-is-on-database-default-value-is-on-databas")
+                        track.save()
+                        new_playlist.tracks.add(track)
+                    # save the new playlist to the database
+                    new_playlist.save()
+                    # add the new playlist to the current user's playlists
+                    current_user.playlists.add(new_playlist)  
+                    # send a message of success
+                    messages.success(request, "Playlist saved successfully.")
+                    # redirect to this user 'playlists' page after saving playlist
+                    return redirect('playlists')
             
             # otherwise not validated
             else:
@@ -319,33 +320,91 @@ def save_playlist(request, playlist_mood):
 
 
 @login_required
-def open_playlist(request, playlist_name):
+def open_playlist(request, playlist_id):
     try:
         # attempt to get this playlist
-        this_playlist = get_object_or_404(Playlist, name=playlist_name)
-
+        this_playlist = get_object_or_404(Playlist, pk=playlist_id)
     except Http404:
-        # Handle the case where the playlist with the given name was not found (get_object_or_404() raises a standard HTTP 404 "Not Found" error)
+        # Handle the case where the playlist with the given id was not found (get_object_or_404() raises a standard HTTP 404 "Not Found" error)
         messages.error(request, "Playlist Not found.")
-        return redirect('playlists')
-    
+        return redirect('playlists')    
     else:
         context = create_context(
             playlist=this_playlist,
             # serialize the list of tracks objects to JSON format before being used in JavaScript code
             playlist_json=serializers.serialize('json', this_playlist.tracks.all()),
-            # add 'playable' variable and 'mood_select' to signal showing playing music section and hiding mood selection section
+            # add 'playable' variable to signal showing playing music section and hiding playlists section
             playable = True
         )
-        
+        # redirect to 'playlists' template        
         return render(request, "capstone/playlists.html", context=context)
 
 
 
 @login_required
-def playlists(request):
+def rename_playlist(request, playlist_id):
+    # create the default context
+    context = create_context(playlist_form=PlaylistForm())
+        
+    if request.method == "POST":
+        try:
+            # attempt to get this playlist
+            this_playlist = get_object_or_404(Playlist, pk=playlist_id)
+        except Http404:
+            # Handle the case where the playlist with the given id was not found (get_object_or_404() raises a standard HTTP 404 "Not Found" error)
+            messages.error(request, "Playlist Not found.")
+            return redirect('playlists')    
+        else:
+            playlist_form = PlaylistForm(request.POST)
+            # validate playlist 
+            if playlist_form.is_valid(): 
+                # fetch the new name of playlist that user entered
+                new_playlist_name = request.POST.get("name")
+                # check if new name is the same as original name
+                if new_playlist_name == this_playlist.name:
+                    messages.error(request, "No changes occurred. Playlist name remains the same.")
+                    
+                else:
+                    current_user = request.user
+                    if current_user.playlists.filter(name = new_playlist_name).exists():
+                        # adjust the playlist name by adding number for differentiation
+                        new_playlist_name = rename_playlist_numbered(new_playlist_name)
 
-    return render(request, "capstone/playlists.html")
+                    # change this playlist name
+                    this_playlist.name = new_playlist_name
+                    # save this playlist
+                    this_playlist.save()
+                    # send message of success 
+                    messages.success(request, "Playlist renamed successfully.")
+            
+            # otherwise not validated
+            else:
+                # do nothing cz its a form of one field so automatically will stay in same page
+                pass
+
+    # in case GET method or failed to rename or even succeded to rename it
+    return render(request, "capstone/playlists.html", context=context)
+
+
+
+@login_required
+def delete_playlist(request, playlist_id):
+    try:
+        # attempt to get this playlist
+        this_playlist = get_object_or_404(Playlist, pk=playlist_id)
+    except Http404:
+        # Handle the case where the playlist with the given id was not found (get_object_or_404() raises a standard HTTP 404 "Not Found" error)
+        messages.error(request, "Playlist Not found.")  
+    else:
+        # delete the playlist object
+        this_playlist.delete()
+        # send message of success 
+        messages.success(request, "Playlist deleted successfully.")
+        
+    # redirect to 'playlists' page whether succeeded or failed in deleting the playlist
+    return redirect('playlists')
+
+
 
 
 

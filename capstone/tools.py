@@ -115,8 +115,8 @@ def create_context(**kwargs):
         "playlist_form": kwargs.get("playlist_form", None),
         "playlist": kwargs.get("playlist", None),
         "playlist_json": kwargs.get("playlist_json", None),
+        # "user_playlists": kwargs.get("user_playlists", False),
         "is_in_user_playlists": kwargs.get("is_in_user_playlists", False),
-        "user_playlists": kwargs.get("user_playlists", None),
         "message": kwargs.get("message", None),
         "selected_mood": kwargs.get("selected_mood", None),
         "this_mood_genres": kwargs.get("this_mood_genres", None),
@@ -145,6 +145,21 @@ def create_playlist(mood):
     playlist_queryset = Track.objects.filter(pk__in=[track.pk for track in playlist])
     # return playlist as queryset
     return playlist_queryset
+
+
+
+def rename_playlist_numbered(playlist_name):
+    """ 
+    returns a playlist name that differs from the original name passed as arg. increment by 1 if it ends with an int otherwise directly append '_1'
+    """
+    if playlist_name[-1].isdigit():
+        temp = int(playlist_name[-1])
+        temp += 1
+        result_name = playlist_name.replace(playlist_name[-1], str(temp))
+    else:
+        result_name = playlist_name + "_1"
+
+    return result_name
 
 
 

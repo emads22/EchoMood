@@ -193,3 +193,15 @@ ol.form-control{
 .no-playlists {
     color: #F16017;
 }
+
+.no-playlists:hover {
+    color: #7ED957;
+}
+
+a.btn-link {
+    text-decoration: none;
+}
+
+a.btn-link cite {
+    font-style: inherit;
+}

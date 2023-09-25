@@ -6,7 +6,7 @@ var sources = [];
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    handleDivs();    
+    handleDivs(); 
 })
 
 
