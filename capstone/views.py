@@ -100,7 +100,7 @@ def index(request):
             request.session["db_sync_marker"] = "{E>"
 
     # fetch all tracks currently existing in database whether the db was synced or not (an error raised above or simply session hasnt expired)
-    these_tracks = Track.objects.all(),
+    these_tracks = Track.objects.all()
 
     # create the default context
     context = create_context(
