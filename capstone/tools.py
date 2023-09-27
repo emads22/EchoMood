@@ -56,6 +56,9 @@ def fetch_tracks_info(page_token=None):
                 remaining_tracks = fetch_tracks_info(page_token=next_page_token)
                 # combine the contents of 'tracks' and 'remaining_tracks' lists into a single list
                 tracks.extend(remaining_tracks) 
+            # after successfully loaded (fetched) the tracks (info data) then sync the tracks from the drive with the tracks from db
+            sync_drive_db(tracks)
+            # return the list of tracks info fetched from google drive
             return tracks     
 
         except HttpError as http_error:

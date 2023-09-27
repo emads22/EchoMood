@@ -8,10 +8,9 @@ from django.contrib import messages
 from django.core import serializers
 from django import forms
 import re
-import time
 
-from .models import User, Mood, Genre, Track, Playlist
-from .tools import fetch_tracks_info, sync_drive_db, create_context, create_playlist, rename_playlist_numbered, PASSWORD_PATTERN
+from .models import User, Mood, Track, Playlist
+from .tools import fetch_tracks_info, create_context, create_playlist, rename_playlist_numbered, PASSWORD_PATTERN
 
 
 
@@ -80,20 +79,17 @@ class PlaylistForm(forms.Form):
 # <==================================================<Views Functions>==================================================>
 @login_required
 def index(request):       
-    # in case the key acting as session marker has not been created or has expired then attempt to sync db with google drive mp3 tracks
+    # in case the key acting as session marker has not been created or has expired () then attempt to sync db with google drive mp3 tracks
     if "db_sync_marker" not in request.session or request.session["db_sync_marker"] is None:
         try:
             # attempt to fetch info of the tracks in the google drive
             drive_tracks = fetch_tracks_info() 
+            # save the marker key in session to mark that db is synced (to avoid syncing db everytime we get to homepage which affects loading time)
+            request.session["db_sync_marker"] = "{E>"
         # handle exception (raised value error) from 'fetch_tracks_info()'
         except ValueError as error:
             # in case fetching failed for any reason (network, server,...) then skip syncing and continue with tracks currently available in the db
-            messages.error(request, f"Failed to fetch tracks info from server: {error}.")  
-        else:
-            # if successfully loaded (fetched) then sync the tracks from the drive with the tracks from db
-            sync_drive_db(drive_tracks) 
-            # save the marker key in session to mark that db is synced (to avoid syncing db everytime we get to homepage which affects loading time)
-            request.session["db_sync_marker"] = "{E>"
+            messages.error(request, f"Failed to fetch tracks info from server: {error}.")              
 
     # fetch all tracks currently existing in database whether the db was synced or not (an error raised above or simply session hasnt expired)
     these_tracks = Track.objects.all()
