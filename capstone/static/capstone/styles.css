@@ -1,3 +1,4 @@
+/* HTML elements */
 body {
     margin: 0;
     padding: 0;
@@ -24,18 +25,67 @@ a.dropdown-item:hover, button.track:hover {
     background-color:  #6CB946;
 }
   
-
-.bg-navbar, .dropdown-menu, button.track {
-    background-color: #7ED957;
-}
-
-
 button.highlighted {
     background-color:  #F16017;
 }
 
+ol.form-control{
+    background-color: #7ED957;
+    color: #081B00;
+    border: none;
+    padding-left: 40px;
+}
+
+a.btn-link {
+    text-decoration: none;
+}
+
+a.btn-link cite {
+    font-style: inherit;
+}
+
+
+
+/* IDs */
+#player-div {
+    background-color: #081B00;
+    color: #F16017;
+    border: 5px solid #F16017;
+    border-radius: 10px;
+    position: sticky;
+    /* set the distance from the top */
+    bottom: 0; 
+    /* ensure this element is above other elements using z-index */
+    z-index: 1; 
+}
+
+#musicPlayer {
+    border: 5px solid #F16017;
+    border-radius: 50px;
+}
+
+#musicPlayer:hover {
+    border-color: #7ED957;
+}
+
+#media-btns {
+    border: 5px solid #7ED957;
+    border-radius: 50px;
+}
+
+#trackTitle:hover, #loop:hover {
+    color: #7ED957;
+}
+
+
+
+/* Classes */
+.bg-navbar, .dropdown-menu, button.track {
+    background-color: #7ED957;
+}
+
 .container-fluid {
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
 }
 
@@ -66,22 +116,6 @@ button.highlighted {
     color: #081B00;
 }
 
-.container-fluid {
-    margin: 0 auto;
-}
-
-#player-div {
-    background-color: #081B00;
-    color: #F16017;
-    border: 5px solid #F16017;
-    border-radius: 10px;
-    position: sticky;
-    /* set the distance from the top */
-    bottom: 0; 
-    /* ensure this element is above other elements using z-index */
-    z-index: 1; 
-}
-
 .content {
     margin-top: 20px; /* Create space below the sticky div */
 }
@@ -104,24 +138,6 @@ button.highlighted {
 .sound {
     width: fit-content;
     margin-top: -37px;
-}
-
-#musicPlayer {
-    border: 5px solid #F16017;
-    border-radius: 50px;
-}
-
-#musicPlayer:hover {
-    border-color: #7ED957;
-}
-
-#media-btns {
-    border: 5px solid #7ED957;
-    border-radius: 50px;
-}
-
-#trackTitle:hover, #loop:hover {
-    color: #7ED957;
 }
 
 .form-check-input:checked {
@@ -178,13 +194,6 @@ button.highlighted {
     color: #FFF;
 }
 
-ol.form-control{
-    background-color: #7ED957;
-    color: #081B00;
-    border: none;
-    padding-left: 40px;
-}
-
 .card-track:hover {
     background-color: #6CB946;
     color: #FFF;
@@ -198,10 +207,4 @@ ol.form-control{
     color: #7ED957;
 }
 
-a.btn-link {
-    text-decoration: none;
-}
 
-a.btn-link cite {
-    font-style: inherit;
-}

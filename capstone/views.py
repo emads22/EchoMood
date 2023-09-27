@@ -5,11 +5,8 @@ from django.http import HttpResponseRedirect, Http404
 from django.db import IntegrityError
 from django.urls import reverse
 from django.contrib import messages
-from django.core.paginator import Paginator
-import json
 from django.core import serializers
 from django import forms
-# from django.forms.widgets import HiddenInput
 import re
 import time
 
@@ -59,12 +56,11 @@ class RegisterForm(forms.Form):
 
 class MoodForm(forms.Form):    
     mood = forms.ChoiceField(
-        # label='Select your mood ',
         # choices must be list of tuples (value, display_label), and added first choice as empty value. (genres are instances of Model table)
         choices=[('', 'Select your mood')] + [(mood.name, mood.name) for mood in Mood.objects.all()],
         initial='',     # here empty value is selected at first
         widget=forms.Select(attrs={'class': 'form-select form-select-lg fs-4 py-3 mood-form',
-                                #    'autofocus': 'autofocus'
+                                   'autofocus': 'autofocus'
                                    }),
         required=True
         )
@@ -201,11 +197,6 @@ def register(request):
 
 @login_required
 def this_mood_playlist(request):
-    # create the default context
-    context = create_context(
-        mood_form=MoodForm(),
-        playlist_form=PlaylistForm())
-
     if request.method != "POST":        
         # handle other HTTP methods (like GET) as needed
         messages.error(request, "Only POST method.")
@@ -215,28 +206,48 @@ def this_mood_playlist(request):
         mood_form = MoodForm(request.POST)
         # validate form (mood) 
         if mood_form.is_valid(): 
-            context['selected_mood'] = request.POST.get("mood")
-            this_mood = Mood.objects.get(name=context['selected_mood'])
-            this_playlist = create_playlist(this_mood)            
-            context['playlist'] = this_playlist        
-            # serialize list of tracks objects to JSON format before using it in JavaScript code and also to be able to save playlist in session 
-            # and access it in other view functions
-            context['playlist_json'] = serializers.serialize('json', this_playlist) 
-            # check if this playlist (queryset of tracks) exists in the current user's playlists and pass the boolean var to template 
-            for playlist in request.user.playlists.all():
-                if set(playlist.tracks.all()) == set(this_playlist):
-                    context['is_in_user_playlists'] = True 
-            # save the deserialized playlist in the session after defining session data in 'settings.py'
-            request.session['playlist'] = context['playlist_json']
-            # add 'playable' variable to signal showing playing music section and hiding mood selection section
-            context['playable'] = True        
-            # redirect to same page 'index' bt with the collection of tracks based on this mood selected
-            return render(request, "capstone/index.html", context=context)
+            selected_mood = request.POST.get("mood")
+            # return the result of 'generate_playlist' function
+            return generate_playlist(request, selected_mood)
         
         # otherwise not validated
         else:
             # do nothing cz its a form of one field so automatically will stay in same page
             pass
+
+
+
+@login_required
+def generate_playlist(request, mood):
+    try:
+        this_mood = get_object_or_404(Mood, name=mood)
+    except Http404:
+        # Handle the case where the mood with the given name was not found (get_object_or_404() raises a standard HTTP 404 "Not Found" error)
+        messages.error(request, "Invalid Mood. Playlist cannot be generated.")
+        return redirect('index')  
+    else:     
+        this_playlist = create_playlist(this_mood)        
+        # create the default context
+        context = create_context(
+            mood_form=MoodForm(),
+            playlist_form=PlaylistForm(),
+            selected_mood=mood,
+            playlist=this_playlist,
+            # serialize list of tracks objects to JSON format before using it in JavaScript code and also to be able to save playlist in session 
+            # and access it in other view functions
+            playlist_json=serializers.serialize('json', this_playlist),
+            # add 'playable' variable to signal showing playing music section and hiding mood selection section
+            playable=True
+            )   
+        # check if this playlist (queryset of tracks) exists in the current user's playlists and pass the boolean var to template 
+        for playlist in request.user.playlists.all():
+            if set(playlist.tracks.all()) == set(this_playlist):
+                context['is_in_user_playlists'] = True
+                break 
+        # save the deserialized playlist in the session after defining session data in 'settings.py'
+        request.session['playlist'] = context['playlist_json']                
+        # redirect to page 'index' bt with the collection of tracks based on this mood selected (generated playlist)
+        return render(request, "capstone/index.html", context=context)
 
 
 

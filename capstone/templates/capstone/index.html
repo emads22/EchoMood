@@ -61,7 +61,7 @@
     <div id="tracks-div" style="display: none;" data-playable="{{ playable }}" class="mb-5">
         <div class="container-fluid d-flex justify-content-center mx-auto my-3">
             <img class="d-flex justify-content-center mx-auto sound" src="{% static 'capstone/assets/icons/sound.png' %}" alt="sound icon">
-            <h3 class="d-flex justify-content-center mt-2 mx-2 playlist">{{selected_mood}}&nbsp;Mood Playlist</h3>
+            <h3 class="d-flex justify-content-center mt-2 playlist">{{selected_mood}}&nbsp;Mood</h3>
             <img class="d-flex justify-content-center mx-auto sound" src="{% static 'capstone/assets/icons/sound.png' %}" alt="sound icon">
         </div>
         
@@ -89,16 +89,21 @@
         <div class="mb-5">
             {% if not is_in_user_playlists %}
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-lg btn-green d-flex justify-content-center mx-auto p-3 mt-5 fs-4" data-bs-toggle="modal" data-bs-target="#savePlaylistModal">
-                    Save Playlist
-                </button>
+                <div class="d-flex justify-content-between ">
+                    <button type="button" class="btn btn-lg btn-green mx-auto p-3 me-4 mt-5 fs-4" data-bs-toggle="modal" data-bs-target="#savePlaylistModal">
+                        Save Playlist
+                    </button>
+                    <a href="{% url 'generate_playlist' selected_mood %}" type="button" class="btn btn-lg btn-green mx-auto p-3 ms-4 mt-5 fs-4">
+                        Regenerate
+                    </a>
+                </div>
                 
                 <!-- Modal -->
                 <div class="modal fade" id="savePlaylistModal" tabindex="-1" aria-labelledby="savePlaylistModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="savePlaylistModalLabel">Save this playlist for <strong class="fs-4">{{selected_mood}}</strong> mood</h1>
+                                <h1 class="modal-title fs-5" id="savePlaylistModalLabel">Save this <strong class="fs-4">{{selected_mood}}</strong> mood playlist</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <form action="{% url 'save_playlist' selected_mood %}" method="post">
@@ -114,10 +119,6 @@
                         </div>
                     </div>
                 </div>
-            {% else %}  <!--fix with a form to new view function of deletion -->
-                <button type="button" class="btn btn-lg btn-green d-flex justify-content-center mx-auto p-3 mt-5 fs-4">
-                    Delete Playlist
-                </button>
             {% endif %}
         </div>
 
@@ -128,7 +129,7 @@
                     <!-- first sub-div Embedded Player -->
                     <div class="col-md-3 col-sm-12 my-3 mx-auto">
                         <div class="d-flex justify-content-start">
-                            <h3 id="trackTitle" class="d-flex justify-content-start py-3">Track Title</h3>
+                            <h3 id="trackTitle" class="d-flex justify-content-start py-3">🎧🎵</h3>
                         </div>                    
                     </div>                
             
@@ -173,26 +174,3 @@
     </div>
 
 {% endblock %} 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- <!-- <div>
-        <h5 id="trackTitle">{{tracks.0.title}}</h5>
-        <audio id="player" controls>
-            <source src="https://drive.google.com/uc?id={{tracks.0.gdrive_id}}" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio><br>
-    </div>
-
-    <br><br> -->
