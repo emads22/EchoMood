@@ -182,7 +182,7 @@ def register(request):
                 # add a message to pass it to template
                 messages.error(
                     request, 
-                    """Valid password (in any order):\n   - 2 or more uppercase letters\n   - 2 or more digits\n   - 2 or more special characters from   _!@#$%&"""
+                    """Valid password consists of 6 to 8 characters long in any order:\n   - 2 or more uppercase letters\n   - 2 or more digits\n   - 2 or more special characters from   _!@#$%&"""
                     )
                 # pass the same input values of login form to the template to correct them 
                 context["register_form"] = this_register_form

@@ -80,7 +80,7 @@ a.btn-link cite {
 
 
 /* Classes */
-.bg-navbar, .dropdown-menu, button.track {
+.bg-navbar, .dropdown-menu, button.track, button.navbar-toggler {
     background-color: #7ED957;
 }
 
@@ -203,8 +203,11 @@ a.btn-link cite {
     color: #F16017;
 }
 
-.no-playlists:hover {
+.no-playlists:hover, .attribute {
     color: #7ED957;
 }
 
-
+.bg-attributes {
+    background-color: #081B00;
+    color: #7ED957;
+}
