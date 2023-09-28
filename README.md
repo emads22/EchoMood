@@ -128,16 +128,12 @@
 
 ## Contents of the Files:
 
-####    assets:
-    
-    It contains:
+####    assets directory contains:
         - EchoMood Logo image
         - All the icons used on the application webpages whether for buttons or designs sourced freely from https://www.flaticon.com/
 
 
-####    layout.html:
-    
-    It contains:
+####    layout.html file contains:
         - Meta Information: Contains meta tags for character encoding and viewport settings.
         - Title: Sets the webpage's title, which can be customized in individual pages using blocks.
         - Bootstrap: Links to Bootstrap CSS and JavaScript for responsive design and styling.
@@ -149,9 +145,7 @@
         - Footer: Displays a copyright notice for EchoMood.
         - Bootstrap JavaScript: Includes Bootstrap JavaScript for enhanced functionality.
 
-####    index.html:
-
-    It contains:
+####    index.html file contains:
         - Parsing JSON data for playlist tracks.
         - Displaying messages and automatic page refresh.
         - EchoMood logo.
@@ -159,9 +153,7 @@
         - Option to save and regenerate playlists.
         - Player controls for streaming tracks with loop functionality.
 
-####    login.html:
-
-    It contains:
+####    login.html file contains:
         - Extends the 'capstone/layout.html' template.
         - Loads static files.
         - Displays warning messages, if any, in an alert box.
@@ -172,9 +164,7 @@
         - Offers a link to the registration page for new users.
 
 
-####    register.html:
-
-    It contains:
+####    register.html file contains:
         - Extends the 'capstone/layout.html' template.
         - Loads static files.
         - Displays warning messages if any.
@@ -185,9 +175,7 @@
         - Includes a "Register" button to submit the form.
         - Offers a link to the login page for users who already have an account.
 
-####    playlists.html:
-
-    It contains:
+####    playlists.html file contains:
         - Layout Inheritance: The HTML file extends a layout template ('capstone/layout.html').
         - Loading Static Resources: It loads static resources using {% load static %}.
         - Alert Messages: The file checks for alert messages and displays them if present, including a refresh meta tag.
@@ -203,9 +191,7 @@
         - No Playlists Message: If the user has no playlists, a message is displayed.
         - No Tracks Message: If a playlist has no tracks, a message is displayed.
 
-####    capstone_script.js:
-
-    It contains:
+####    capstone_script.js file contains:
         - The script defines the 'src_base' variable for the base URL to access music tracks on Google Drive.
         - It initializes variables such as 'currentSourceIndex' and an empty array 'sources'.
         - The 'DOMContentLoaded' event listener calls the 'handleDivs' function when the page content is loaded.
@@ -216,13 +202,10 @@
           based on user interaction.
         - The 'musicPlayer' function sets up the music player interface, including play, pause, stop, next, and previous buttons, 
           and handles track-related events.
-        - The 'playNext', 'playPrevious', and other functions manage the playback of music tracks, handle errors, 
-          and highlight the currently playing track.
+        - The 'playNext', 'playPrevious', and other functions manage the playback of music tracks, handle errors, and highlight the currently playing track.
 
-####    styles.css:
-
-    It contains:
-#####   HTML Elements:
+####    styles.css file contains:
+        - HTML Elements:
             - Styles for the 'body' element, setting background and text colors.
             - Styling for 'audio' elements and customizing the appearance of the play button.
             - Styling for links with class 'login-link.'
@@ -231,13 +214,13 @@
             - Styles for ordered lists with class 'form-control.'
             - Styles for links with class 'btn-link' and 'cite' within them.
 
-#####   IDs:
+        - IDs:
             - Styles for elements with the 'player-div' ID, including background and border properties.
             - Styles for elements with the 'musicPlayer' ID, including border properties and hover effect.
             - Styles for elements with the 'media-btns' ID, including border properties.
             - Hover effect styles for elements with the 'trackTitle' and 'loop' IDs.
 
-#####   Classes:
+        - Classes:
             - Background color styles for elements with classes 'bg-navbar,' 'dropdown-menu,' and 'track.'
             - Styles for 'container-fluid' class.
             - Margin and width styles for elements with classes 'home-icon' and 'small-logo.'
@@ -257,15 +240,11 @@
             - Hover effect styles for elements with class 'btn-card' and 'card-track.'
             - Styles for elements with class 'no-playlists' and its hover effect.
 
-####    admin.py:
-
-    It contains:
+####    admin.py file contains:
         - Imports modules from Django's admin package.
         - Registers models for User, Mood, Genre, Track, and Playlist in the Django admin interface.
 
-####    models.py:
-
-    It contains:
+####    models.py file contains:
 
         - Defines a custom user model named 'User' inheriting from 'AbstractUser.'
         - Includes a 'playlists' field in the 'User' model, establishing a Many-to-Many relationship with the 'Playlist' model.
@@ -277,15 +256,12 @@
         - Defines a 'Playlist' model with fields for 'name,' 'created_on,' and a Many-to-Many relationship with the 'Track' model. 
           It also has a Foreign Key relationship with the 'Mood' model.
     
-####    tools.py:
-
-    It contains:
+####    tools.py file contains:
 
         - Imports various modules and libraries, including Google APIs, Django-related modules, and others.
         - Defines a regular expression (PASSWORD_PATTERN) for validating password complexity during user registration.
         - Sets a constant 'PLAYLIST_MAX_TRACKS' to limit the number of tracks in a playlist to 16.
-
-#####   Functions and Their Purposes:
+        - Functions and Their Purposes:
             - fetch_tracks_info(page_token=None): Retrieves file names and IDs from a specific Google Drive folder using the Drive v3 API, 
               with the ability to handle pagination.
             - sync_drive_db(drive_tracks): Synchronizes the application's database with the tracks from Google Drive, 
@@ -293,33 +269,26 @@
             - create_context(**kwargs): Creates a context template for views to avoid repetitive argument passing. 
               Sets default values for various template context variables.
             - create_playlist(mood): Generates a playlist by randomly selecting tracks associated with a given mood and shuffling them.
-            - rename_playlist_numbered(playlist_name): Renames a playlist by incrementing a number if the name ends with a digit, 
-              otherwise appending "_1".
+            - rename_playlist_numbered(playlist_name): Renames a playlist by incrementing a number if the name ends with a digit, otherwise appending "_1".
             - shuffle_list(this_list, num_shuffles): Recursively shuffles a list a specified number of times, ensuring a randomized order.
 
-####    urls.py:
-
-    It contains:
+####    urls.py file contains:
         - Defines URL patterns for various views in the Django web application.
         - Includes paths for the homepage, login, logout, registration, mood-based playlist generation, playlist management, saving 
           playlists, opening playlists, renaming playlists, and deleting playlists.
 
-####    views.py:
-
-    It contains:
+####    views.py file contains:
         - Imports various modules and classes from Django, including forms, authentication, database models, and HTTP-related components.
         - Defines several Django forms used for user login, registration, mood selection, and playlist creation.
-
-#####   Functions and Their Purposes:
-        - index(request): Displays the homepage, generates mood-based playlists, and synchronizes music tracks with Google Drive.
-        - login_view(request): Handles user login, authentication, and redirects to the homepage.
-        - logout_view(request): Logs the user out and redirects to the login page.
-        - register(request): Handles user registration, enforces password complexity rules, 
-          and logs in the user upon successful registration.
-        - this_mood_playlist(request): Generates a mood-based playlist based on user-selected mood.
-        - generate_playlist(request, mood): Generates a playlist for a specific mood and displays it.
-        - playlists(request): Displays the user's playlists and provides options for renaming and deleting them.
-        - save_playlist(request, playlist_mood): Saves a user-generated playlist and performs necessary checks to prevent duplicates.
-        - open_playlist(request, playlist_id): Opens and displays a user's playlist for playback and management.
-        - rename_playlist(request, playlist_id): Allows the user to rename a playlist.
-        - delete_playlist(request, playlist_id): Deletes a user's playlist.
+        - Functions and Their Purposes:
+            - index(request): Displays the homepage, generates mood-based playlists, and synchronizes music tracks with Google Drive.
+            - login_view(request): Handles user login, authentication, and redirects to the homepage.
+            - logout_view(request): Logs the user out and redirects to the login page.
+            - register(request): Handles user registration, enforces password complexity rules, and logs in the user upon successful registration.
+            - this_mood_playlist(request): Generates a mood-based playlist based on user-selected mood.
+            - generate_playlist(request, mood): Generates a playlist for a specific mood and displays it.
+            - playlists(request): Displays the user's playlists and provides options for renaming and deleting them.
+            - save_playlist(request, playlist_mood): Saves a user-generated playlist and performs necessary checks to prevent duplicates.
+            - open_playlist(request, playlist_id): Opens and displays a user's playlist for playback and management.
+            - rename_playlist(request, playlist_id): Allows the user to rename a playlist.
+            - delete_playlist(request, playlist_id): Deletes a user's playlist.
