@@ -80,7 +80,7 @@ a.btn-link cite {
 
 
 /* Classes */
-.bg-navbar, .dropdown-menu, button.track, button.navbar-toggler {
+.bg-navbar, .dropdown-menu, button.navbar-toggler {
     background-color: #7ED957;
 }
 
@@ -117,12 +117,14 @@ a.btn-link cite {
 }
 
 .content {
-    margin-top: 20px; /* Create space below the sticky div */
+    /* Create space below the sticky div */
+    margin-top: 20px; 
 }
 
 .track {
     border-radius: 0;
     border-color: #6CB946;
+    background-color: #7ED957;
 }
 
 .mood-form {
