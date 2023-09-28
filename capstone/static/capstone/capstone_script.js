@@ -87,8 +87,8 @@ function musicPlayer(sources) {
     const playNextButton = document.getElementById("playNext");
     const playPreviousButton = document.getElementById("playPrevious");
 
-    // set the initial volume when the audio element loads (0.2 represents 20% volume)
-    player.volume = 0.2; 
+    // set the initial volume when the audio element loads (0.4 represents 40% volume)
+    player.volume = 0.4; 
     // set the src for the music layer (1st track)
     player.src = `${src_base}${sources[currentSourceIndex].id}`;
     // load src of player
