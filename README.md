@@ -69,17 +69,17 @@ For those who can't wait, EchoMood offers the convenience of double-clicking on 
 This feature allows them to instantly play a specific track without waiting for it to follow the order. 
 Users musical desires are prioritized.
 
-### 5. Managing Playlists
-
-EchoMood doesn't just stop at generating playlists; it also provides a robust playlist management system. 
-All of the saved playlists are neatly organized in the "Playlists" page. 
-Here, users can view, rename, or delete their playlists, giving them full control over their musical collection.
-
-### 6. Customization and Variety
+### 5. Customization and Variety
 
 EchoMood doesn't stop at just one playlist. 
 Users have the option to save the generated playlist, ensuring that the perfect soundtrack is always within reach. 
 Even better, if the mood strikes for something different, EchoMood allows them to regenerate a playlist for the same mood, offering variety and spontaneity.
+
+### 6. Managing Playlists
+
+EchoMood doesn't just stop at generating playlists; it also provides a robust playlist management system. 
+All of the saved playlists are neatly organized in the "Playlists" page. 
+Here, users can view, rename, or delete their playlists, giving them full control over their musical collection.
 
 ### 7. Smart Playlist Handling
 
