@@ -101,9 +101,11 @@ def sync_drive_db(drive_tracks):
             }
         )
     
-    # catch tracks that don't meet this criteria (tracks that arent existent in drive anymore)
-    db_tracks = Track.objects.exclude(title__in=drive_tracks_titles)
-    db_tracks.delete()
+    # catch tracks that don't meet this criteria (tracks that arent existent in drive anymore) in order to delete them from db
+    # but this approach not recommended cz it affects the tracks that exist in the saved playlists of users frequently, so
+    # better to have media loading error instead of empty playlists
+    # db_tracks = Track.objects.exclude(title__in=drive_tracks_titles)
+    # db_tracks.delete()
 
 
 
