@@ -1,35 +1,43 @@
-# EchoMood
 
-### Video Demo:  <>
-
-## Description:    
-
-    In today's fast-paced world, music has become an integral part of our lives, influencing our moods, emotions, and even productivity. 
-    We often find ourselves searching for the perfect playlist that resonates with our current feelings or activities. 
-    EchoMood, The Mood-Based Music Companion, is a web application designed to solve this problem by offering a personalized and dynamic music experience tailored to the mood.
+<div style="display: flex; align-items: center;">
+  <img src="./capstone/static/capstone/assets/logo/EchoMood.png" alt="EchoMood Logo" style="width: 30%; height: auto; margin-right: 40px; margin-bottom: 20px;" />
+  <div>
+    <h1>EchoMood</h1>
+    <h2>Description:</h2>
+    <h3>
+      In today's fast-paced world, music has become an integral part of our lives, influencing our moods, emotions, and even productivity.<br>
+      We often find ourselves searching for the perfect playlist that resonates with our current feelings or activities.<br> 
+      EchoMood, The Mood-Based Music Companion, is a web application designed to solve this problem by offering a personalized and dynamic music experience tailored to the mood.
+    </h3>
+    <h3>Video Demo: &lt;Insert video link here&gt;</h3>
+  </div>
+</div>
     
 
 ## Distinctiveness and Complexity:  
 
     EchoMood's distinctiveness lies in its innovative use of Google Drive APIs, a complex synchronization system, and stringent password requirements, all aimed at providing users with a superior and secure music experience.
 
-#### 1. Leveraging Google Drive APIs for Music Streaming
+### 1. Leveraging Google Drive APIs for Music Streaming
  
     Unlike most music streaming services that store audio files directly on their servers, EchoMood takes a more efficient and pro-active approach. It utilizes Google Drive APIs to fetch music tracks stored in the user's Google Drive, thus eliminating the need for massive server storage for audio files. This results in a significant reduction in storage requirements while allowing EchoMood to provide a vast library of royalty-free music sourced freely from Free Music Archive "https://freemusicarchive.org/" and YouTube Audio Library "https://studio.youtube.com/channel/" .
 
-#### 2. The Complexity of Secure Google Drive Integration
+### 2. The Complexity of Secure Google Drive Integration
 
     EchoMood's ability to seamlessly access and stream music from Google Drive is not a simple feat. It involves a complex set of operations to ensure the security and privacy of both the user's Google Drive account and the EchoMood platform. The application employs robust authentication mechanisms and carefully follows Google's security measures to access and fetch tracks from Google Drive. This complexity in integration ensures that user data remains protected while enjoying the convenience of accessing their music library.
 
-#### 3. Real-Time Synchronization for Fresh Content
+### 3. Real-Time Synchronization for Fresh Content
 
     To enhance user experience and keep the music library up-to-date, EchoMood employs a sophisticated synchronization system. Frequently, upon visiting the homepage, the application checks if the user's session has expired. If it detects that the session has expired (by examining the existence of a specific marker in the session), EchoMood re-establishes a connection with Google Drive to read the latest music tracks and sync their metadata with the database on the app server. This dynamic approach ensures that users always have access to the most recent music additions.
 
-#### 4. Enhancing Security with Complex Password Requirements
+### 4. Enhancing Security with Complex Password Requirements
 
     EchoMood goes beyond the standard password requirements to strengthen the security of user accounts. During the registration process, EchoMood enforces stringent password criteria. Each password must contain at least two uppercase letters, two digits, and two special characters. Moreover, it must be within a specific length range of 6 to 8 characters. This heightened level of password complexity strengthens user authentication and safeguards their accounts from unauthorized access.
 
     In summary, EchoMood's distinctiveness and complexity stem from its unique approach to music storage and retrieval, intricate Google Drive integration, real-time synchronization capabilities, and stringent password security measures. These innovative features not only make EchoMood a standout music streaming platform but also ensure a secure and dynamic user experience. EchoMood sets a new standard in music streaming by combining convenience, efficiency, and security in an elegant and user-friendly package.
+
+
+## EchoMood's Features:
 
 ####    Creating the Perfect Playlist 
 
@@ -83,7 +91,7 @@
     If a user tries to save a new playlist with a name that already exists for another saved playlist, EchoMood automatically appends a number to the name to make it distinct. 
     For example, if a playlist named "Chill Vibes", the new playlist will be named "Chill Vibes_1."
 
-####    Manage Music Universe
+####    Managing Music Universe
 
     The 'Playlists' page is the gateway to managing users musical universe. 
     Here, they can view all the playlists they've saved, each neatly organized by mood. 
