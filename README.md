@@ -9,7 +9,7 @@
       We often find ourselves searching for the perfect playlist that resonates with our current feelings or activities.<br> 
       EchoMood, The Mood-Based Music Companion, is a web application designed to solve this problem by offering a personalized and dynamic music experience tailored to the mood.
     </h3>
-    <h3>Video Demo: &lt;Insert video link here&gt;</h3>
+    <h3>Video Demo:&nbsp;&nbsp;<a href="https://youtu.be/CXwgDzoLlWE">https://youtu.be/CXwgDzoLlWE</a></h3>
   </div>
 </div>
     
