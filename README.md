@@ -79,7 +79,8 @@ Even better, if the mood strikes for something different, EchoMood allows them t
 
 EchoMood doesn't just stop at generating playlists; it also provides a robust playlist management system. 
 All of the saved playlists are neatly organized in the "Playlists" page. 
-Here, users can view, rename, or delete their playlists, giving them full control over their musical collection.
+Here, they can view all the playlists they've saved, each neatly organized by mood.
+EchoMood gives them the power to rename or delete playlists at their discretion, giving them full control over their musical collection, and ensuring that it stays organized and tailored to their preferences.
 
 ### 7. Smart Playlist Handling
 
@@ -91,13 +92,7 @@ Additionally, EchoMood is intelligent enough to handle playlist naming conflicts
 If a user tries to save a new playlist with a name that already exists for another saved playlist, EchoMood automatically appends a number to the name to make it distinct. 
 For example, if a playlist named "Chill Vibes", the new playlist will be named "Chill Vibes_1."
 
-### 8. Managing Music Universe
-
-The 'Playlists' page is the gateway to managing users musical universe. 
-Here, they can view all the playlists they've saved, each neatly organized by mood. 
-EchoMood gives them the power to rename or delete playlists at their discretion, ensuring that their music library stays organized and tailored to their preferences.
-
-### 9. Mobile Responsiveness
+### 8. Mobile Responsiveness
 
 EchoMood understands the importance of music on the go.
 To cater to users on all devices, the web app is designed to be fully mobile responsive. 
