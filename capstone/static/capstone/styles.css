@@ -213,3 +213,16 @@ a.btn-link cite {
     background-color: #081B00;
     color: #7ED957;
 }
+
+/* Make the links italic */
+.attribute {
+    font-style: italic;
+    text-decoration: none;
+}
+
+/* Hover effect to show underline */
+.attribute:hover {
+    text-decoration: underline;
+    color: #6CB946;
+}
+
