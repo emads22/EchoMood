@@ -1,19 +1,24 @@
+# Update: EchoMood
 
-<div style="display: flex; align-items: center;">
-  <img src="./capstone/static/capstone/assets/logo/EchoMood.png" alt="EchoMood Logo" style="width: 30%; height: auto; margin-right: 40px; margin-bottom: 20px;" />
-  <div>
-    <h1>EchoMood</h1>
-    <h2>Description:</h2>
-    <h3>
-      In today's fast-paced world, music has become an integral part of our lives, influencing our moods, emotions, and even productivity.<br>
-      We often find ourselves searching for the perfect playlist that resonates with our current feelings or activities.<br> 
-      EchoMood, The Mood-Based Music Companion, is a web application designed to solve this problem by offering a personalized and dynamic music experience tailored to the mood.
-    </h3>
-  </div>
-</div>
-    
-## Overview
-This is an updated version of the original **`EchoMood`** app developed as part of my [**CS50W**](https://cs50.harvard.edu/web/2020/) final project ([GitHub repo link](https://github.com/me50/emads22)). It is a mood-based music companion web application designed to offer a personalized and dynamic music experience tailored to your mood. It generates playlists based on user mood inputs and provides a seamless music streaming experience.
+![EchoMood Logo](./capstone/static/capstone/assets/logo/EchoMood.png)
+
+## Description:
+In today's fast-paced world, music has become an integral part of our lives, influencing our moods, emotions, and even productivity.
+We often find ourselves searching for the perfect playlist that resonates with our current feelings or activities.
+EchoMood, The Mood-Based Music Companion, is a web application designed to solve this problem by offering a personalized and dynamic music experience tailored to the mood.
+
+---
+
+## Update
+This version represents an updated iteration of the original **`EchoMood`** app developed during my [**CS50W**](https://cs50.harvard.edu/web/2020/) final project. You can explore its development on [me/50](https://github.com/me50/emads22) repository.
+
+### Key Enhancements:
+- **Improved Music Streaming**: Removed reliance on Google Drive APIs, now storing tracks locally for enhanced performance.
+- **Optimized User Experience**: Refined styles, improved logic, and enhanced functionality throughout the application.
+
+---
+
+Enjoy the updated EchoMood experience, tailored to provide the best music companion service possible.
 
 ## Features
 - **Creating the Perfect Playlist**: Generate music playlists based on the user's mood input, curating a unique 16-track playlist every time.
