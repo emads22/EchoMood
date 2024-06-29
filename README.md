@@ -2,7 +2,7 @@
 
 ![EchoMood Logo](./capstone/static/capstone/assets/logo/EchoMood.png)
 
-## Description:
+## Overview:
 In today's fast-paced world, music has become an integral part of our lives, influencing our moods, emotions, and even productivity.
 We often find ourselves searching for the perfect playlist that resonates with our current feelings or activities.
 EchoMood, The Mood-Based Music Companion, is a web application designed to solve this problem by offering a personalized and dynamic music experience tailored to the mood.
