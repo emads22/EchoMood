@@ -46,11 +46,11 @@ Enjoy the updated EchoMood experience, tailored to provide the best music compan
 4. Explore, interact with, and enjoy the personalized music experience.
 
 ## Example
-### John's User Profile
+#### John's User Profile:
 - **Username**: `john`
 - **Password**: `abAB12!@` (utilizing **`EchoMood`**'s highly secure password pattern)
 
-John enjoys a personalized music experience with EchoMood, exploring various moods and enjoying curated playlists tailored to his preferences. You can view his playlists in the `Playlists` section.
+John enjoys a personalized music experience with EchoMood, exploring various moods and enjoying curated playlists tailored to his preferences. You can view his playlists in the `Playlists` section on `http://127.0.0.1:8000/playlists`.
 
 ## Update
 This update improves EchoMood by:
