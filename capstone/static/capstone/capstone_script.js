@@ -1,5 +1,5 @@
-
-const src_base = "https://drive.google.com/uc?id="
+// const src_base = "https://drive.google.com/uc?id="
+const src_base = "/static/capstone/assets/tracks/"
 var currentSourceIndex = 0;
 var sources = [];
 
@@ -17,10 +17,11 @@ function handleDivs() {
         playlist_tracks.forEach(element => {
             // create a list of dict (objects) for each track in 'playlist_tracks' object
             sources.push({
-                id: element.fields.gdrive_id,
+                id: element.pk,
                 title: element.fields.title,
                 artist: element.fields.artist,
-                genre: element.fields.genre
+                genre: element.fields.genre,
+                audio_file: element.fields.audio_file
             });
         })
         handleTracksDiv();
@@ -30,10 +31,11 @@ function handleDivs() {
         this_playlist_tracks.forEach(element => {
             // create a list of dict (objects) for each track in 'playlist_tracks' object
             sources.push({
-                id: element.fields.gdrive_id,
+                id: element.pk,
                 title: element.fields.title,
                 artist: element.fields.artist,
-                genre: element.fields.genre
+                genre: element.fields.genre,
+                audio_file: element.fields.audio_file
             });
         })
         handlePlaylistsDiv();
@@ -89,8 +91,11 @@ function musicPlayer(sources) {
 
     // set the initial volume when the audio element loads (0.4 represents 40% volume)
     player.volume = 0.4; 
+    // Ensure the MIME type is set
+    player.type = "audio/mpeg";  
     // set the src for the music layer (1st track)
-    player.src = `${src_base}${sources[currentSourceIndex].id}`;
+    player.src = `${src_base}${sources[currentSourceIndex].audio_file}`;
+    
     // load src of player
     player.load();
 
@@ -145,7 +150,7 @@ function musicPlayer(sources) {
     player.addEventListener("play", () => {
         // this function will be called when the audio starts or resumes playing
         highlightTrack(sources);
-        title.textContent = `${sources[currentSourceIndex].title}`;
+        title.textContent = `${sources[currentSourceIndex].title} - ${sources[currentSourceIndex].artist}`;
     })
 
     player.addEventListener("ended", () => {
@@ -154,6 +159,7 @@ function musicPlayer(sources) {
 
     // select all <button> elements with class "track"
     const trackButtons = document.querySelectorAll("button.track");
+    
 
     trackButtons.forEach(function(button) {         
         button.addEventListener("dblclick", function() {
@@ -168,7 +174,7 @@ function musicPlayer(sources) {
 function playNext(player, title, loop, sources) {    
     // even if index is the end of the playlist, using modulo '%' will return index to the start (0)
     currentSourceIndex = (currentSourceIndex + 1) % sources.length;
-    player.src = `${src_base}${sources[currentSourceIndex].id}`;
+    player.src = `${src_base}${sources[currentSourceIndex].audio_file}`;
     // load new src of player 
     player.load();
     
@@ -177,7 +183,7 @@ function playNext(player, title, loop, sources) {
         console.log("end of playlist");
     // otherwise keep playing the music playlist from the starting track cz loop is checked
     } else {
-        title.textContent = `${sources[currentSourceIndex].title}`;
+        title.textContent = `${sources[currentSourceIndex].title} - ${sources[currentSourceIndex].artist}`;
         player.play(); 
     }
 }
@@ -187,10 +193,10 @@ function playNext(player, title, loop, sources) {
 function playPrevious(player, title, sources) {    
     // if index gets to 0 (start of playlist) it will remain at 0 without going negative
     currentSourceIndex = (currentSourceIndex === 0) ? 0 : (currentSourceIndex - 1) % sources.length;
-    player.src = `${src_base}${sources[currentSourceIndex].id}`;
+    player.src = `${src_base}${sources[currentSourceIndex].audio_file}`;
     // load new src of player 
     player.load();
-    title.textContent = `${sources[currentSourceIndex].title}`;    
+    title.textContent = `${sources[currentSourceIndex].title} - ${sources[currentSourceIndex].artist}`;    
     player.play();
 }
 
@@ -208,17 +214,19 @@ function stopPlayer(player) {
 function playClickedTrack(player, element, title, sources) {
     // store the clicked button ID in a variable
     const clickedButtonId = element.id;
+    
     // the 'Array.findIndex()' method is called on 'sources', it takes a function as an argument, and this function is executed for each 
     // element in the array. it returns the index of the first element that satisfies the condition of having an id property equal to 
     // 'this.id'. if no such element is found, it returns -1
     currentSourceIndex = sources.findIndex(function(track) {
-        return track.id === clickedButtonId;
+        // Check if the track id matches the clickedButtonId (`==` checks for equality after performing type conversion cz `track.id` is int and `clickedButtonId` is str)
+        return track.id == clickedButtonId;
     })
     
     if (currentSourceIndex !== -1) {
         // update the player source and title for the current playing track
-        player.src = `${src_base}${sources[currentSourceIndex].id}`;
-        title.textContent = `${sources[currentSourceIndex].title}`;
+        player.src = `${src_base}${sources[currentSourceIndex].audio_file}`;
+        title.textContent = `${sources[currentSourceIndex].title} - ${sources[currentSourceIndex].artist}`;
         // load and play the audio track
         player.load();
         player.play(); 
@@ -233,9 +241,11 @@ function playClickedTrack(player, element, title, sources) {
 function highlightTrack(sources) {
     const playlistTracks = document.querySelectorAll(".track");
     playlistTracks.forEach((playlistTrack) => {
-        if (playlistTrack.id === sources[currentSourceIndex].id) {
+        // Check if the track id matches the clickedButtonId (`==` checks for equality after performing type conversion)
+        if (playlistTrack.id == sources[currentSourceIndex].id) {
             // add the highlighted class to this track
             playlistTrack.classList.add("highlighted");
+
         } else {
             // check if 'highlighted' class exists in this track's classList in order to remove it
             if (playlistTrack.classList.contains('highlighted')) {

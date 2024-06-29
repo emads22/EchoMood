@@ -3,16 +3,6 @@
 {% load static %}
 
 {% block body %}
-    
-    {% if messages %}
-        <div class="alert alert-warning p-3 fs-5" role="alert">
-            {% for message in messages %}
-                <p class="pt-2 px-2">{{ message }}</p>
-            {% endfor %}
-        </div>
-        <!-- The meta tag with http-equiv="refresh" attribute reloads the page after 1 second here -->
-        <meta http-equiv="refresh" content="1;url={% url 'login' %}">
-    {% endif %}
 
     <div class="row container-fluid d-flex justify-content-center align-items-center mt-4 pt-4">
         <div class="col-md-6 p-3">

@@ -10,25 +10,14 @@
         // JavaScript code. This filter escapes special characters so the resulting JavaScript string is valid
         // ensure that special characters are properly escaped, preventing potential JavaScript errors
         var playlist_tracks =  JSON.parse('{{ playlist_json | escapejs }}');
-    </script>
         
-    {% if messages %}
-        <div class="alert alert-warning p-3 fs-5" role="alert">
-            {% for message in messages %}
-                <!-- <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p> -->
-                <p class="pt-2 px-2">{{ message }}</p>
-            {% endfor %}
-        </div>
-        <!-- The meta tag with http-equiv="refresh" attribute reloads the page after 1 second here -->
-        <meta http-equiv="refresh" content="1;url={% url 'index' %}">
-    {% endif %}
-    
+    </script>
+            
     <div class="row container-fluid d-flex justify-content-center">
         <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
             <img src="{% static 'capstone/assets/logo/EchoMood.png' %}" alt="EchoMood Logo">
         </div>
     </div>
-
 
     <div id="mood-div" style="display: none;" data-mood-select="{{ mood_select }}"> 
         <div class="row container-fluid d-flex justify-content-center align-items-center mt-2 pt-2">
@@ -67,7 +56,7 @@
         
         <div class="list-group col-md-6 col-sm-12 mx-auto">
             {% for track in playlist %}
-                <button id="{{track.gdrive_id}}" class="list-group-item btn btn-lg pt-3 track">                        
+                <button id="{{track.pk}}" class="list-group-item btn btn-lg pt-3 track">                        
                     <figure class="text-center">
                         <blockquote class="blockquote">
                             <p>
@@ -127,14 +116,14 @@
             <div class="container">
                 <div class="row d-flex justify-content-between align-items-center p-2">
                     <!-- first sub-div Embedded Player -->
-                    <div class="col-md-3 col-sm-12 my-3 mx-auto">
+                    <div class="col-md-4 col-sm-12 py-3 mx-auto">
                         <div class="d-flex justify-content-start">
-                            <h3 id="trackTitle" class="d-flex justify-content-start py-3">🎧🎵</h3>
+                            <h3 id="trackTitle" class="d-flex justify-content-start">🎧🎵</h3>
                         </div>                    
                     </div>                
             
                     <!-- second sub-div (Media Buttons) -->
-                    <div id="media-btns" class="col-md-4 col-sm-12 my-3 mx-auto">
+                    <div id="media-btns" class="col-md-8 col-sm-12 my-3 mx-auto">
                         <div class="d-flex justify-content-center align-items-center">
                             <button id="playAll" class="btn player-btn">
                                 <img class="m-1 p-1" src="{% static 'capstone/assets/icons/play.png' %}" alt="play icon">
@@ -152,11 +141,9 @@
                                 <img class="m-1 p-1" src="{% static 'capstone/assets/icons/next.png' %}" alt="next icon">
                             </button>
                         </div>
-                    </div>
 
-                    <!-- third sub-div (Audio Player) -->   
-                    <div class="col-md-5 col-sm-12 d-flex justify-content-end my-3 mx-auto">
-                        <div class="d-flex align-items-center">
+                        <!-- third sub-div (Audio Player) -->   
+                        <div class="d-flex justify-content-center align-items-center my-3 mx-auto">
                             <audio id="musicPlayer" controls class="">
                                 <source src="" type="audio/mpeg">
                                 Your browser does not support the audio element.

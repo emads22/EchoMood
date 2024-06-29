@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "capstone",
+    'corsheaders',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,7 +42,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # Ensure security measures are applied
     "django.middleware.security.SecurityMiddleware",
+    # Enable CORS (Cross-Origin Resource Sharing)
+    'corsheaders.middleware.CorsMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -81,9 +85,9 @@ DATABASES = {
     }
 }
 
-# provide unique related names. To avoid the error (fields.E304) (Reverse accessor 'Group.user_set' and  Reverse accessor 'Permission.user_set') that 
-# occurs because of a clash between the reverse accessors of the groups and user_permissions fields in the default Django User model and our custom 
-# User model within the capstone app. The issue arises because both models are using the same field names and, by default, Django creates reverse 
+# provide unique related names. To avoid the error (fields.E304) (Reverse accessor 'Group.user_set' and  Reverse accessor 'Permission.user_set') that
+# occurs because of a clash between the reverse accessors of the groups and user_permissions fields in the default Django User model and our custom
+# User model within the capstone app. The issue arises because both models are using the same field names and, by default, Django creates reverse
 # accessors for the relationships between models based on these field names.
 AUTH_USER_MODEL = "capstone.User"
 
@@ -121,9 +125,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-
+# Static files settings
 # add a leading slash to the URL to ensure that Django can serve static files correctly
-STATIC_URL = "/static/"     
+STATIC_URL = '/static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -135,8 +140,11 @@ LOGIN_URL = 'login'
 
 # # enable session support (can choose a different session engine if needed, by default its database-backed session engine)
 # SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-# # by default django sets the session cookie name as "sessionid,"  
-# SESSION_COOKIE_NAME = 'my_session'  
+# # by default django sets the session cookie name as "sessionid,"
+# SESSION_COOKIE_NAME = 'my_session'
 
 # set session timeout to 1 hour (in seconds) (by default in django its 1209600 seconds (2 weeks))
 SESSION_COOKIE_AGE = 3600
+
+
+TRACKS_ROOT = BASE_DIR / 'capstone' / 'static' / 'capstone' / 'assets' / 'tracks'

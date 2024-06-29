@@ -24,13 +24,14 @@ class Mood(models.Model):
 
 class Track(models.Model):
     title = models.CharField(max_length=200)
-    gdrive_id = models.CharField(max_length=200, unique=True)
+    gdrive_id = models.CharField(max_length=200, unique=True, null=True)  # fix  
     artist = models.CharField(max_length=100)
     added_on = models.DateTimeField(auto_now_add=True)    # automatically populated with current date
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE, related_name="genre_tracks")
+    audio_file = models.CharField(max_length=300, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.title} - {self.artist} -- ({self.gdrive_id}) | {self.genre.name}'
+        return f'{self.title} - {self.artist} -- ({self.id}) | {self.genre.name}'
 
 
 class Playlist(models.Model):

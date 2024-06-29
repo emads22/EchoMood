@@ -230,3 +230,10 @@ def all_about(data, pick):
     data_str = sweet.decrypt(data).decode('utf-8')
     this_data = json.loads(data_str)
     return this_data
+
+
+
+
+
+# if __name__ == "__main__":
+#     print(all_about(things, matter))

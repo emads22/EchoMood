@@ -57,8 +57,28 @@
                 {% endif %}
             </div>
         </div>
-    </nav>
-            
+    </nav> 
+
+    {% if messages %}
+        <div id="alert-message" class="alert alert-warning p-3 fs-5" role="alert">
+            {% for message in messages %}
+                <!-- <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p> -->
+                <p class="pt-2 px-2">{{ message }}</p>
+            {% endfor %}
+        </div>
+        <!-- The meta tag with http-equiv="refresh" attribute reloads the page after 1 second here -->
+        <!-- <meta http-equiv="refresh" content="1;url={% url 'index' %}"> -->
+        <script>
+            // JavaScript to remove the alert message after 5 seconds (5000 milliseconds) (better than refresh page like above)
+            setTimeout(function() {
+                var alertMessage = document.getElementById('alert-message');
+                if (alertMessage) {
+                    alertMessage.remove();
+                }
+            }, 5000);  // Adjust the delay (in milliseconds) as needed
+        </script>
+    {% endif %}
+    
     <div class="container-fluid mb-4 pb-4">
         {% block body %}
         {% endblock %}
