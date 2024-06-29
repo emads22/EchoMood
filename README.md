@@ -10,7 +10,7 @@ EchoMood, The Mood-Based Music Companion, is a web application designed to solve
 ---
 
 ## Update
-This version represents an updated iteration of the original **`EchoMood`** app developed during my [**CS50W**](https://cs50.harvard.edu/web/2020/) final project. You can explore its development on [me/50](https://github.com/me50/emads22) repository.
+This version represents an updated iteration of the original **`EchoMood`** app developed during my [**CS50W**](https://cs50.harvard.edu/web/2020/) **`Final Project`** in 2023. You can explore its development on [me/50](https://github.com/me50/emads22) repository.
 
 ### Key Enhancements:
 - **Improved Music Streaming**: Removed reliance on Google Drive APIs, now storing tracks locally for enhanced performance.
