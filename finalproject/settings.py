@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "capstone",
-    'corsheaders',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -44,8 +43,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     # Ensure security measures are applied
     "django.middleware.security.SecurityMiddleware",
-    # Enable CORS (Cross-Origin Resource Sharing)
-    'corsheaders.middleware.CorsMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",

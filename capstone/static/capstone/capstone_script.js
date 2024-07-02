@@ -1,4 +1,3 @@
-// const src_base = "https://drive.google.com/uc?id="
 const src_base = "/static/capstone/assets/tracks/"
 var currentSourceIndex = 0;
 var sources = [];

@@ -16,7 +16,7 @@ from .tools import fetch_tracks_info, create_context, create_playlist, rename_pl
 
 @login_required
 def index(request):
-    # in case the key acting as session marker has not been created or has expired () then attempt to sync db with google drive mp3 tracks
+    # in case the key acting as session marker has not been created or has expired () then attempt to sync db with server drive mp3 tracks
     if "db_sync_marker" not in request.session or request.session["db_sync_marker"] is None:
         try:
 

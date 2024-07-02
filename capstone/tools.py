@@ -1,14 +1,7 @@
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from pathlib import Path
-from pprint import pprint
 import random
-import json
 
-from .apps import all_about, things, matter
 from .models import Genre, Track
 from finalproject.settings import TRACKS_ROOT
 

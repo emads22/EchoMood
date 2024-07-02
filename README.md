@@ -31,6 +31,10 @@ Enjoy the updated EchoMood experience, tailored to provide the best music compan
 - **Mobile Responsiveness**: Fully mobile responsive design for seamless music experience on any device.
 - **Secure Authentication**: Implements a highly secure password pattern (e.g., abAB12!@) during user registration to enhance account security.
 
+## Technologies Used
+- **Django**: A high-level Python web framework for developing web applications.
+- **re**: A module for regular expression operations.
+
 ## Setup
 1. Clone the repository.
 2. Ensure Python 3.x is installed.
