@@ -1,6 +1,6 @@
 # Update: EchoMood
 
-![EchoMood Logo](./capstone/static/capstone/assets/logo/EchoMood.png)
+![EchoMood_logo](./capstone/static/capstone/assets/logo/EchoMood_logo.png)
 
 ## Overview:
 In today's fast-paced world, music has become an integral part of our lives, influencing our moods, emotions, and even productivity.
